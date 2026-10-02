@@ -47,3 +47,21 @@ aws bedrock list-foundation-models --by-provider anthropic \
 ```
 
 If the Bedrock call is empty or denied, raise it at the setup session. Everything depends on Claude access.
+
+## 5. Calling Claude
+
+Use the `us.` inference-profile ID, not the bare model ID. `anthropic.claude-sonnet-5` fails with "on-demand throughput isn't supported"; `us.anthropic.claude-sonnet-5` works.
+
+```python
+import boto3
+
+bedrock = boto3.Session(profile_name="lpl-hackathon").client("bedrock-runtime", region_name="us-east-1")
+resp = bedrock.converse(
+    modelId="us.anthropic.claude-sonnet-5",
+    messages=[{"role": "user", "content": [{"text": "Reply with exactly: Bedrock OK"}]}],
+    inferenceConfig={"maxTokens": 20},
+)
+print(resp["output"]["message"]["content"][0]["text"])
+```
+
+Windows PowerShell 5.1 mangles inline JSON passed to the CLI. Put `--messages` in a file and pass `file://msg.json` instead.

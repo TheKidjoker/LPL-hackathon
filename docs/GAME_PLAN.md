@@ -91,7 +91,7 @@ All times Eastern. Build done by 6 AM Saturday. Hard deadline is noon Saturday.
 
 | When | What |
 |---|---|
-| Fri 12:30 PM | AWS setup session. Confirm Bedrock and Claude access first |
+| Fri 12:30 PM | AWS setup session. Confirm Bedrock and Claude access first. **Done:** Sonnet 5 call works via `us.anthropic.claude-sonnet-5` ([`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude)) |
 | Fri 3:00 PM | Submit categories: Startup We'd Buy Tomorrow and Best Technical Execution |
 | Fri 4:00 PM | Checkpoint: a fake request flows through the deployed API |
 | Fri 8:00 PM | Checkpoint: the real AI memo shows on the dashboard |
