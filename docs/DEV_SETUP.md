@@ -96,8 +96,8 @@ sam deploy
 
 ## 7. Kaylin: data and write handlers
 
-- Put `accounts.json` and `transactions.json` in `data/` using the shapes in [`api.md`](api.md).
-- Once Thomas deploys, set the table names and run `python scripts/seed_dynamodb.py`.
+- `data/*.json` is generated: edit `scripts/make_seed_data.py`, then run `python scripts/make_seed_data.py`. `data/scenarios.json` has each account's demo withdrawal and the level it should score.
+- `python scripts/seed_dynamodb.py` replaces the Accounts and Transactions tables with `data/`. It finds the table names from the `fraud-speed-bump` stack if they are not set.
 - To run a handler against the real tables, set the same variables first:
 
 ```powershell
@@ -108,4 +108,4 @@ $env:AUDIT_TABLE = "<from deploy output>"
 python scripts/invoke_local.py submit_withdrawal
 ```
 
-DynamoDB returns numbers as `Decimal`. Convert them in `db.py` so handlers only see `int` and `float`.
+`db.py` converts DynamoDB's `Decimal` numbers, so handlers only see `int` and `float`. `tests/test_db.py` runs it against in-memory tables (moto), so tests never touch the real ones.

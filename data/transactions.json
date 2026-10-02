@@ -1,0 +1,1667 @@
+[
+  {
+    "transactionId": "txn-0001",
+    "accountId": "acc-1001",
+    "timestamp": "2026-07-05T15:43:00Z",
+    "type": "transfer",
+    "amount": 1500,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0002",
+    "accountId": "acc-1001",
+    "timestamp": "2026-07-20T16:28:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0003",
+    "accountId": "acc-1001",
+    "timestamp": "2026-07-21T19:32:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0004",
+    "accountId": "acc-1001",
+    "timestamp": "2026-07-25T12:21:00Z",
+    "type": "deposit",
+    "amount": 450,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0005",
+    "accountId": "acc-1001",
+    "timestamp": "2026-08-03T13:59:00Z",
+    "type": "deposit",
+    "amount": 2140,
+    "payee": {
+      "payeeId": "pay-001",
+      "name": "U.S. Treasury SSA benefit",
+      "type": "bank",
+      "addedAt": "2010-01-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0006",
+    "accountId": "acc-1001",
+    "timestamp": "2026-08-05T15:40:00Z",
+    "type": "transfer",
+    "amount": 1500,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0007",
+    "accountId": "acc-1001",
+    "timestamp": "2026-08-06T21:47:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0008",
+    "accountId": "acc-1001",
+    "timestamp": "2026-08-20T16:44:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0009",
+    "accountId": "acc-1001",
+    "timestamp": "2026-08-22T14:23:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0010",
+    "accountId": "acc-1001",
+    "timestamp": "2026-08-23T21:48:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0011",
+    "accountId": "acc-1001",
+    "timestamp": "2026-08-25T12:28:00Z",
+    "type": "deposit",
+    "amount": 450,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0012",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-03T13:16:00Z",
+    "type": "deposit",
+    "amount": 2140,
+    "payee": {
+      "payeeId": "pay-001",
+      "name": "U.S. Treasury SSA benefit",
+      "type": "bank",
+      "addedAt": "2010-01-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0013",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-05T15:29:00Z",
+    "type": "transfer",
+    "amount": 1500,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0014",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-09T17:08:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0015",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-15T16:31:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0016",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-18T17:23:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0017",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-20T16:33:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0018",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-23T16:35:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0019",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-25T12:11:00Z",
+    "type": "deposit",
+    "amount": 450,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0020",
+    "accountId": "acc-1001",
+    "timestamp": "2026-09-28T19:33:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-100",
+      "name": "First Harbor Bank checking",
+      "type": "bank",
+      "addedAt": "2011-06-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0021",
+    "accountId": "acc-1002",
+    "timestamp": "2026-07-10T14:04:00Z",
+    "type": "deposit",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-201",
+      "name": "Northwind Corp payroll",
+      "type": "bank",
+      "addedAt": "2019-02-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0022",
+    "accountId": "acc-1002",
+    "timestamp": "2026-07-12T20:17:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0023",
+    "accountId": "acc-1002",
+    "timestamp": "2026-07-15T18:32:00Z",
+    "type": "transfer",
+    "amount": 750,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0024",
+    "accountId": "acc-1002",
+    "timestamp": "2026-07-18T17:47:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0025",
+    "accountId": "acc-1002",
+    "timestamp": "2026-07-21T15:23:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0026",
+    "accountId": "acc-1002",
+    "timestamp": "2026-07-24T14:05:00Z",
+    "type": "deposit",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-201",
+      "name": "Northwind Corp payroll",
+      "type": "bank",
+      "addedAt": "2019-02-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0027",
+    "accountId": "acc-1002",
+    "timestamp": "2026-07-25T12:56:00Z",
+    "type": "deposit",
+    "amount": 531,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0028",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-07T14:59:00Z",
+    "type": "deposit",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-201",
+      "name": "Northwind Corp payroll",
+      "type": "bank",
+      "addedAt": "2019-02-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0029",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-08T17:16:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0030",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-15T18:31:00Z",
+    "type": "transfer",
+    "amount": 750,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0031",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-16T14:57:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0032",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-21T14:21:00Z",
+    "type": "deposit",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-201",
+      "name": "Northwind Corp payroll",
+      "type": "bank",
+      "addedAt": "2019-02-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0033",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-21T15:20:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0034",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-22T16:02:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0035",
+    "accountId": "acc-1002",
+    "timestamp": "2026-08-25T12:17:00Z",
+    "type": "deposit",
+    "amount": 531,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0036",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-02T20:14:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0037",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-04T14:37:00Z",
+    "type": "deposit",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-201",
+      "name": "Northwind Corp payroll",
+      "type": "bank",
+      "addedAt": "2019-02-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0038",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-10T17:05:00Z",
+    "type": "transfer",
+    "amount": 5000,
+    "payee": {
+      "payeeId": "pay-202",
+      "name": "Lakeside Title & Escrow",
+      "type": "bank",
+      "addedAt": "2026-09-02T15:30:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0039",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-13T20:37:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0040",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-15T18:45:00Z",
+    "type": "transfer",
+    "amount": 750,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0041",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-17T17:35:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0042",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-18T14:58:00Z",
+    "type": "deposit",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-201",
+      "name": "Northwind Corp payroll",
+      "type": "bank",
+      "addedAt": "2019-02-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0043",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-18T21:30:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0044",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-25T12:50:00Z",
+    "type": "deposit",
+    "amount": 531,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0045",
+    "accountId": "acc-1002",
+    "timestamp": "2026-09-25T19:53:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-200",
+      "name": "Summit National Bank checking",
+      "type": "bank",
+      "addedAt": "2015-08-20T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0046",
+    "accountId": "acc-1003",
+    "timestamp": "2026-07-08T20:47:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0047",
+    "accountId": "acc-1003",
+    "timestamp": "2026-07-24T16:59:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0048",
+    "accountId": "acc-1003",
+    "timestamp": "2026-07-25T12:21:00Z",
+    "type": "deposit",
+    "amount": 870,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0049",
+    "accountId": "acc-1003",
+    "timestamp": "2026-07-31T21:56:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0050",
+    "accountId": "acc-1003",
+    "timestamp": "2026-08-01T14:17:00Z",
+    "type": "transfer",
+    "amount": 3000,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0051",
+    "accountId": "acc-1003",
+    "timestamp": "2026-08-02T15:12:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0052",
+    "accountId": "acc-1003",
+    "timestamp": "2026-08-03T13:48:00Z",
+    "type": "deposit",
+    "amount": 2480,
+    "payee": {
+      "payeeId": "pay-001",
+      "name": "U.S. Treasury SSA benefit",
+      "type": "bank",
+      "addedAt": "2010-01-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0053",
+    "accountId": "acc-1003",
+    "timestamp": "2026-08-12T19:33:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0054",
+    "accountId": "acc-1003",
+    "timestamp": "2026-08-24T15:11:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0055",
+    "accountId": "acc-1003",
+    "timestamp": "2026-08-25T12:45:00Z",
+    "type": "deposit",
+    "amount": 870,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0056",
+    "accountId": "acc-1003",
+    "timestamp": "2026-09-01T14:20:00Z",
+    "type": "transfer",
+    "amount": 3000,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0057",
+    "accountId": "acc-1003",
+    "timestamp": "2026-09-03T13:37:00Z",
+    "type": "deposit",
+    "amount": 2480,
+    "payee": {
+      "payeeId": "pay-001",
+      "name": "U.S. Treasury SSA benefit",
+      "type": "bank",
+      "addedAt": "2010-01-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0058",
+    "accountId": "acc-1003",
+    "timestamp": "2026-09-05T16:33:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0059",
+    "accountId": "acc-1003",
+    "timestamp": "2026-09-25T12:28:00Z",
+    "type": "deposit",
+    "amount": 870,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0060",
+    "accountId": "acc-1003",
+    "timestamp": "2026-10-01T14:16:00Z",
+    "type": "transfer",
+    "amount": 3000,
+    "payee": {
+      "payeeId": "pay-300",
+      "name": "Cedar Credit Union checking",
+      "type": "bank",
+      "addedAt": "2009-11-02T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0061",
+    "accountId": "acc-1004",
+    "timestamp": "2026-07-09T17:40:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0062",
+    "accountId": "acc-1004",
+    "timestamp": "2026-07-14T15:52:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0063",
+    "accountId": "acc-1004",
+    "timestamp": "2026-07-17T18:02:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0064",
+    "accountId": "acc-1004",
+    "timestamp": "2026-07-24T21:05:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0065",
+    "accountId": "acc-1004",
+    "timestamp": "2026-07-25T12:15:00Z",
+    "type": "deposit",
+    "amount": 103,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0066",
+    "accountId": "acc-1004",
+    "timestamp": "2026-07-27T21:15:00Z",
+    "type": "withdrawal",
+    "amount": 600,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0067",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-01T15:23:00Z",
+    "type": "deposit",
+    "amount": 500,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0068",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-02T16:25:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0069",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-06T21:34:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0070",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-07T17:05:00Z",
+    "type": "withdrawal",
+    "amount": 450,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0071",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-11T15:51:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0072",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-16T18:50:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0073",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-22T20:15:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0074",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-25T12:56:00Z",
+    "type": "deposit",
+    "amount": 103,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0075",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-30T22:19:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0076",
+    "accountId": "acc-1004",
+    "timestamp": "2026-08-31T20:37:00Z",
+    "type": "withdrawal",
+    "amount": 450,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0077",
+    "accountId": "acc-1004",
+    "timestamp": "2026-09-01T15:41:00Z",
+    "type": "deposit",
+    "amount": 500,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0078",
+    "accountId": "acc-1004",
+    "timestamp": "2026-09-05T22:22:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0079",
+    "accountId": "acc-1004",
+    "timestamp": "2026-09-25T12:44:00Z",
+    "type": "deposit",
+    "amount": 103,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0080",
+    "accountId": "acc-1004",
+    "timestamp": "2026-09-25T19:36:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0081",
+    "accountId": "acc-1004",
+    "timestamp": "2026-10-01T15:31:00Z",
+    "type": "deposit",
+    "amount": 500,
+    "payee": {
+      "payeeId": "pay-400",
+      "name": "Riverbend Bank checking",
+      "type": "bank",
+      "addedAt": "2020-01-14T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0082",
+    "accountId": "acc-1005",
+    "timestamp": "2026-07-10T15:00:00Z",
+    "type": "transfer",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0083",
+    "accountId": "acc-1005",
+    "timestamp": "2026-07-17T15:25:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0084",
+    "accountId": "acc-1005",
+    "timestamp": "2026-07-18T20:31:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0085",
+    "accountId": "acc-1005",
+    "timestamp": "2026-07-25T12:05:00Z",
+    "type": "deposit",
+    "amount": 280,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0086",
+    "accountId": "acc-1005",
+    "timestamp": "2026-07-25T14:38:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0087",
+    "accountId": "acc-1005",
+    "timestamp": "2026-07-31T21:42:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0088",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-03T13:31:00Z",
+    "type": "deposit",
+    "amount": 1960,
+    "payee": {
+      "payeeId": "pay-001",
+      "name": "U.S. Treasury SSA benefit",
+      "type": "bank",
+      "addedAt": "2010-01-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0089",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-03T17:16:00Z",
+    "type": "withdrawal",
+    "amount": 100,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0090",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-10T15:38:00Z",
+    "type": "transfer",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0091",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-16T16:40:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0092",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-19T20:11:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0093",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-25T12:33:00Z",
+    "type": "deposit",
+    "amount": 280,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0094",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-27T16:51:00Z",
+    "type": "withdrawal",
+    "amount": 200,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0095",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-28T17:19:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0096",
+    "accountId": "acc-1005",
+    "timestamp": "2026-08-29T16:10:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "phone",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0097",
+    "accountId": "acc-1005",
+    "timestamp": "2026-09-03T13:06:00Z",
+    "type": "deposit",
+    "amount": 1960,
+    "payee": {
+      "payeeId": "pay-001",
+      "name": "U.S. Treasury SSA benefit",
+      "type": "bank",
+      "addedAt": "2010-01-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0098",
+    "accountId": "acc-1005",
+    "timestamp": "2026-09-10T15:41:00Z",
+    "type": "transfer",
+    "amount": 1200,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0099",
+    "accountId": "acc-1005",
+    "timestamp": "2026-09-25T12:09:00Z",
+    "type": "deposit",
+    "amount": 280,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0100",
+    "accountId": "acc-1005",
+    "timestamp": "2026-09-29T16:34:00Z",
+    "type": "withdrawal",
+    "amount": 150,
+    "payee": {
+      "payeeId": "pay-500",
+      "name": "Granite State Bank checking",
+      "type": "bank",
+      "addedAt": "2002-03-01T00:00:00Z"
+    },
+    "channel": "branch",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0101",
+    "accountId": "acc-1006",
+    "timestamp": "2026-07-06T16:21:00Z",
+    "type": "transfer",
+    "amount": 900,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0102",
+    "accountId": "acc-1006",
+    "timestamp": "2026-07-25T12:21:00Z",
+    "type": "deposit",
+    "amount": 160,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0103",
+    "accountId": "acc-1006",
+    "timestamp": "2026-08-01T14:26:00Z",
+    "type": "deposit",
+    "amount": 1850,
+    "payee": {
+      "payeeId": "pay-601",
+      "name": "Midstate Teachers Pension",
+      "type": "bank",
+      "addedAt": "2014-06-30T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0104",
+    "accountId": "acc-1006",
+    "timestamp": "2026-08-06T16:47:00Z",
+    "type": "transfer",
+    "amount": 900,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0105",
+    "accountId": "acc-1006",
+    "timestamp": "2026-08-25T12:26:00Z",
+    "type": "deposit",
+    "amount": 160,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0106",
+    "accountId": "acc-1006",
+    "timestamp": "2026-09-01T14:21:00Z",
+    "type": "deposit",
+    "amount": 1850,
+    "payee": {
+      "payeeId": "pay-601",
+      "name": "Midstate Teachers Pension",
+      "type": "bank",
+      "addedAt": "2014-06-30T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0107",
+    "accountId": "acc-1006",
+    "timestamp": "2026-09-01T19:28:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0108",
+    "accountId": "acc-1006",
+    "timestamp": "2026-09-06T16:40:00Z",
+    "type": "transfer",
+    "amount": 900,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0109",
+    "accountId": "acc-1006",
+    "timestamp": "2026-09-25T12:52:00Z",
+    "type": "deposit",
+    "amount": 160,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0110",
+    "accountId": "acc-1006",
+    "timestamp": "2026-10-01T14:44:00Z",
+    "type": "deposit",
+    "amount": 1850,
+    "payee": {
+      "payeeId": "pay-601",
+      "name": "Midstate Teachers Pension",
+      "type": "bank",
+      "addedAt": "2014-06-30T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  },
+  {
+    "transactionId": "txn-0111",
+    "accountId": "acc-1006",
+    "timestamp": "2026-10-01T19:31:00Z",
+    "type": "withdrawal",
+    "amount": 300,
+    "payee": {
+      "payeeId": "pay-600",
+      "name": "Harborview Bank checking",
+      "type": "bank",
+      "addedAt": "2012-07-09T00:00:00Z"
+    },
+    "channel": "web",
+    "clientNote": ""
+  }
+]
