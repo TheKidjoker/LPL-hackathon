@@ -173,7 +173,7 @@ function CaseDetail({ c, context, busy, onRelease, onDecide }) {
           <SignalGroups signals={c.risk?.signals} level={c.risk?.level} />
           <div className="memo-head">
             <SparkIcon />
-            <span className="kicker">Claude case memo</span>
+            <span className="kicker">Juno case memo</span>
             <span className="muted" style={{ fontSize: 11, marginLeft: "auto" }}>Drafted {fmtAt(c.createdAt)} ET</span>
           </div>
           <div className="memo">{memo.map((p, i) => <p key={i}>{p}</p>)}</div>

@@ -25,7 +25,7 @@ export function SignalGroups({ signals, level }) {
       </div>
       {claude.length > 0 && (
         <div className="signal-group">
-          <div className="kicker"><SparkIcon size={12} />Claude found · {claude.length}</div>
+          <div className="kicker"><SparkIcon size={12} />Juno found · {claude.length}</div>
           <div className="chips">{claude.map((s) => chip(s, true))}</div>
         </div>
       )}

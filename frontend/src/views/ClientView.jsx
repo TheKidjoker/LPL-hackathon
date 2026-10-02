@@ -9,7 +9,7 @@ import { usePolling } from "../components/live.jsx";
 const ROLE = "client";
 
 // Shown while scoring runs (about 10 seconds with real Claude), one step every ~2.5 seconds.
-const REVIEW_STEPS = ["Verifying the payee", "Checking 90 days of account activity", "Claude is reviewing the request", "Writing the case memo"];
+const REVIEW_STEPS = ["Verifying the payee", "Checking 90 days of account activity", "Juno is reviewing the request", "Writing the case memo"];
 
 const WARNING_SIGNS = [
   "Someone called saying they are from your bank or our firm's security team",

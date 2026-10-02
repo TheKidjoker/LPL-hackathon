@@ -49,7 +49,7 @@ export default function Assistant({ role, c }) {
   }
 
   return (
-    <section className="assistant" aria-label="Ask Claude about this case">
+    <section className="assistant" aria-label="Ask Juno about this case">
       <div className="assistant-head">
         <span className="ai-mark">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ai)" strokeWidth="2" aria-hidden="true">
@@ -57,8 +57,8 @@ export default function Assistant({ role, c }) {
           </svg>
         </span>
         <div>
-          <div style={{ fontWeight: 800, fontSize: 15 }}>Ask Claude about {c.clientName || "this case"}</div>
-          <div className="muted" style={{ fontSize: 12 }}>Answers only from this case's data · every question is logged to the audit trail · Claude never decides a hold</div>
+          <div style={{ fontWeight: 800, fontSize: 15 }}>Ask Juno about {c.clientName || "this case"}</div>
+          <div className="muted" style={{ fontSize: 12 }}>Juno, the Second Look AI co-pilot · answers only from this case's data · every question is logged to the audit trail · Juno never decides a hold</div>
         </div>
       </div>
       {(messages.length > 0 || busy) && (
@@ -73,7 +73,7 @@ export default function Assistant({ role, c }) {
           {suggestions.map((s) => <button key={s} className="btn btn-secondary" disabled={busy} onClick={() => ask(s)}>{s}</button>)}
         </div>
         <form onSubmit={(e) => { e.preventDefault(); ask(text); }}>
-          <input className="input" placeholder={role === "fraud" ? "Ask about this client, the signals, or what to check next" : "Ask about your client's held withdrawal"} value={text} onChange={(e) => setText(e.target.value)} aria-label="Question for Claude" maxLength={2000} />
+          <input className="input" placeholder={role === "fraud" ? "Ask about this client, the signals, or what to check next" : "Ask about your client's held withdrawal"} value={text} onChange={(e) => setText(e.target.value)} aria-label="Question for Juno" maxLength={2000} />
           <button className="btn btn-primary" disabled={busy || !text.trim()}>Ask</button>
         </form>
       </div>

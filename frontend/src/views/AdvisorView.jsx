@@ -81,7 +81,7 @@ export default function AdvisorView() {
         <div className="left">
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <SparkIcon />
-            <span className="kicker">AI risk summary</span>
+            <span className="kicker">Juno risk summary</span>
           </div>
           <div style={{ display: "flex", alignItems: "flex-end", gap: 20 }}>
             <span className="big" style={{ fontSize: 72, lineHeight: 0.85, letterSpacing: "-0.03em", color: r.fg }}>{risk.score ?? "?"}</span>
@@ -101,11 +101,11 @@ export default function AdvisorView() {
           </div>
           <div style={{ marginTop: 24 }}><SignalGroups signals={risk.signals} level={risk.level} /></div>
           <div className="divider" />
-          <div className="kicker" style={{ marginBottom: 10 }}>AI memo</div>
+          <div className="kicker" style={{ marginBottom: 10 }}>Juno memo</div>
           <div className="memo" style={{ fontSize: 15, lineHeight: 1.65 }}>
             {memoParagraphs(risk.memo).map((p, i) => <p key={i}>{p}</p>)}
           </div>
-          <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>Drafted by Claude · {fmtAt(c.createdAt)} ET · Review before acting</div>
+          <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>Drafted by Juno · {fmtAt(c.createdAt)} ET · Review before acting</div>
         </div>
 
         <div className="right">
