@@ -9,7 +9,7 @@ from fraud_ai import bedrock_client, scam_check_chat, score_withdrawal
 from fraud_ai.score import FALLBACK_MEMO, build_prompt, fallback_risk, level_for, validate
 from fraud_ai.signals import compute_signals
 
-SCENARIOS = {s["name"]: s for s in json.loads((Path(__file__).parent.parent / "ai" / "eval" / "scenarios.json").read_text())}
+SCENARIOS = {s["name"]: s for s in json.loads((Path(__file__).parent / "fixtures" / "ai_scenarios.json").read_text())}
 
 
 def names(signals):
