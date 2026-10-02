@@ -2,6 +2,15 @@
 
 Older Americans reported losing **$7.7 billion** to online fraud in 2025, and losses grew **59%** in one year. Second Look catches the costliest kind, where the client is tricked into sending their own money, before the money leaves. In live tests it held every scam, released every normal withdrawal, and explained each decision in about 11 seconds, for about **3 cents per withdrawal** in AI cost.
 
+## Positioning
+
+> *"Fraud tools ask 'is this really the client?' Second Look asks 'is the client being scammed?' When the real client, often a senior, is manipulated into sending their own money, every security check passes. We catch it, explain it, and pause it, turning LPL's own red-flag policy into automatic protection on every withdrawal."*
+
+- **The differentiator:** identity-theft tools look for someone pretending to be the client. In an authorized-push scam the real client logs in and sends the money, so those checks pass. Second Look looks at *why* the money is moving, not *who* is moving it.
+- **Not only seniors:** older clients are the most urgent group, but proposed FINRA Rule 2166 covers clients of any age, and age is one signal among seven.
+- **Builds on what LPL already has:** LPL's public [Fraud & Identity Theft Prevention policy](https://www.lpl.com/disclosures/identity-theft-prevention-red-flag-policy.html) lists unusual fund requests and behavior changes from third-party exploitation as red flags. Second Look detects those automatically on every withdrawal, explains them, holds the money, and routes the case to the Fraud team.
+- **Q&A: "Doesn't LPL already have fraud monitoring?"** "Yes, for impostors. We're built for when the client isn't an impostor."
+
 ## The problem, in numbers
 
 | Figure | Value | Source |
@@ -60,3 +69,4 @@ Measured token usage on Claude Opus 5, priced at Anthropic's list rates ($5 per 
 - [FTC, Protecting Older Consumers 2024–2025 (PDF)](https://www.ftc.gov/system/files/ftc_gov/pdf/P144400-OlderAdultsReportDec2025.pdf)
 - [Amazon Bedrock pricing](https://aws.amazon.com/bedrock/pricing/) (Guardrails rates)
 - Claude list pricing: Anthropic API pricing, Opus 5 $5 / $25 per million tokens
+- [LPL Financial, Fraud & Identity Theft Prevention policy](https://www.lpl.com/disclosures/identity-theft-prevention-red-flag-policy.html)
