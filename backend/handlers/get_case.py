@@ -1,12 +1,11 @@
 """GET /cases/{caseId}. Owner: Kaylin.
 
-Stub: returns the sample Case for any id. Replace with db.get_case (404 when None)
-and, for the fraud role, audit.list_audit for the audit field.
+404 when the Case does not exist. The fraud role also gets the audit trail.
 """
 
-from common.http import api_handler, path_param, respond
+from common import audit, db
+from common.http import ApiError, api_handler, path_param, respond
 from common.roles import get_role
-from common.samples import sample_case
 from common.views import case_for_role
 
 
@@ -15,6 +14,9 @@ def handler(event, context):
     role = get_role(event)
     case_id = path_param(event, "caseId")
 
-    case = sample_case()  # TODO(Kaylin): db.get_case(case_id), 404 if None
-    case["caseId"] = case_id
+    case = db.get_case(case_id)
+    if case is None:
+        raise ApiError(404, "not_found", f"No case {case_id}.")
+    if role == "fraud":
+        case["audit"] = audit.list_audit(case_id)
     return respond(case_for_role(case, role))
