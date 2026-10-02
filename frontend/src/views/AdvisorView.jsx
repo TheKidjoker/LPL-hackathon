@@ -63,7 +63,7 @@ export default function AdvisorView() {
 
       <div className="banner">
         <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-          <ShieldIcon size={22} color="var(--color-accent-700)" />
+          <ShieldIcon size={22} color="var(--brand-orange)" />
           <div>
             <h3>{open ? `${c.clientName} has a held withdrawal` : `${c.clientName}'s withdrawal`}</h3>
             <p>
@@ -91,7 +91,7 @@ export default function AdvisorView() {
               <div className="scale">
                 <div style={{ background: "var(--risk-low)" }} />
                 <div style={{ background: "var(--risk-medium)" }} />
-                <div style={{ background: "var(--color-accent)" }} />
+                <div style={{ background: "var(--risk-high)" }} />
                 <div className="scale-marker" style={{ left: `${markerLeft}%` }} />
               </div>
               <div className="scale-labels"><span>Low</span><span>Medium</span><span>High</span></div>
@@ -114,7 +114,7 @@ export default function AdvisorView() {
               <span>Status</span><span><StatusPill status={c.status} /></span>
               <span>Hold ends</span><span style={{ fontWeight: 600 }}>{open ? fmtDay(c.holdEndsAt) : "—"}</span>
               <span>Client answer</span>
-              <span style={{ fontWeight: 600, color: answer?.denied ? "var(--color-accent-700)" : "var(--color-text)" }}>{answer ? answer.said : "Awaiting answer"}</span>
+              <span style={{ fontWeight: 600, color: answer?.denied ? "var(--risk-high-ink)" : "var(--color-text)" }}>{answer ? answer.said : "Awaiting answer"}</span>
             </div>
           </div>
           <div>

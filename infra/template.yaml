@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Fraud Speed Bump - API, tables, and Lambdas. Owner Thomas. Only Thomas runs sam deploy.
+Description: Second Look - API, tables, and Lambdas. Owner Thomas. Only Thomas runs sam deploy.
 
 Parameters:
   ModelId:
@@ -57,7 +57,7 @@ Resources:
   DataKey:
     Type: AWS::KMS::Key
     Properties:
-      Description: Fraud Speed Bump - encrypts DynamoDB tables and CloudTrail logs
+      Description: Second Look - encrypts DynamoDB tables and CloudTrail logs
       EnableKeyRotation: true
       KeyPolicy:
         Version: "2012-10-17"

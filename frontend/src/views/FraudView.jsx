@@ -173,7 +173,7 @@ function CaseDetail({ c, busy, onRelease, onDecide }) {
         <div className="col">
           <div className="cell">
             <div className="kicker" style={{ marginBottom: 8 }}>Client answer · "Did you request this?"</div>
-            <div className="big" style={{ fontSize: 20, color: answer?.denied ? "var(--color-accent-700)" : "var(--color-text)" }}>{answer ? answer.said : "Awaiting answer"}</div>
+            <div className="big" style={{ fontSize: 20, color: answer?.denied ? "var(--risk-high-ink)" : "var(--color-text)" }}>{answer ? answer.said : "Awaiting answer"}</div>
             <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>
               {answer ? (answer.denied ? "Client denies making this request" : "Client says they made this request") : "Client was asked in the app"}
             </div>
@@ -199,7 +199,7 @@ function CaseDetail({ c, busy, onRelease, onDecide }) {
         {audit.map((a, i) => (
           <div key={i} className="timeline-row">
             <span className="muted">{fmtAt(a.timestamp)}</span>
-            <div className="rail"><i style={{ background: a.action === "HELD" || a.action === "ESCALATED" ? "var(--color-accent)" : a.action === "RELEASED" ? "var(--risk-low)" : "var(--color-text)" }} /><b /></div>
+            <div className="rail"><i style={{ background: a.action === "HELD" || a.action === "ESCALATED" ? "var(--brand-orange)" : a.action === "RELEASED" ? "var(--risk-low)" : "var(--color-text)" }} /><b /></div>
             <div><span style={{ fontWeight: 600 }}>{a.action}</span> <span className="soft">{a.actor}{a.detail ? ` · ${a.detail}` : ""}</span></div>
           </div>
         ))}

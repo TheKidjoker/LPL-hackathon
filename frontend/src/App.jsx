@@ -27,7 +27,7 @@ export default function App() {
       <header className="topbar">
         <div className="brand">
           <div className="brand-mark" />
-          <span className="brand-name">Speed Bump</span>
+          <span className="brand-name">Second Look</span>
           <span className="brand-firm">Halden Private Wealth</span>
         </div>
         <div className="role-switch">

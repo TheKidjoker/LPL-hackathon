@@ -1,10 +1,10 @@
-# Fraud Speed Bump: Team Game Plan
+# Second Look: Team Game Plan
 
 Oct 2, 2026 · @Thomas
 
 ## The idea in one paragraph
 
-We are building an AI "speed bump" that catches scams where a client is tricked into moving their own money. When a risky withdrawal comes in, the system pauses it, has Claude explain in plain English why it looks like fraud, and alerts three people at once: the client, their financial advisor, and LPL's fraud team. Each one weighs in, and the fraud team makes the final call.
+We are building Second Look, an AI pause that catches scams where a client is tricked into moving their own money. When a risky withdrawal comes in, the system pauses it, has Claude explain in plain English why it looks like fraud, and alerts three people at once: the client, their financial advisor, and LPL's fraud team. Each one weighs in, and the fraud team makes the final call.
 
 **Why it fits the prompt:** the prompt asks for a compliant, AI-powered startup that helps advisors, investors, or the teams that support them. We help all three, and compliance is the whole point of the product.
 
