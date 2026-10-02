@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { api } from "../api.js";
 import { advisorNotes, clientAnswer, memoParagraphs } from "../lib/caseView.js";
 import { fmtAt, fmtDay, isOpen, money, riskOf } from "../lib/format.js";
-import { LevelPill, LockIcon, PhoneIcon, ShieldIcon, SignalChips, SparkIcon, StatusPill } from "../components/parts.jsx";
+import { LevelPill, LockIcon, PhoneIcon, ShieldIcon, SparkIcon, StatusPill } from "../components/parts.jsx";
+import { SignalGroups } from "../components/caseParts.jsx";
+import { usePolling, useToast } from "../components/live.jsx";
+import Assistant from "../components/Assistant.jsx";
 
 const ROLE = "advisor";
 
@@ -13,19 +16,17 @@ export default function AdvisorView() {
   const [draft, setDraft] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const toast = useToast();
 
-  useEffect(() => {
+  // Refresh every few seconds so a new hold or the client's answer shows up without reloading.
+  usePolling(() =>
     api.listCases(ROLE)
       .then(({ cases }) => {
         setCases(cases);
-        setSelId(cases.find((x) => isOpen(x.status))?.caseId || cases[0]?.caseId || null);
+        setSelId((id) => id || cases.find((x) => isOpen(x.status))?.caseId || cases[0]?.caseId || null);
       })
-      .catch((e) => setError(e.message));
-  }, []);
-
-  useEffect(() => {
-    if (selId) api.getCase(ROLE, selId).then(setCase).catch((e) => setError(e.message));
-  }, [selId]);
+      .catch((e) => setError(e.message)), []);
+  usePolling(() => selId && api.getCase(ROLE, selId).then(setCase).catch((e) => setError(e.message)), [selId]);
 
   async function saveNote() {
     setSaving(true);
@@ -33,6 +34,7 @@ export default function AdvisorView() {
     try {
       setCase(await api.postResponse(ROLE, c.caseId, "note", draft.trim()));
       setDraft("");
+      toast("Note saved. The Fraud team can see it now.");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -79,7 +81,7 @@ export default function AdvisorView() {
         <div className="left">
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <SparkIcon />
-            <span className="kicker">AI risk summary</span>
+            <span className="kicker">Juno risk summary</span>
           </div>
           <div style={{ display: "flex", alignItems: "flex-end", gap: 20 }}>
             <span className="big" style={{ fontSize: 72, lineHeight: 0.85, letterSpacing: "-0.03em", color: r.fg }}>{risk.score ?? "?"}</span>
@@ -97,13 +99,13 @@ export default function AdvisorView() {
               <div className="scale-labels"><span>Low</span><span>Medium</span><span>High</span></div>
             </div>
           </div>
-          <div style={{ marginTop: 24 }}><SignalChips signals={risk.signals} level={risk.level} /></div>
+          <div style={{ marginTop: 24 }}><SignalGroups signals={risk.signals} level={risk.level} /></div>
           <div className="divider" />
-          <div className="kicker" style={{ marginBottom: 10 }}>AI memo</div>
+          <div className="kicker" style={{ marginBottom: 10 }}>Juno memo</div>
           <div className="memo" style={{ fontSize: 15, lineHeight: 1.65 }}>
             {memoParagraphs(risk.memo).map((p, i) => <p key={i}>{p}</p>)}
           </div>
-          <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>Drafted by Claude · {fmtAt(c.createdAt)} ET · Review before acting</div>
+          <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>Drafted by Juno · {fmtAt(c.createdAt)} ET · Review before acting</div>
         </div>
 
         <div className="right">
@@ -138,6 +140,9 @@ export default function AdvisorView() {
             <div className="muted" style={{ fontSize: 12, marginTop: 8 }}>Only the Fraud team can release a hold. Your notes go into their review.</div>
           </div>
         </div>
+      </div>
+      <div style={{ marginTop: 28, border: "var(--rule)" }}>
+        <Assistant role="advisor" c={c} />
       </div>
     </div>
   );

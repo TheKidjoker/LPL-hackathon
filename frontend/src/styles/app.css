@@ -1,49 +1,55 @@
 /* Layout for Second Look, ported from the Claude Design prototype.
-   Tokens and base components live in modernist.css; the palette below retunes them
-   to the LPL Financial template (navy #00205B, burnt orange #B35000, gray #F2F3F5; background tinted blue-gray #E3E8F1). */
+   Tokens and base components live in modernist.css; the palette below retunes them to a
+   deep LPL navy dark theme (from the LPL template: navy #00205B, burnt orange #B35000). */
 
 :root {
-  /* LPL palette. --color-accent is the primary (buttons, selected role, links). */
-  --color-bg: #e3e8f1;
-  --color-surface: #d6deeb;
-  --color-text: #00205b;
-  --color-divider: color-mix(in srgb, #00205b 30%, transparent);
-  --color-accent: #00205b;
-  --color-accent-100: #eaeef6;
-  --color-accent-200: #d3dbea;
-  --color-accent-300: #aebbd5;
-  --color-accent-400: #7487b0;
-  --color-accent-500: #3a5288;
-  --color-accent-600: #001a4b;
-  --color-accent-700: #00143c;
-  --color-accent-800: #000f2e;
-  --color-accent-900: #000a1f;
-  --color-neutral-100: #f7f8fa;
-  --color-neutral-200: #e9ebef;
-  --color-neutral-300: #d4d8e0;
-  --color-neutral-400: #b5bbc7;
-  --color-neutral-500: #9097a6;
-  --color-neutral-600: #6f7788;
-  --color-neutral-700: #545c6e;
-  --color-neutral-800: #3a4255;
-  --color-neutral-900: #1f2738;
-  --brand-orange: #b35000;
-  --brand-orange-100: #fbf0e8;
-  --brand-orange-ink: #8a3d00;
+  color-scheme: dark;
+  /* Deep navy ground with lighter navy panels: easy on the eyes on a projector or late at night. */
+  --color-bg: #0a1833;
+  --color-surface: #13264d;
+  --color-panel: #0f2043;
+  --color-text: #e8eef9;
+  --color-divider: color-mix(in srgb, #9fb4dc 22%, transparent);
+  /* --color-accent is the primary: buttons, selected role, links. LPL orange, brightened for dark. */
+  --color-accent: #e8843c;
+  --color-accent-100: color-mix(in srgb, #e8843c 14%, transparent);
+  --color-accent-200: color-mix(in srgb, #e8843c 24%, transparent);
+  --color-accent-300: #b86224;
+  --color-accent-400: #cf7330;
+  --color-accent-500: #e8843c;
+  --color-accent-600: #f09a58;
+  --color-accent-700: #f5b07b;
+  --color-accent-800: #f8c59f;
+  --color-accent-900: #fbdcc4;
+  --color-neutral-100: #0f2147;
+  --color-neutral-200: #172b55;
+  --color-neutral-300: #253a68;
+  --color-neutral-400: #3a5080;
+  --color-neutral-500: #6a7fa6;
+  --color-neutral-600: #8899bb;
+  --color-neutral-700: #9fb0cc;
+  --color-neutral-800: #c3cfe3;
+  --color-neutral-900: #e8eef9;
+  --brand-navy: #00205b;
+  --brand-orange: #e8843c;
+  --brand-orange-100: color-mix(in srgb, #e8843c 13%, transparent);
+  --brand-orange-ink: #f5b07b;
+  --ai: #8fb6ff;
+  --ai-bg: color-mix(in srgb, #8fb6ff 12%, transparent);
   --font-heading: "Source Serif 4", Georgia, serif;
   --font-heading-weight: 600;
 
-  /* Risk colors mean risk only, so they stay distinct from the brand. */
-  --risk-high: #c0261b;
-  --risk-high-bg: #fdecea;
-  --risk-high-ink: #8c1a12;
-  --risk-low: #2e7d4f;
-  --risk-low-bg: #e6f2eb;
-  --risk-low-ink: #00491f;
-  --risk-medium: oklch(0.74 0.15 70);
-  --risk-medium-bg: oklch(0.95 0.04 80);
-  --risk-medium-ink: oklch(0.44 0.1 60);
-  --rule: 2px solid var(--color-divider);
+  /* Risk colors mean risk only, so they stay distinct from the brand. Tuned for a dark ground. */
+  --risk-high: #ff6b5e;
+  --risk-high-bg: color-mix(in srgb, #ff6b5e 15%, transparent);
+  --risk-high-ink: #ffb3ab;
+  --risk-low: #4cc38a;
+  --risk-low-bg: color-mix(in srgb, #4cc38a 15%, transparent);
+  --risk-low-ink: #a6e8c6;
+  --risk-medium: #f2b544;
+  --risk-medium-bg: color-mix(in srgb, #f2b544 15%, transparent);
+  --risk-medium-ink: #ffd98a;
+  --rule: 1px solid var(--color-divider);
   --hair: 1px solid var(--color-divider);
 }
 
@@ -51,7 +57,13 @@ body { background: var(--color-bg); }
 a { color: var(--color-accent); }
 /* Serif is for headings only; buttons and dialog titles stay in the sans body face. */
 .btn, .dialog-title { font-family: var(--font-body); font-weight: 600; }
-.btn-primary { color: #fff; }
+.btn-primary { color: var(--color-bg); }
+.btn-primary:hover { background: var(--color-accent-600); }
+.btn-secondary { color: var(--color-text); }
+.input { background: var(--color-panel); color: var(--color-text); }
+.input::placeholder { color: var(--color-neutral-500); }
+.dialog-backdrop { background: rgba(3, 10, 25, 0.72); }
+.dialog { background: var(--color-surface); color: var(--color-text); }
 .app { min-height: 100vh; font-variant-numeric: tabular-nums; }
 
 .kicker { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700); }
@@ -64,11 +76,11 @@ a { color: var(--color-accent); }
 /* — top bar — */
 .topbar {
   display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
-  padding: 14px 32px; border-bottom: var(--rule); background: var(--color-bg);
+  padding: 14px 32px; border-bottom: 1px solid color-mix(in srgb, #e8843c 45%, transparent); background: var(--brand-navy);
   position: sticky; top: 0; z-index: 5;
 }
 .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
-.brand-mark { width: 22px; height: 22px; background: var(--color-accent); display: flex; align-items: flex-end; padding: 4px; }
+.brand-mark { width: 22px; height: 22px; background: var(--color-text); display: flex; align-items: flex-end; padding: 4px; }
 .brand-mark::after { content: ""; width: 100%; height: 5px; background: var(--brand-orange); }
 .brand-name { font-family: var(--font-heading); font-weight: 600; font-size: 20px; letter-spacing: -0.01em; }
 .brand-firm { font-size: 12px; color: var(--color-neutral-700); border-left: var(--hair); padding-left: 12px; }
@@ -82,7 +94,7 @@ a { color: var(--color-accent); }
 
 /* — fraud team — */
 .fraud { display: grid; grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); min-height: calc(100vh - 66px); }
-.queue { border-right: var(--rule); display: flex; flex-direction: column; }
+.queue { border-right: var(--rule); display: flex; flex-direction: column; background: var(--color-panel); }
 .queue-head { padding: 20px 20px 14px; border-bottom: var(--rule); }
 .queue-head h4 { margin: 0; }
 .queue-row {
@@ -188,3 +200,54 @@ a { color: var(--color-accent); }
   .contact-form { grid-template-columns: 1fr; }
   .topbar, .detail-head, .stat, .cell, .page { padding-left: 16px; padding-right: 16px; }
 }
+
+/* — impact strip (fraud team) — */
+.impact { display: flex; flex-wrap: wrap; gap: 0; border-bottom: var(--rule); background: var(--color-panel); }
+.impact > div { padding: 12px 32px; border-right: var(--hair); }
+.impact b { display: block; font-size: 20px; font-weight: 800; letter-spacing: -0.01em; }
+.impact span { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-neutral-700); }
+.impact .tested { margin-left: auto; border-right: 0; font-size: 12px; color: var(--color-neutral-700); align-self: center; }
+
+/* — signal groups — */
+.signal-group + .signal-group { margin-top: 14px; }
+.signal-group .kicker { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.chip.ai-chip { background: var(--ai-bg); color: var(--color-text); border: 1px dashed color-mix(in srgb, #8fb6ff 55%, transparent); }
+.chip.ai-chip i { background: var(--ai); }
+
+/* — who was alerted — */
+.alert-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.alert-row { display: flex; align-items: center; gap: 10px; }
+.alert-row .dot { width: 8px; height: 8px; flex: none; }
+.alert-row.skipped { color: var(--risk-high-ink); }
+
+/* — transcript on the fraud view — */
+.transcript { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.transcript .q { color: var(--color-neutral-700); }
+.transcript .a { padding-left: 12px; border-left: 2px solid var(--color-divider); }
+
+/* — AI assistant panel — */
+.assistant { border-top: var(--rule); background: var(--color-panel); }
+.assistant-head { display: flex; align-items: center; gap: 10px; padding: 16px 32px; border-bottom: var(--hair); }
+.assistant-head .ai-mark { width: 26px; height: 26px; display: grid; place-items: center; background: var(--ai-bg); border: 1px solid color-mix(in srgb, #8fb6ff 45%, transparent); }
+.assistant-log { display: flex; flex-direction: column; gap: 12px; padding: 20px 32px; max-height: 420px; overflow-y: auto; }
+.assistant-log .from-ai { max-width: 85%; background: var(--color-surface); padding: 12px 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+.assistant-log .from-me { max-width: 75%; align-self: flex-end; background: var(--ai-bg); border: 1px solid color-mix(in srgb, #8fb6ff 35%, transparent); padding: 10px 14px; font-size: 14px; }
+.assistant-foot { padding: 0 32px 20px; display: flex; flex-direction: column; gap: 10px; }
+.assistant-foot .suggest { display: flex; flex-wrap: wrap; gap: 8px; }
+.assistant-foot .suggest button { font-size: 13px; padding: 6px 10px; }
+.assistant-foot form { display: flex; gap: 8px; }
+.typing { display: inline-flex; gap: 4px; }
+.typing i { width: 6px; height: 6px; background: var(--color-neutral-600); animation: blink 1s infinite; }
+.typing i:nth-child(2) { animation-delay: 0.2s; }
+.typing i:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+
+/* — toasts — */
+.toasts { position: fixed; right: 24px; bottom: 24px; display: flex; flex-direction: column; gap: 8px; z-index: 30; }
+.toast { background: var(--color-surface); color: var(--color-text); border-left: 4px solid var(--color-accent); padding: 12px 16px; font-size: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); min-width: 260px; }
+.toast.error { border-left-color: var(--risk-high); }
+
+/* — scenario picker and review — */
+.scenario-pick { display: grid; gap: 8px; margin-top: 18px; max-width: 520px; }
+.scenario-pick label { font-size: 12px; color: var(--color-neutral-700); }
+.live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--risk-low); margin-right: 6px; animation: blink 2s infinite; }

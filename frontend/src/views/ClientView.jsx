@@ -2,19 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "../api.js";
 import { chatTurns, clientAnswer, trustedContact } from "../lib/caseView.js";
 import { fmtDay, isOpen, money } from "../lib/format.js";
-import { PhoneIcon, ShieldIcon } from "../components/parts.jsx";
+import { SCENARIOS, freshRequest } from "../lib/scenarios.js";
+import { PhoneIcon, ShieldIcon, useNow } from "../components/parts.jsx";
+import { usePolling } from "../components/live.jsx";
 
 const ROLE = "client";
 
-const DEMO_REQUEST = {
-  accountId: "acc-1001",
-  amount: 180000,
-  payee: { name: "CoinVault Exchange", type: "crypto_exchange", addedAt: "2026-10-02T12:01:00Z" },
-  channel: "web",
-  clientNote: "Moving funds to a safe account as instructed by bank security.",
-};
-
-const REVIEW_STEPS = ["Verifying the payee", "Checking recent account activity", "Comparing with your usual patterns"];
+// Shown while scoring runs (about 10 seconds with real Claude), one step every ~2.5 seconds.
+const REVIEW_STEPS = ["Verifying the payee", "Checking 90 days of account activity", "Juno is reviewing the request", "Writing the case memo"];
 
 const WARNING_SIGNS = [
   "Someone called saying they are from your bank or our firm's security team",
@@ -27,16 +22,20 @@ const WARNING_SIGNS = [
 export default function ClientView({ caseId, onCase }) {
   const [tab, setTab] = useState("withdraw");
   const [c, setCase] = useState(null);
+  const [context, setContext] = useState(null);
   const [error, setError] = useState("");
 
+  // Polls so the fraud team's decision (released, escalated) reaches the client screen live.
+  usePolling(() => caseId && api.getCase(ROLE, caseId).then(setCase).catch((e) => setError(e.message)), [caseId]);
   useEffect(() => {
-    if (caseId) api.getCase(ROLE, caseId).then(setCase).catch((e) => setError(e.message));
+    if (caseId) api.getContext(ROLE, caseId).then(setContext).catch(() => setContext(null));
   }, [caseId]);
 
   const update = (next) => {
     setCase(next);
     onCase(next.caseId);
   };
+  const noAdvisor = context && !context.advisor;
 
   return (
     <div className="page" style={{ maxWidth: 1200, paddingTop: 28, paddingBottom: 56 }}>
@@ -48,9 +47,9 @@ export default function ClientView({ caseId, onCase }) {
       {tab === "withdraw" ? (
         <div className="client">
           <div className="main">
-            {c ? <Outcome c={c} onUpdate={update} setError={setError} /> : <WithdrawForm onDone={update} setError={setError} />}
+            {c ? <Outcome c={c} onUpdate={update} setError={setError} noAdvisor={noAdvisor} goChat={() => setTab("chat")} /> : <WithdrawForm onDone={update} setError={setError} />}
           </div>
-          <SidePanel />
+          <SidePanel advisor={context?.advisor} known={!!context} />
         </div>
       ) : (
         <ScamCheck c={c} onUpdate={update} goWithdraw={() => setTab("withdraw")} setError={setError} />
@@ -60,40 +59,44 @@ export default function ClientView({ caseId, onCase }) {
 }
 
 function WithdrawForm({ onDone, setError }) {
-  const [form, setForm] = useState({ amount: money(DEMO_REQUEST.amount, true), payee: DEMO_REQUEST.payee.name, note: DEMO_REQUEST.clientNote });
-  const [stepIdx, setStepIdx] = useState(-1);
+  const [scenarioId, setScenarioId] = useState(SCENARIOS[0].id);
+  const scenario = SCENARIOS.find((s) => s.id === scenarioId);
+  const blank = (s) => ({ amount: money(s.request.amount, true), payee: s.request.payee.name, note: s.request.clientNote || "" });
+  const [form, setForm] = useState(blank(scenario));
+  const [started, setStarted] = useState(null);
+  const now = useNow(100);
+  const elapsed = started ? (now - started) / 1000 : 0;
+  const stepIdx = started ? Math.min(REVIEW_STEPS.length - 1, Math.floor(elapsed / 2.5)) : -1;
+  const newPayee = !!freshRequest(scenario).payee?.addedAt && Date.now() - Date.parse(freshRequest(scenario).payee.addedAt) < 24 * 3600e3;
+
+  function pick(id) {
+    setScenarioId(id);
+    setForm(blank(SCENARIOS.find((s) => s.id === id)));
+  }
 
   async function submit() {
     setError("");
-    setStepIdx(0);
-    // Real scoring takes about 10 seconds; walk the steps while it runs.
-    const timers = [1, 2].map((i) => setTimeout(() => setStepIdx(i), i * 3000));
+    setStarted(Date.now());
     try {
       const amount = Number(String(form.amount).replace(/[^0-9.]/g, ""));
-      const result = await api.submitWithdrawal(ROLE, {
-        ...DEMO_REQUEST,
-        amount,
-        // The demo payee was "added" two hours before submit, so payee_added_recently fires on any day.
-        payee: { ...DEMO_REQUEST.payee, name: form.payee, addedAt: new Date(Date.now() - 2 * 3600e3).toISOString().replace(/\.\d+Z$/, "Z") },
-        clientNote: form.note,
-      });
-      setStepIdx(3);
-      setTimeout(() => onDone(result), 400);
+      const result = await api.submitWithdrawal(ROLE, freshRequest(scenario, { amount, payee: { name: form.payee }, clientNote: form.note }));
+      onDone(result);
     } catch (e) {
       setError(e.message);
-      setStepIdx(-1);
-    } finally {
-      timers.forEach(clearTimeout);
+      setStarted(null);
     }
   }
 
-  if (stepIdx >= 0) {
+  if (started) {
     return (
       <>
         <h2>Reviewing your request…</h2>
-        <p className="soft">This usually takes a few seconds. Please keep this page open.</p>
-        <div style={{ height: 4, background: "var(--color-neutral-300)", margin: "28px 0 8px", maxWidth: 520 }}>
-          <div style={{ height: 4, background: "var(--color-text)", width: `${Math.round(((stepIdx + 1) / 4) * 100)}%`, transition: "width 0.6s" }} />
+        <p className="soft">This usually takes about 10 seconds. Please keep this page open.</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, maxWidth: 520, margin: "28px 0 8px" }}>
+          <div style={{ flex: 1, height: 4, background: "var(--color-neutral-300)" }}>
+            <div style={{ height: 4, background: "var(--color-accent)", width: `${Math.min(95, (elapsed / 11) * 100)}%`, transition: "width 0.2s" }} />
+          </div>
+          <span className="muted" style={{ fontSize: 12, minWidth: 40, textAlign: "right" }}>{elapsed.toFixed(1)}s</span>
         </div>
         <div style={{ maxWidth: 520, borderTop: "var(--rule)", marginTop: 20 }}>
           {REVIEW_STEPS.map((t, i) => (
@@ -102,6 +105,7 @@ function WithdrawForm({ onDone, setError }) {
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-bg)" strokeWidth="3" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
               </span>
               {t}
+              {i === stepIdx && <span className="typing" style={{ marginLeft: 8 }}><i /><i /><i /></span>}
             </div>
           ))}
         </div>
@@ -112,7 +116,16 @@ function WithdrawForm({ onDone, setError }) {
   return (
     <>
       <h2>Withdraw funds</h2>
-      <p className="soft">From Brokerage {DEMO_REQUEST.accountId} · Available {money(DEMO_REQUEST.amount, true)}</p>
+      <div className="scenario-pick">
+        <label htmlFor="scenario">Demo account</label>
+        <select id="scenario" className="input" value={scenarioId} onChange={(e) => pick(e.target.value)}>
+          {SCENARIOS.map((s) => (
+            <option key={s.id} value={s.id}>{s.clientName} · {money(s.request.amount)} to {s.request.payee.name} ({s.expectedLevel === "high" ? "scam" : "normal"})</option>
+          ))}
+        </select>
+        <div className="muted" style={{ fontSize: 13 }}>{scenario.story}</div>
+      </div>
+      <p className="soft" style={{ marginTop: 18 }}>From Brokerage {scenario.accountId} · Available {money(scenario.balance, true)}</p>
       <div className="form">
         <div className="field">
           <label htmlFor="amount">Amount</label>
@@ -121,10 +134,12 @@ function WithdrawForm({ onDone, setError }) {
         <div className="field">
           <label htmlFor="payee">Payee</label>
           <input id="payee" className="input" value={form.payee} onChange={(e) => setForm({ ...form, payee: e.target.value })} />
-          <div style={{ display: "flex", gap: 8, marginTop: 6, alignItems: "center" }}>
-            <span className="tag tag-neutral">New payee</span>
-            <span className="muted" style={{ fontSize: 12 }}>Added today</span>
-          </div>
+          {newPayee && (
+            <div style={{ display: "flex", gap: 8, marginTop: 6, alignItems: "center" }}>
+              <span className="tag tag-neutral">New payee</span>
+              <span className="muted" style={{ fontSize: 12 }}>Added today</span>
+            </div>
+          )}
         </div>
         <div className="field">
           <label htmlFor="note">Note (optional)</label>
@@ -141,7 +156,7 @@ function WithdrawForm({ onDone, setError }) {
   );
 }
 
-function Outcome({ c, onUpdate, setError }) {
+function Outcome({ c, onUpdate, setError, noAdvisor, goChat }) {
   const [contact, setContact] = useState({ name: "", phone: "" });
   const [busy, setBusy] = useState(false);
   const answer = clientAnswer(c);
@@ -184,6 +199,14 @@ function Outcome({ c, onUpdate, setError }) {
         <div><div className="muted" style={{ fontSize: 12 }}>To</div><div className="big" style={{ fontSize: 20, marginTop: 4 }}>{txn.payee?.name}</div></div>
         <div><div className="muted" style={{ fontSize: 12 }}>On hold until</div><div className="big" style={{ fontSize: 20, marginTop: 4 }}>{fmtDay(c.holdEndsAt) || "Under review"}</div></div>
       </div>
+
+      {noAdvisor && (
+        <div className="callout" style={{ marginBottom: 24, borderLeft: "4px solid var(--color-accent)" }}>
+          <b>You don't have an assigned advisor, so we'll check in with you directly.</b>
+          <p>Answer a few quick questions so a person can review your transfer faster.</p>
+          <button className="btn btn-primary" style={{ marginTop: 12 }} onClick={goChat}>Start the 1-minute scam check</button>
+        </div>
+      )}
 
       <h3>Did you request this?</h3>
       {!answer ? (
@@ -243,13 +266,13 @@ function Outcome({ c, onUpdate, setError }) {
   );
 }
 
-function SidePanel() {
+function SidePanel({ advisor, known }) {
   return (
     <aside>
       <div>
         <div className="kicker" style={{ marginBottom: 8 }}>Your advisor</div>
-        <div className="big" style={{ fontSize: 18 }}>Call the number on your statement</div>
-        <div className="soft" style={{ fontSize: 14, marginTop: 4 }}>Mon–Fri, 8–6 ET</div>
+        <div className="big" style={{ fontSize: 18 }}>{advisor ? advisor.name : known ? "No assigned advisor" : "Your advisor team"}</div>
+        <div className="soft" style={{ fontSize: 14, marginTop: 4 }}>{known && !advisor ? "Client service: call the number on your statement" : "Call the number on your statement · Mon–Fri, 8–6 ET"}</div>
       </div>
       <div style={{ height: 2, background: "var(--color-divider)" }} />
       <div style={{ fontSize: 14, lineHeight: 1.6 }}><b>We will never ask you to move money to keep it safe.</b> Not by phone, text or email. If someone does, it is a scam.</div>

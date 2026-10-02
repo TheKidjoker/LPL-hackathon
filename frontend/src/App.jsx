@@ -3,6 +3,7 @@ import { api, USING_MOCK } from "./api.js";
 import ClientView from "./views/ClientView.jsx";
 import AdvisorView from "./views/AdvisorView.jsx";
 import FraudView from "./views/FraudView.jsx";
+import { ToastProvider } from "./components/live.jsx";
 
 const ROLES = [
   { id: "client", label: "Client", viewer: "Signed in as a client" },
@@ -23,6 +24,7 @@ export default function App() {
   }
 
   return (
+    <ToastProvider>
     <div className="app">
       <header className="topbar">
         <div className="brand">
@@ -58,5 +60,6 @@ export default function App() {
         {role === "fraud" && <FraudView />}
       </div>
     </div>
+    </ToastProvider>
   );
 }
