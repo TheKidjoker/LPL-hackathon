@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -8,6 +9,7 @@ from moto import mock_aws
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT / "backend"), str(ROOT / "ai")]
+os.environ.setdefault("SEED_DATA_DIR", str(ROOT / "data"))  # /opt in Lambda
 
 from common import db  # noqa: E402
 

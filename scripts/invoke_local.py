@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT / "backend"), str(ROOT / "ai"), str(ROOT / "scripts")]
 os.environ.setdefault("AWS_PROFILE", "lpl-hackathon")
 os.environ.setdefault("AWS_REGION", "us-east-1")
+os.environ.setdefault("SEED_DATA_DIR", str(ROOT / "data"))  # /opt in Lambda, from the SeedDataLayer
 
 
 def main():
