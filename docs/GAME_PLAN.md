@@ -72,9 +72,11 @@ We split work by folder so nobody edits the same files. For checklists and hando
 
 | Person | Folders | Owns |
 |---|---|---|
-| Thomas | `/frontend`, `/docs` | One app with three role views, Amplify hosting, deck, demo script, video |
-| Krish | `/backend`, `/infra` | API Gateway, Lambda, DynamoDB, Step Functions. The only person who runs `sam deploy` |
-| Kaylin | `/ai`, `/data` | Opus 5 scoring, memo and scam-check chat, Guardrails, Knowledge Base, fake accounts and scam scenarios |
+| Thomas | `/frontend`, `/infra`, `/docs`, read endpoints in `/backend` | All frontend, all AWS setup (SAM template, IAM, Amplify, Cognito), deck, demo, video. The only person who runs `sam deploy` |
+| Krish | `/backend` (case logic) | Submit, responses, and decision endpoints, case statuses, audit log, alerts |
+| Kaylin | `/ai`, `/data` | Bedrock client, Opus 5 scoring and memo, scam-check chat, Guardrails, seed data and loader |
+
+All three build parts of the backend. The file-by-file split is in [`TEAM_PLAN.md`](TEAM_PLAN.md#backend-file-map).
 
 **Rules for the repo:**
 
