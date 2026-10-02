@@ -1,0 +1,12 @@
+{
+  "httpMethod": "GET",
+  "path": "/cases/case-0001/context",
+  "headers": {
+    "X-Role": "fraud"
+  },
+  "pathParameters": {
+    "caseId": "case-0001"
+  },
+  "queryStringParameters": null,
+  "body": null
+}

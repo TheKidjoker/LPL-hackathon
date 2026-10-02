@@ -279,6 +279,27 @@ Resources:
           Type: Api
           Properties: { Path: "/cases/{caseId}", Method: get }
 
+  CaseContextFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.case_context.handler
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: "/cases/{caseId}/context", Method: get }
+
+  AssistantFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.assistant.handler
+      Role: !GetAtt LambdaRole.Arn
+      Timeout: 30
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: "/cases/{caseId}/assistant", Method: post }
+
   PostResponseFunction:
     Type: AWS::Serverless::Function
     Properties:

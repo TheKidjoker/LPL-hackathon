@@ -1,0 +1,12 @@
+{
+  "httpMethod": "POST",
+  "path": "/cases/case-0001/assistant",
+  "headers": {
+    "X-Role": "fraud"
+  },
+  "pathParameters": {
+    "caseId": "case-0001"
+  },
+  "queryStringParameters": null,
+  "body": "{\"messages\": [{\"role\": \"user\", \"text\": \"Why was this held and what should I do first?\"}]}"
+}
