@@ -7,6 +7,7 @@ why it looks like a scam, and alerts the client, their advisor, and LPL's fraud 
 
 ## Start here
 
+- [ROLES.md](ROLES.md): what each person does, first steps, and checklist
 - [docs/DEV_SETUP.md](docs/DEV_SETUP.md): install, run the tests, and start on your lane
 - [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md): who builds what, checklists, handoffs
 - [docs/api.md](docs/api.md): the API contract everyone builds to
