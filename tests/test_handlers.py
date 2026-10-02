@@ -5,9 +5,9 @@ from datetime import date
 
 import pytest
 
-from common import db
+from common import case_state, db
 from conftest import ROOT, body
-from handlers import get_case, list_cases, post_response, submit_withdrawal
+from handlers import demo_reset, get_case, list_cases, post_decision, post_response, submit_withdrawal
 
 SCENARIOS = {s["accountId"]: s["request"] for s in json.loads((ROOT / "data" / "scenarios.json").read_text())}
 
@@ -95,8 +95,8 @@ def test_submit_validation(event, seeded, scored):
 
 
 def test_hold_end_date_counts_business_days():
-    assert submit_withdrawal.hold_end_date(date(2026, 10, 2)) == "2026-10-16"  # Friday
-    assert submit_withdrawal.hold_end_date(date(2026, 10, 3)) == "2026-10-16"  # Saturday
+    assert case_state.hold_end_date(date(2026, 10, 2)) == "2026-10-16"  # Friday
+    assert case_state.hold_end_date(date(2026, 10, 3)) == "2026-10-16"  # Saturday
 
 
 def test_list_cases_puts_holds_first_newest_first(event, tables):
@@ -182,3 +182,72 @@ def test_scam_check_chat(event, seeded, monkeypatch):
     assert case["audit"][-1]["action"] == "SCAM_CHECK_DONE"
 
     assert respond_as(event, "client", "chat", "one more")["statusCode"] == 409
+
+
+def decide(event, action, note="", case_id="case-0001", role="fraud"):
+    request = event("post_decision", headers={"X-Role": role}, pathParameters={"caseId": case_id},
+                    body=json.dumps({"action": action, "note": note}))
+    return post_decision.handler(request, None)
+
+
+def test_release_saves_decision_and_clears_hold(event, seeded):
+    result = decide(event, "release", "Client confirmed in person at the branch.")
+    assert result["statusCode"] == 200
+    case = body(result)
+    assert case["status"] == "RELEASED" and case["holdEndsAt"] is None
+    assert case["decision"]["action"] == "release" and case["decision"]["by"] == "fraud"
+    assert case["audit"][-1]["action"] == "RELEASED"
+
+    saved = fraud_view(event, "case-0001")
+    assert saved["status"] == "RELEASED" and saved["decision"]["note"] == "Client confirmed in person at the branch."
+    assert decide(event, "escalate")["statusCode"] == 409  # released is final
+
+
+def test_extend_then_escalate(event, seeded):
+    extended = body(decide(event, "extend"))
+    assert extended["status"] == "EXTENDED"
+    assert extended["holdEndsAt"] > "2026-10-16"  # 10 more business days past the old end
+    assert "hold now ends" in extended["audit"][-1]["detail"]
+    assert decide(event, "extend")["statusCode"] == 409  # only one extension
+
+    escalated = body(decide(event, "escalate", "Impostor scam. Sent to investigations."))
+    assert escalated["status"] == "ESCALATED" and escalated["holdEndsAt"] == extended["holdEndsAt"]
+    assert [a["action"] for a in escalated["audit"]] == ["EXTENDED", "ESCALATED"]
+
+
+def test_decision_rules(event, seeded):
+    assert decide(event, "release", role="advisor")["statusCode"] == 403
+    assert decide(event, "release", role="client")["statusCode"] == 403
+    assert decide(event, "approve")["statusCode"] == 400
+    assert decide(event, "release", note="x" * 2001)["statusCode"] == 400
+    assert decide(event, "release", case_id="case-nope")["statusCode"] == 404
+    assert fraud_view(event, "case-0001")["status"] == "HELD"  # nothing changed
+
+
+def test_decision_loses_race_cleanly(event, seeded, monkeypatch):
+    real_get = db.get_case
+
+    def stale_get(case_id):  # someone releases the case right after we read it
+        case = real_get(case_id)
+        db.update_case(case_id, {"status": "RELEASED"})
+        return case
+
+    monkeypatch.setattr(db, "get_case", stale_get)
+    result = decide(event, "escalate")
+    assert result["statusCode"] == 409
+    monkeypatch.setattr(db, "get_case", real_get)
+    assert fraud_view(event, "case-0001")["status"] == "RELEASED"
+
+
+def test_demo_reset_clears_cases_and_reloads_seed(event, seeded, scored):
+    scored(risk(92, "high"))
+    submit(event, "acc-1001")
+    db.update_case("case-0001", {"status": "RELEASED"})
+    db.load_seed_data([{"accountId": "acc-junk"}], [])
+
+    result = body(demo_reset.handler(event("demo_reset"), None))
+    assert result == {"ok": True, "accountsLoaded": 6}
+    assert db.list_cases_by_status() == []
+    assert db.get_account("acc-junk") is None and db.get_account("acc-1001")["clientName"] == "Margaret Ellis"
+    assert len(db.get_history("acc-1001", days=3650)) == 20
+    assert demo_reset.handler(event("demo_reset", headers={}), None)["statusCode"] == 403
