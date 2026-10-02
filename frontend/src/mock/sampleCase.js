@@ -24,6 +24,8 @@ export const sampleCase = {
       { name: "full_liquidation", detail: "Withdrawal is 100% of the account balance" },
       { name: "senior_client", detail: "Client is 78" },
       { name: "first_crypto", detail: "No crypto activity in 22 years" },
+      { name: "safe_account_script", detail: "Client note repeats the 'move it to a safe account' impostor script" },
+      { name: "third_party_direction", detail: "Note says 'bank security' told her to move the money" },
     ],
     memo:
       "Margaret Ellis, 78, asked to send her full $180,000 balance to CoinVault Exchange, a crypto payee added two hours earlier. " +

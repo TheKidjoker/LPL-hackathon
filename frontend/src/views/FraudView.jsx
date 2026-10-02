@@ -1,33 +1,42 @@
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api.js";
-import { advisorNotes, citations, clientAnswer, memoParagraphs, trustedContact } from "../lib/caseView.js";
+import { advisorNotes, chatTurns, citations, clientAnswer, memoParagraphs, trustedContact } from "../lib/caseView.js";
 import { countdown, fmtAt, fmtClock, fmtDay, holdEndMs, isOpen, money, riskOf } from "../lib/format.js";
-import { LockIcon, RiskGauge, SignalChips, SparkIcon, StatusPill, useNow } from "../components/parts.jsx";
+import { LockIcon, RiskGauge, SparkIcon, StatusPill, useNow } from "../components/parts.jsx";
+import { AlertsPanel, ChatTranscript, ImpactStrip, SignalGroups } from "../components/caseParts.jsx";
+import { LiveDot, usePolling, useToast } from "../components/live.jsx";
+import Assistant from "../components/Assistant.jsx";
 
 const ROLE = "fraud";
+const DONE = { release: "Hold released. Funds will be sent.", extend: "Hold extended.", escalate: "Escalated to Fraud Investigations." };
 
 export default function FraudView() {
   const [cases, setCases] = useState([]);
   const [selId, setSelId] = useState(null);
   const [c, setCase] = useState(null);
+  const [context, setContext] = useState(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [releaseOpen, setReleaseOpen] = useState(false);
+  const toast = useToast();
 
   const loadList = useCallback(async () => {
     try {
       const { cases } = await api.listCases(ROLE);
       setCases(cases);
       setSelId((id) => id || cases[0]?.caseId || null);
+      setError("");
     } catch (e) {
       setError(e.message);
     }
   }, []);
 
-  useEffect(() => { loadList(); }, [loadList]);
+  // Queue and open case refresh every few seconds, so client answers and advisor notes appear live.
+  usePolling(loadList, [loadList]);
+  usePolling(() => selId && api.getCase(ROLE, selId).then(setCase).catch((e) => setError(e.message)), [selId]);
   useEffect(() => {
-    if (!selId) return;
-    api.getCase(ROLE, selId).then(setCase).catch((e) => setError(e.message));
+    setContext(null);
+    if (selId) api.getContext(ROLE, selId).then(setContext).catch(() => setContext(null));
   }, [selId]);
 
   async function decide(action, note = "") {
@@ -35,9 +44,10 @@ export default function FraudView() {
     setError("");
     try {
       setCase(await api.postDecision(ROLE, c.caseId, action, note));
+      toast(DONE[action]);
       await loadList();
     } catch (e) {
-      setError(e.message);
+      toast(e.message, "error");
     } finally {
       setBusy(false);
       setReleaseOpen(false);
@@ -51,7 +61,7 @@ export default function FraudView() {
       <aside className="queue">
         <div className="queue-head">
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-            <h4>Case queue</h4>
+            <h4><LiveDot />Case queue</h4>
             <span className="muted" style={{ fontSize: 12 }}>{held} held · {cases.length} open</span>
           </div>
           <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>Held first, then by risk score</div>
@@ -78,11 +88,12 @@ export default function FraudView() {
       </aside>
 
       <main className="detail">
-        {error && <p className="error" style={{ padding: "12px 32px 0" }}>{error}</p>}
+        <ImpactStrip cases={cases} />
+        {error && <p className="error" style={{ padding: "12px 32px 0" }}>Could not refresh: {error}</p>}
         {!c ? (
           <div className="empty">{cases.length ? "Loading case..." : "No cases yet. Submit a withdrawal from the Client view."}</div>
         ) : (
-          <CaseDetail c={c} busy={busy} onRelease={() => setReleaseOpen(true)} onDecide={decide} />
+          <CaseDetail c={c} context={context} busy={busy} onRelease={() => setReleaseOpen(true)} onDecide={decide} />
         )}
       </main>
 
@@ -91,7 +102,7 @@ export default function FraudView() {
   );
 }
 
-function CaseDetail({ c, busy, onRelease, onDecide }) {
+function CaseDetail({ c, context, busy, onRelease, onDecide }) {
   const now = useNow();
   const open = isOpen(c.status);
   const end = holdEndMs(c.holdEndsAt);
@@ -159,7 +170,7 @@ function CaseDetail({ c, busy, onRelease, onDecide }) {
       <div className="columns">
         <div className="col cell">
           <div className="kicker" style={{ marginBottom: 10 }}>Signals</div>
-          <SignalChips signals={c.risk?.signals} level={c.risk?.level} />
+          <SignalGroups signals={c.risk?.signals} level={c.risk?.level} />
           <div className="memo-head">
             <SparkIcon />
             <span className="kicker">Claude case memo</span>
@@ -184,22 +195,31 @@ function CaseDetail({ c, busy, onRelease, onDecide }) {
               <div key={n.responseId} className="note">{n.text}<div className="muted" style={{ fontSize: 11, marginTop: 2 }}>Advisor · {fmtAt(n.at)}</div></div>
             )) : <div className="muted" style={{ fontSize: 14 }}>No notes yet</div>}
           </div>
+          {chatTurns(c).length > 0 && (
+            <div className="cell">
+              <div className="kicker" style={{ marginBottom: 8 }}>Scam-check chat with the client</div>
+              <ChatTranscript c={c} />
+            </div>
+          )}
+          <div className="cell">
+            <div className="kicker" style={{ marginBottom: 8 }}>Who was alerted</div>
+            <AlertsPanel c={c} context={context} />
+          </div>
           <div className="cell">
             <div className="kicker" style={{ marginBottom: 8 }}>Trusted contact</div>
             <div style={{ fontSize: 14 }}>{trustedContact(c) || "None on file. Rule 2165 notice cannot be sent."}</div>
-            {c.risk?.doNotNotify?.length > 0 && (
-              <div className="error" style={{ marginTop: 8 }}>Not alerted, may be involved: {c.risk.doNotNotify.join(", ")}</div>
-            )}
           </div>
         </div>
       </div>
 
-      <div style={{ padding: "24px 32px 40px" }}>
+      <Assistant role="fraud" c={c} />
+
+      <div style={{ padding: "24px 32px 40px", borderTop: "var(--rule)" }}>
         <div className="kicker" style={{ marginBottom: 14 }}>Audit timeline</div>
         {audit.map((a, i) => (
           <div key={i} className="timeline-row">
             <span className="muted">{fmtAt(a.timestamp)}</span>
-            <div className="rail"><i style={{ background: a.action === "HELD" || a.action === "ESCALATED" ? "var(--brand-orange)" : a.action === "RELEASED" ? "var(--risk-low)" : "var(--color-text)" }} /><b /></div>
+            <div className="rail"><i style={{ background: a.action === "HELD" || a.action === "ESCALATED" ? "var(--brand-orange)" : a.action === "RELEASED" ? "var(--risk-low)" : a.action === "ASSISTANT_QUESTION" ? "var(--ai)" : "var(--color-text)" }} /><b /></div>
             <div><span style={{ fontWeight: 600 }}>{a.action}</span> <span className="soft">{a.actor}{a.detail ? ` · ${a.detail}` : ""}</span></div>
           </div>
         ))}

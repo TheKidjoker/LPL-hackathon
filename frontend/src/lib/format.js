@@ -31,7 +31,7 @@ export const riskOf = (level) => RISK[level] || RISK.unknown;
 export const STATUS = {
   HELD: { label: "Held", bg: "var(--color-text)", ink: "var(--color-bg)" },
   EXTENDED: { label: "Extended", bg: "var(--color-text)", ink: "var(--color-bg)" },
-  ESCALATED: { label: "Escalated", bg: "var(--brand-orange)", ink: "#fff" },
+  ESCALATED: { label: "Escalated", bg: "var(--brand-orange)", ink: "var(--color-bg)" },
   RELEASED: { label: "Released", bg: "var(--risk-low-bg)", ink: "var(--risk-low-ink)" },
 };
 export const statusOf = (s) => STATUS[s] || { label: s, bg: "var(--color-neutral-300)", ink: "var(--color-neutral-900)" };
@@ -46,4 +46,4 @@ const SIGNAL_LABELS = {
   unusual_timing: "Unusual timing",
   large_vs_history: "Large for this account",
 };
-export const signalLabel = (s) => SIGNAL_LABELS[s.name] || s.name.replaceAll("_", " ");
+export const signalLabel = (s) => SIGNAL_LABELS[s.name] || s.name.replaceAll("_", " ").replace(/^./, (ch) => ch.toUpperCase());
