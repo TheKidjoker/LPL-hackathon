@@ -69,7 +69,8 @@ Until the real functions land, Kaylin commits stubs with these exact signatures 
 
 **Pitch, from Sat midnight (Krish and Kaylin join after the build freezes):**
 
-- [ ] Deck: problem, demo, architecture slide (from `ARCHITECTURE.md`), the three safety rules, why LPL buys it
+- [ ] Architecture diagram for the deck and submission: how Claude on Bedrock connects to each AWS service. Start from the draft in `ARCHITECTURE.md`, and check it with Krish and Kaylin
+- [ ] Deck: problem, demo, architecture diagram, the three safety rules, why LPL buys it
 - [ ] Demo script that walks the $180K scenario through all three views
 - [ ] Backup demo video recorded by 6 AM
 
