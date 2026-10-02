@@ -46,7 +46,9 @@ def handler(event, context):
             fresh = db.get_case(case["caseId"])
             if not fresh or fresh.get("status") not in OPEN_HOLDS or not expired(fresh, now):
                 continue
-            db.update_case(fresh["caseId"], {"status": case_state.ESCALATED})
+            # Only if the status is unchanged, so a decision made this instant still wins.
+            if db.update_case(fresh["caseId"], {"status": case_state.ESCALATED}, if_status=fresh["status"]) is None:
+                continue
             audit.write_audit(
                 fresh["caseId"], "system", case_state.ESCALATED,
                 f"Hold reached its end date ({fresh['holdEndsAt']}) with no decision. Escalated so the funds stay protected until the fraud team decides",
