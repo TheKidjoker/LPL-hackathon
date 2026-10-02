@@ -73,7 +73,8 @@ function WithdrawForm({ onDone, setError }) {
       const result = await api.submitWithdrawal(ROLE, {
         ...DEMO_REQUEST,
         amount,
-        payee: { ...DEMO_REQUEST.payee, name: form.payee },
+        // The demo payee was "added" two hours before submit, so payee_added_recently fires on any day.
+        payee: { ...DEMO_REQUEST.payee, name: form.payee, addedAt: new Date(Date.now() - 2 * 3600e3).toISOString().replace(/\.\d+Z$/, "Z") },
         clientNote: form.note,
       });
       setStepIdx(3);
