@@ -19,6 +19,9 @@ def notify_held(case, account):
     advisor = (account or {}).get("advisor")
     if advisor and advisor["contactId"] not in skip:
         recipients.append(advisor["contactId"])
-    # TODO(Kaylin): also alert the emergency contact unless skipped; send for real (stretch)
+    contact = (account or {}).get("emergencyContact")
+    if contact and contact["contactId"] not in skip:
+        recipients.append(contact["contactId"])
+    # Stretch: send for real with SNS and SES
     logger.info("Alerting %s for case %s", recipients, case["caseId"])
     return recipients

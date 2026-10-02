@@ -1,0 +1,132 @@
+[
+  {
+    "name": "hero_impostor_crypto",
+    "expected": ["high"],
+    "expectDoNotNotify": [],
+    "account": {
+      "accountId": "acc-1001", "clientName": "Margaret Ellis", "clientAge": 78, "accountOpened": "2004-03-15", "balance": 180000,
+      "advisor": {"contactId": "adv-01", "name": "Daniel Reyes"},
+      "emergencyContact": {"contactId": "ec-01", "name": "Susan Ellis", "relationship": "daughter"},
+      "jointOwners": [],
+      "knownPayees": [{"payeeId": "pay-100", "name": "First Harbor Bank checking", "type": "bank", "addedAt": "2011-06-01T00:00:00Z"}]
+    },
+    "transaction": {
+      "transactionId": "txn-9001", "accountId": "acc-1001", "timestamp": "2026-10-02T14:05:00Z", "type": "withdrawal", "amount": 180000,
+      "payee": {"payeeId": "pay-777", "name": "CoinVault Exchange", "type": "crypto_exchange", "addedAt": "2026-10-02T12:01:00Z"},
+      "channel": "web", "clientNote": "Moving funds to a safe account as instructed by bank security. They said not to tell anyone until it is done."
+    },
+    "history": [
+      {"transactionId": "h1", "accountId": "acc-1001", "timestamp": "2026-09-01T15:00:00Z", "type": "withdrawal", "amount": 2500, "payee": {"payeeId": "pay-100", "name": "First Harbor Bank checking", "type": "bank"}, "channel": "web"},
+      {"transactionId": "h2", "accountId": "acc-1001", "timestamp": "2026-08-01T15:00:00Z", "type": "withdrawal", "amount": 2500, "payee": {"payeeId": "pay-100", "name": "First Harbor Bank checking", "type": "bank"}, "channel": "web"},
+      {"transactionId": "h3", "accountId": "acc-1001", "timestamp": "2026-07-15T15:00:00Z", "type": "deposit", "amount": 1200, "payee": {"name": "Social Security", "type": "bank"}, "channel": "web"}
+    ]
+  },
+  {
+    "name": "joint_owner_scammer",
+    "expected": ["high"],
+    "expectDoNotNotify": ["jo-01"],
+    "account": {
+      "accountId": "acc-1002", "clientName": "Harold Kim", "clientAge": 82, "accountOpened": "1998-09-10", "balance": 240000,
+      "advisor": {"contactId": "adv-02", "name": "Priya Shah"},
+      "emergencyContact": {"contactId": "ec-02", "name": "Grace Kim", "relationship": "daughter"},
+      "jointOwners": [{"contactId": "jo-01", "name": "Victor Lane", "relationship": "joint owner, added 3 weeks ago"}],
+      "knownPayees": [{"payeeId": "pay-200", "name": "Coastal Credit Union checking", "type": "bank", "addedAt": "2005-02-01T00:00:00Z"}]
+    },
+    "transaction": {
+      "transactionId": "txn-9002", "accountId": "acc-1002", "timestamp": "2026-10-02T16:30:00Z", "type": "withdrawal", "amount": 200000,
+      "payee": {"payeeId": "pay-778", "name": "V. Lane Holdings LLC", "type": "individual", "addedAt": "2026-10-01T20:00:00Z"},
+      "channel": "web", "clientNote": "Victor said we need to move everything into his company account this week for the investment. He handles it, please don't call my daughter."
+    },
+    "history": [
+      {"transactionId": "h4", "accountId": "acc-1002", "timestamp": "2026-09-05T14:00:00Z", "type": "withdrawal", "amount": 3000, "payee": {"payeeId": "pay-200", "name": "Coastal Credit Union checking", "type": "bank"}, "channel": "branch"},
+      {"transactionId": "h5", "accountId": "acc-1002", "timestamp": "2026-08-05T14:00:00Z", "type": "withdrawal", "amount": 3000, "payee": {"payeeId": "pay-200", "name": "Coastal Credit Union checking", "type": "bank"}, "channel": "branch"}
+    ]
+  },
+  {
+    "name": "no_advisor_senior_tech_support",
+    "expected": ["high"],
+    "expectDoNotNotify": [],
+    "account": {
+      "accountId": "acc-1003", "clientName": "Dorothy Banks", "clientAge": 74, "accountOpened": "2012-05-20", "balance": 95000,
+      "advisor": null,
+      "emergencyContact": {"contactId": "ec-03", "name": "Michael Banks", "relationship": "son"},
+      "jointOwners": [],
+      "knownPayees": [{"payeeId": "pay-300", "name": "Lakeside Bank checking", "type": "bank", "addedAt": "2012-06-01T00:00:00Z"}]
+    },
+    "transaction": {
+      "transactionId": "txn-9003", "accountId": "acc-1003", "timestamp": "2026-10-02T22:40:00Z", "type": "withdrawal", "amount": 60000,
+      "payee": {"payeeId": "pay-779", "name": "SecureFix Refund Desk", "type": "crypto_exchange", "addedAt": "2026-10-02T21:55:00Z"},
+      "channel": "web", "clientNote": "Microsoft support found a virus and hackers in my account. The technician is on the phone and needs me to send this right now so they can protect it."
+    },
+    "history": [
+      {"transactionId": "h6", "accountId": "acc-1003", "timestamp": "2026-09-10T16:00:00Z", "type": "withdrawal", "amount": 1500, "payee": {"payeeId": "pay-300", "name": "Lakeside Bank checking", "type": "bank"}, "channel": "web"}
+    ]
+  },
+  {
+    "name": "normal_house_down_payment",
+    "expected": ["low", "medium"],
+    "expectDoNotNotify": [],
+    "account": {
+      "accountId": "acc-2001", "clientName": "Jordan Patel", "clientAge": 41, "accountOpened": "2015-01-12", "balance": 210000,
+      "advisor": {"contactId": "adv-03", "name": "Daniel Reyes"},
+      "emergencyContact": {"contactId": "ec-04", "name": "Amira Patel", "relationship": "spouse"},
+      "jointOwners": [],
+      "knownPayees": [
+        {"payeeId": "pay-400", "name": "Summit Title & Escrow", "type": "bank", "addedAt": "2026-06-15T00:00:00Z"},
+        {"payeeId": "pay-401", "name": "Northline Bank checking", "type": "bank", "addedAt": "2015-02-01T00:00:00Z"}
+      ]
+    },
+    "transaction": {
+      "transactionId": "txn-9004", "accountId": "acc-2001", "timestamp": "2026-10-02T15:10:00Z", "type": "withdrawal", "amount": 60000,
+      "payee": {"payeeId": "pay-400", "name": "Summit Title & Escrow", "type": "bank", "addedAt": "2026-06-15T00:00:00Z"},
+      "channel": "web", "clientNote": "Down payment for our house closing next week. Our advisor Daniel knows about it."
+    },
+    "history": [
+      {"transactionId": "h7", "accountId": "acc-2001", "timestamp": "2026-09-20T15:00:00Z", "type": "withdrawal", "amount": 5000, "payee": {"payeeId": "pay-400", "name": "Summit Title & Escrow", "type": "bank"}, "channel": "web"},
+      {"transactionId": "h8", "accountId": "acc-2001", "timestamp": "2026-09-01T15:00:00Z", "type": "withdrawal", "amount": 4000, "payee": {"payeeId": "pay-401", "name": "Northline Bank checking", "type": "bank"}, "channel": "web"}
+    ]
+  },
+  {
+    "name": "normal_monthly_transfer",
+    "expected": ["low"],
+    "expectDoNotNotify": [],
+    "account": {
+      "accountId": "acc-2002", "clientName": "Elena Ruiz", "clientAge": 67, "accountOpened": "2009-07-01", "balance": 320000,
+      "advisor": {"contactId": "adv-04", "name": "Priya Shah"},
+      "emergencyContact": {"contactId": "ec-05", "name": "Carlos Ruiz", "relationship": "son"},
+      "jointOwners": [],
+      "knownPayees": [{"payeeId": "pay-500", "name": "Harborview Bank checking", "type": "bank", "addedAt": "2009-08-01T00:00:00Z"}]
+    },
+    "transaction": {
+      "transactionId": "txn-9005", "accountId": "acc-2002", "timestamp": "2026-10-01T14:00:00Z", "type": "transfer", "amount": 4000,
+      "payee": {"payeeId": "pay-500", "name": "Harborview Bank checking", "type": "bank", "addedAt": "2009-08-01T00:00:00Z"},
+      "channel": "web", "clientNote": "Monthly living expenses."
+    },
+    "history": [
+      {"transactionId": "h9", "accountId": "acc-2002", "timestamp": "2026-09-01T14:00:00Z", "type": "transfer", "amount": 4000, "payee": {"payeeId": "pay-500", "name": "Harborview Bank checking", "type": "bank"}, "channel": "web"},
+      {"transactionId": "h10", "accountId": "acc-2002", "timestamp": "2026-08-01T14:00:00Z", "type": "transfer", "amount": 4000, "payee": {"payeeId": "pay-500", "name": "Harborview Bank checking", "type": "bank"}, "channel": "web"},
+      {"transactionId": "h11", "accountId": "acc-2002", "timestamp": "2026-07-01T14:00:00Z", "type": "transfer", "amount": 4000, "payee": {"payeeId": "pay-500", "name": "Harborview Bank checking", "type": "bank"}, "channel": "web"}
+    ]
+  },
+  {
+    "name": "normal_small_withdrawal",
+    "expected": ["low"],
+    "expectDoNotNotify": [],
+    "account": {
+      "accountId": "acc-2003", "clientName": "Sam Okafor", "clientAge": 35, "accountOpened": "2019-03-03", "balance": 48000,
+      "advisor": {"contactId": "adv-05", "name": "Daniel Reyes"},
+      "emergencyContact": null,
+      "jointOwners": [],
+      "knownPayees": [{"payeeId": "pay-600", "name": "Metro Bank checking", "type": "bank", "addedAt": "2019-03-10T00:00:00Z"}]
+    },
+    "transaction": {
+      "transactionId": "txn-9006", "accountId": "acc-2003", "timestamp": "2026-10-02T12:30:00Z", "type": "withdrawal", "amount": 800,
+      "payee": {"payeeId": "pay-600", "name": "Metro Bank checking", "type": "bank", "addedAt": "2019-03-10T00:00:00Z"},
+      "channel": "web", "clientNote": ""
+    },
+    "history": [
+      {"transactionId": "h12", "accountId": "acc-2003", "timestamp": "2026-09-12T12:00:00Z", "type": "withdrawal", "amount": 1000, "payee": {"payeeId": "pay-600", "name": "Metro Bank checking", "type": "bank"}, "channel": "web"},
+      {"transactionId": "h13", "accountId": "acc-2003", "timestamp": "2026-08-12T12:00:00Z", "type": "withdrawal", "amount": 600, "payee": {"payeeId": "pay-600", "name": "Metro Bank checking", "type": "bank"}, "channel": "web"}
+    ]
+  }
+]
