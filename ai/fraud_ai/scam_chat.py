@@ -85,6 +85,6 @@ def scam_check_chat(case, messages):
         risk = max(0, min(100, int(round(float(risk))))) if done and risk is not None else None
         if done and risk is None:
             raise ValueError("done without riskUpdate")
-        return {"reply": reply.strip(), "riskUpdate": risk, "done": done}
+        return {"reply": bedrock_client.guard_output(reply.strip()), "riskUpdate": risk, "done": done}
     except Exception:
         return _fallback(client_turns)

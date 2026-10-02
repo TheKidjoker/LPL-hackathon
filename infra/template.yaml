@@ -28,6 +28,10 @@ Globals:
         TRANSACTIONS_TABLE: !Ref TransactionsTable
         CASES_TABLE: !Ref CasesTable
         AUDIT_TABLE: !Ref AuditTable
+        GUARDRAIL_ID: !GetAtt CaseGuardrail.GuardrailId
+        GUARDRAIL_VERSION: !GetAtt CaseGuardrailVersion.Version
+        QUESTION_GUARDRAIL_ID: !GetAtt QuestionGuardrail.GuardrailId
+        QUESTION_GUARDRAIL_VERSION: !GetAtt QuestionGuardrailVersion.Version
   Api:
     Cors:
       AllowOrigin: "'*'"
@@ -178,12 +182,68 @@ Resources:
                   - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/us.anthropic.claude-*"
                   - arn:aws:bedrock:*::foundation-model/anthropic.claude-*
               - Effect: Allow
+                Action: bedrock:ApplyGuardrail
+                Resource:
+                  - !GetAtt CaseGuardrail.GuardrailArn
+                  - !GetAtt QuestionGuardrail.GuardrailArn
+              - Effect: Allow
                 Action:
                   - kms:Decrypt
                   - kms:Encrypt
                   - kms:GenerateDataKey*
                   - kms:DescribeKey
                 Resource: !GetAtt DataKey.Arn
+
+  # Bedrock Guardrails, two of them:
+  # - QuestionGuardrail: staff questions to Juno that ask for investment advice are refused before
+  #   any model call. Only questions are checked: a memo describing an investment scam is evidence.
+  # - OutputGuardrail: everything the AI writes (memo, Juno, scam-check chat) has identity and
+  #   account numbers masked.
+  QuestionGuardrail:
+    Type: AWS::Bedrock::Guardrail
+    Properties:
+      Name: !Sub "${AWS::StackName}-juno-questions"
+      Description: Second Look - refuses requests for investment advice in questions to Juno
+      BlockedInputMessaging: Juno can't give investment advice. Ask about this case's facts, risk signals, or next steps instead.
+      BlockedOutputsMessaging: Juno can't give investment advice. Ask about this case's facts, risk signals, or next steps instead.
+      TopicPolicyConfig:
+        TopicsConfig:
+          - Name: InvestmentAdvice
+            Type: DENY
+            Definition: "Requests for advice on what to invest in: which securities, funds, crypto, or other assets to buy, sell, or hold, or how to invest or allocate money."
+            Examples:
+              - Should she move this money into an index fund?
+              - What should Harold invest in instead?
+              - Is Bitcoin a good buy right now?
+              - How should I allocate my retirement savings?
+
+  QuestionGuardrailVersion:
+    Type: AWS::Bedrock::GuardrailVersion
+    Properties:
+      GuardrailIdentifier: !GetAtt QuestionGuardrail.GuardrailId
+      Description: Version 1
+
+  CaseGuardrail:
+    Type: AWS::Bedrock::Guardrail
+    Properties:
+      Name: !Sub "${AWS::StackName}-juno-guardrail"
+      Description: Second Look - masks identity and account numbers in everything the AI writes
+      BlockedInputMessaging: This request can't be processed.
+      BlockedOutputsMessaging: This response was withheld because it contained sensitive information.
+      SensitiveInformationPolicyConfig:
+        PiiEntitiesConfig:
+          - { Type: US_SOCIAL_SECURITY_NUMBER, Action: ANONYMIZE }
+          - { Type: CREDIT_DEBIT_CARD_NUMBER, Action: ANONYMIZE }
+          - { Type: US_BANK_ACCOUNT_NUMBER, Action: ANONYMIZE }
+          - { Type: US_BANK_ROUTING_NUMBER, Action: ANONYMIZE }
+          - { Type: PIN, Action: ANONYMIZE }
+          - { Type: PASSWORD, Action: ANONYMIZE }
+
+  CaseGuardrailVersion:
+    Type: AWS::Bedrock::GuardrailVersion
+    Properties:
+      GuardrailIdentifier: !GetAtt CaseGuardrail.GuardrailId
+      Description: Version 2, masking only
 
   # CloudTrail: who did what, including every read and write on the tables
   TrailBucket:
@@ -319,6 +379,21 @@ Resources:
         Api:
           Type: Api
           Properties: { Path: "/cases/{caseId}/decision", Method: post }
+
+  # EventBridge Scheduler runs this every 15 minutes: holds past their end date with no
+  # decision are escalated, never released.
+  HoldExpiryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.hold_expiry.handler
+      Role: !GetAtt LambdaRole.Arn
+      Timeout: 60
+      Events:
+        Every15Minutes:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: rate(15 minutes)
+            Description: Escalate held withdrawals whose hold has ended with no decision
 
   DemoResetFunction:
     Type: AWS::Serverless::Function
