@@ -47,22 +47,22 @@ What LPL has today, from our research:
 
 ## AWS services and why we use each
 
-Judges score "right service for the right reason," so everyone should be able to explain this table.
+Judges score "right service for the right reason," so everyone should be able to explain this table. **Only claim what is live.** The full picture is in [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
-| Service | What it does in our app | Why this one |
-|---|---|---|
-| Bedrock (Claude) | Opus 5 scores the risk, writes the memo, and runs the scam-check chat | Managed AI, data stays in our AWS account. Approved models are listed in [`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude) |
-| Bedrock Guardrails | Blocks investment advice and personal info leaks | Compliance built in |
-| Bedrock Knowledge Base | Holds FINRA rule text so memos cite real rules | Answers grounded in regulation |
-| Step Functions | Runs the case: flag, review, hold, notify, release | Every step visible and auditable |
-| EventBridge Scheduler | Fires notice deadlines and hold expiry | Exact timers with no server running |
-| Lambda | Scoring logic and API code | Pay only when a request comes in |
-| DynamoDB | Accounts, transactions, cases, responses | Fast, serverless storage |
-| API Gateway | Front door between the app and backend | Secure, managed API |
-| Cognito | Logins with client, advisor, and fraud roles | Each role sees only its own view |
-| SNS and SES | Sends alerts to all three parties | Reliable fan-out messaging |
-| KMS and CloudTrail | One customer-managed key encrypts every DynamoDB table and the trail logs. CloudTrail records every API call and every table read and write | Security and audit trail, built in from the first deploy |
-| Amplify | Hosts the frontend from GitHub | Auto-deploys on every push |
+| Service | Status | What it does in our app | Why this one |
+|---|---|---|---|
+| Bedrock (Claude) | Live | Juno: Opus 5 scores the risk, writes the memo, runs the scam-check chat, and answers staff questions. Hedges to Sonnet 5 if Opus is slow | Managed AI, data stays in our AWS account. Approved models are listed in [`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude) |
+| Bedrock Guardrails | Live | Two guardrails: one refuses investment-advice questions to Juno, one masks identity and account numbers in everything the AI writes | Compliance enforced by the platform, not only by prompts |
+| EventBridge Scheduler | Live | Every 15 minutes, escalates holds that passed their end date with no decision (never releases) | Exact timing with no server running |
+| Lambda | Live | 9 functions: every endpoint plus hold expiry. Layers carry the AI code and seed data | Pay only when a request comes in |
+| DynamoDB | Live | Accounts, transactions, cases, audit log | Fast, serverless storage |
+| API Gateway | Live | Front door between the app and backend | Secure, managed API |
+| KMS and CloudTrail | Live | One customer-managed key encrypts every table and the trail logs. CloudTrail records every API call and every table read and write | Security and audit trail, built in from the first deploy |
+| Amplify | Live | Hosts the frontend at https://main.d1s6iogq4h15rg.amplifyapp.com (manual deploy with `scripts/deploy_frontend.py`, not auto-deploy from GitHub) | Managed static hosting with HTTPS |
+| Cognito | In progress | Real logins for client, advisor, and fraud roles, replacing the `X-Role` header | Role comes from a verified identity |
+| Step Functions | Not built | Would run the case as a visible workflow | Stretch |
+| SNS and SES | Not built | Would deliver alerts by text and email. Alerts are in-app today | Stretch |
+| Bedrock Knowledge Base | Not built | Would hold FINRA rule text so memos quote it | Stretch |
 
 **Skip:** SageMaker (too slow to train) and Amazon Fraud Detector (likely closed to new customers).
 

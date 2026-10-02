@@ -12,6 +12,21 @@ Three people, one owner for every piece. Thomas and Kaylin write the code, split
 
 **Stack:** DynamoDB for every table. One customer-managed KMS key encrypts all tables and the CloudTrail logs. CloudTrail records every API call and every table read and write. All of it is in `infra/template.yaml`.
 
+## Status (Fri Oct 2, evening)
+
+The build is done and live. The checklists below are the original plan; this table is what actually shipped.
+
+| Area | Status |
+|---|---|
+| Backend (all endpoints on DynamoDB, decisions, demo reset) | Done (Kaylin, PRs #2, #4, #6, #11) |
+| Juno: scoring, memo, scam-check chat, Ask Juno, eval | Done (Thomas, PRs #1, #9, #13) |
+| Frontend: three views, navy theme, live polling, demo scenarios | Done, live on Amplify (Thomas, PRs #3, #7, #8, #10) |
+| AWS: Lambda, API Gateway, DynamoDB, KMS, CloudTrail, Guardrails, EventBridge Scheduler, Amplify | Live (Thomas, PRs #5, #12) |
+| Cognito logins | Built in PR #14, not deployed |
+| Measured results and cost per case | Done: [`IMPACT.md`](IMPACT.md), [`RESULTS.md`](RESULTS.md) |
+| Deck, demo script, architecture diagram, backup video, ZIP, submission form | Krish. Not started in the repo |
+| Step Functions, SNS/SES, Knowledge Base | Not built (stretch) |
+
 **Core** = needed for the demo, done by Sat midnight. **Stretch** = only after the core flow works.
 
 ## First steps by person
