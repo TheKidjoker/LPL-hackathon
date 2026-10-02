@@ -59,13 +59,13 @@ def test_only_fraud_can_decide(event):
     assert result["statusCode"] == 403
 
 
-def test_decision_moves_status(event):
+def test_decision_moves_status(event, seeded):
     case = body(post_decision.handler(event("post_decision"), None))
     assert case["status"] == "ESCALATED"
     assert case["decision"]["action"] == "escalate"
 
 
-def test_demo_reset(event):
+def test_demo_reset(event, seeded):
     assert body(demo_reset.handler(event("demo_reset"), None))["ok"] is True
 
 

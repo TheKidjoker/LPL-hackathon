@@ -11,7 +11,7 @@
 
 import logging
 import uuid
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 from common import audit, case_state, db
 from common.http import ApiError, api_handler, parse_body, require, respond
@@ -30,16 +30,6 @@ CHANNELS = ("web", "phone", "branch")
 
 def fallback_risk(signals):
     return {"score": None, "level": "unknown", "signals": list(signals), "memo": FALLBACK_MEMO, "doNotNotify": []}
-
-
-def hold_end_date(start, business_days=case_state.HOLD_BUSINESS_DAYS):
-    """The date `business_days` weekdays after `start`, as YYYY-MM-DD."""
-    day = start
-    while business_days:
-        day += timedelta(days=1)
-        if day.weekday() < 5:
-            business_days -= 1
-    return day.isoformat()
 
 
 def is_hold(risk):
@@ -103,7 +93,7 @@ def handler(event, context):
     now_dt = datetime.now(timezone.utc)
     now = now_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
     transaction = build_transaction(body, account, now)
-    hold_ends = hold_end_date(now_dt.date())
+    hold_ends = case_state.hold_end_date(now_dt.date())
     case = {
         "caseId": f"case-{uuid.uuid4().hex[:8]}",
         "accountId": account["accountId"],

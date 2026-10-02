@@ -220,13 +220,15 @@ Request:
 ```
 
 - `action` is `release`, `extend`, or `escalate`. The Case moves to `RELEASED`, `EXTENDED`, or `ESCALATED`.
-- Any role but `fraud` gets `403`. A move not allowed from the current status gets `409`.
+- `release` sets `holdEndsAt` to `null`. `extend` moves it 10 more business days past the current end (once only: `EXTENDED` cannot be extended again). `escalate` keeps it.
+- `note` is optional, up to 2,000 characters.
+- Any role but `fraud` gets `403`. A move not allowed from the current status gets `409`, including when another reviewer changed the Case a moment earlier.
 
 Response `200`: the updated Case.
 
 ### `POST /demo/reset`
 
-No body. Deletes all Cases and Audit rows, reloads the seed data. Response `200`:
+No body. Deletes all Cases and Audit rows, then replaces Accounts and Transactions with the seed data in `data/`. Any valid `X-Role`. Response `200`:
 
 ```json
 { "ok": true, "accountsLoaded": 6 }

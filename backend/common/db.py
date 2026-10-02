@@ -101,21 +101,27 @@ def get_case(case_id):
     return _from_dynamo(item) if item else None
 
 
-def update_case(case_id, changes):
+def update_case(case_id, changes, if_status=None):
     """Apply a dict of top-level field changes to a Case and return the updated Case.
 
-    Returns None if the Case does not exist. `caseId` cannot be changed.
+    Returns None if the Case does not exist, or if `if_status` is given and the Case's status
+    is no longer that value (someone else changed it first). `caseId` cannot be changed.
     """
     changes = {k: v for k, v in changes.items() if k != "caseId"}
     if not changes:
         return get_case(case_id)
     names = {f"#f{i}": field for i, field in enumerate(changes)}
     values = {f":v{i}": _to_dynamo(value) for i, value in enumerate(changes.values())}
+    condition = "attribute_exists(caseId)"
+    if if_status is not None:
+        names["#status"] = "status"
+        values[":expected"] = if_status
+        condition += " AND #status = :expected"
     try:
         resp = _table(CASES_TABLE).update_item(
             Key={"caseId": case_id},
             UpdateExpression="SET " + ", ".join(f"#f{i} = :v{i}" for i in range(len(changes))),
-            ConditionExpression="attribute_exists(caseId)",
+            ConditionExpression=condition,
             ExpressionAttributeNames=names,
             ExpressionAttributeValues=values,
             ReturnValues="ALL_NEW",
