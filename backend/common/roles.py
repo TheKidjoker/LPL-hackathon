@@ -1,4 +1,4 @@
-"""Reads the caller's role. Owner: Krish.
+"""Reads the caller's role. Owner: Kaylin.
 
 For now the frontend sends an X-Role header. Stretch: swap this for the
 Cognito group on the authorizer claims, without changing any handler.

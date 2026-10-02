@@ -161,12 +161,12 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 
 | Method and path | Roles | Owner |
 |---|---|---|
-| `POST /withdrawals` | client | Kaylin |
-| `GET /cases` | advisor, fraud | Krish |
-| `GET /cases/{caseId}` | client, advisor, fraud | Krish |
-| `POST /cases/{caseId}/responses` | client, advisor | Kaylin |
-| `POST /cases/{caseId}/decision` | fraud | Kaylin |
-| `POST /demo/reset` | any | Kaylin |
+| `POST /withdrawals` | client | Krish |
+| `GET /cases` | advisor, fraud | Kaylin |
+| `GET /cases/{caseId}` | client, advisor, fraud | Kaylin |
+| `POST /cases/{caseId}/responses` | client, advisor | Krish |
+| `POST /cases/{caseId}/decision` | fraud | Krish |
+| `POST /demo/reset` | any | Krish |
 
 ### `POST /withdrawals`
 

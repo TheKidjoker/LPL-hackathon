@@ -10,7 +10,7 @@ Everyone does sections 1 and 2. Then go to your lane's section. Total setup is a
 | Python 3.11 | All | `winget install -e --id Python.Python.3.11` | `python --version` |
 | Node 20 or newer | Thomas | `winget install -e --id OpenJS.NodeJS.LTS` | `node --version` |
 | AWS CLI | All | See [`AWS_SETUP.md`](AWS_SETUP.md) | `aws --version` |
-| SAM CLI | Krish | `winget install -e --id Amazon.SAM-CLI` | `sam --version` |
+| SAM CLI | Thomas | `winget install -e --id Amazon.SAM-CLI` | `sam --version` |
 
 Docker is not needed. We test handlers as plain Python (section 2), not with `sam local`.
 
@@ -44,12 +44,12 @@ Then log in to AWS (see [`AWS_SETUP.md`](AWS_SETUP.md)). Scripts default to the 
 |---|---|---|
 | `frontend/` | Thomas | React app (Vite, JavaScript). `src/api.js` is every API call |
 | `ai/fraud_ai/` | Thomas | `score_withdrawal`, `scam_check_chat`, Bedrock client, prompts. Deployed as a Lambda layer |
-| `infra/` | Krish | SAM template and deploy config |
-| `backend/common/http.py`, `roles.py`, `views.py` | Krish | Request helpers, role check, what each role sees |
-| `backend/handlers/list_cases.py`, `get_case.py`, `backend/notify.py` | Krish | Read endpoints and alerts |
-| `backend/common/db.py`, `case_state.py`, `audit.py` | Kaylin | Tables, statuses, audit log |
-| `backend/handlers/submit_withdrawal.py`, `post_response.py`, `post_decision.py`, `demo_reset.py` | Kaylin | Write endpoints |
-| `data/`, `scripts/seed_dynamodb.py` | Kaylin | Seed data and loader |
+| `infra/` | Thomas | SAM template and deploy config |
+| `backend/common/http.py`, `roles.py`, `views.py` | Kaylin | Request helpers, role check, what each role sees |
+| `backend/handlers/list_cases.py`, `get_case.py`, `backend/notify.py` | Kaylin | Read endpoints and alerts |
+| `backend/common/db.py`, `case_state.py`, `audit.py` | Krish | Tables, statuses, audit log |
+| `backend/handlers/submit_withdrawal.py`, `post_response.py`, `post_decision.py`, `demo_reset.py` | Krish | Write endpoints |
+| `data/`, `scripts/seed_dynamodb.py` | Krish | Seed data and loader |
 | `events/` | Owner of the matching handler | Sample requests |
 | `tests/` | Everyone | Contract tests. Add tests for your own code |
 
@@ -65,7 +65,7 @@ npm install
 npm run dev
 ```
 
-Opens on http://localhost:5173 with mock data. To use the live API, copy `.env.example` to `.env.local` and set `VITE_API_URL` to the `ApiUrl` from Krish's deploy. The top bar shows "Mock data" or "Live API".
+Opens on http://localhost:5173 with mock data. To use the live API, copy `.env.example` to `.env.local` and set `VITE_API_URL` to the `ApiUrl` from your deploy. The top bar shows "Mock data" or "Live API".
 
 Mock data lives in `src/mock/`. It filters by role the same way the backend does, so a view that works on mocks works on the live API.
 
@@ -80,7 +80,7 @@ python -c "from fraud_ai.bedrock_client import converse_json; print(converse_jso
 
 Next: `signals.py`, then `score.py` with the prompt in `fraud_ai/prompts/memo.txt`.
 
-## 6. Krish: deploy
+## 6. Thomas: deploy
 
 ```powershell
 cd infra
@@ -94,10 +94,10 @@ sam deploy
 - Redeploy after every merge that touches `backend/`, `ai/`, or `infra/`.
 - Lint without deploying: `pip install cfn-lint`, then `cfn-lint infra/template.yaml`.
 
-## 7. Kaylin: data and handlers
+## 7. Krish: data and write handlers
 
 - Put `accounts.json` and `transactions.json` in `data/` using the shapes in [`api.md`](api.md).
-- Once Krish deploys, set the table names and run `python scripts/seed_dynamodb.py`.
+- Once Thomas deploys, set the table names and run `python scripts/seed_dynamodb.py`.
 - To run a handler against the real tables, set the same variables first:
 
 ```powershell

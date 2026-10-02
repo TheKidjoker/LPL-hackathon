@@ -72,9 +72,9 @@ We split work by folder so nobody edits the same files. For checklists and hando
 
 | Person | Folders | Owns |
 |---|---|---|
-| Thomas | `/ai`, `/frontend` | Everything Claude does (Bedrock client, scoring, memo, scam-check chat, Guardrails) and all three app views |
-| Krish | `/infra`, read endpoints and alerts in `/backend` | All AWS setup (SAM template, IAM, tables, Amplify, Cognito), deploys, architecture diagram, submission. The only person who runs `sam deploy` |
-| Kaylin | Case logic in `/backend`, `/data`, `/docs` | Submit, responses, decision, and demo reset endpoints, case statuses, audit log, seed data, deck, demo script, video |
+| Thomas | `/ai`, `/frontend`, `/infra` | Everything Claude does (Bedrock client, scoring, memo, scam-check chat, Guardrails), all three app views, and all AWS setup (SAM template, IAM, tables, Amplify, Cognito). The only person who runs `sam deploy` |
+| Krish | Case logic in `/backend`, `/data`, `/docs` | Submit, responses, decision, and demo reset endpoints, case statuses, audit log, seed data, architecture diagram, deck, demo script, video, submission |
+| Kaylin | Read endpoints and alerts in `/backend` | Request helpers, `GET /cases` and `GET /cases/{id}`, what each role can see, alerts that skip suspected scammers, stretch alert and hold-timer services |
 
 All three build parts of the backend. The file-by-file split is in [`TEAM_PLAN.md`](TEAM_PLAN.md#backend-file-map).
 

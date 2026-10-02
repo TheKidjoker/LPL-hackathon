@@ -1,4 +1,4 @@
-"""Request and response helpers shared by every handler. Owner: Krish."""
+"""Request and response helpers shared by every handler. Owner: Kaylin."""
 
 import functools
 import json

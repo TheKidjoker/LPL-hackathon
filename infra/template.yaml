@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Fraud Speed Bump - API, tables, and Lambdas. Owner Krish. Only Krish runs sam deploy.
+Description: Fraud Speed Bump - API, tables, and Lambdas. Owner Thomas. Only Thomas runs sam deploy.
 
 Parameters:
   ModelId:

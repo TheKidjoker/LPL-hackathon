@@ -17,7 +17,7 @@ flowchart LR
         COG[Cognito: client, advisor, fraud roles]
     end
 
-    subgraph Backend["Backend: AWS by Krish, case logic by Kaylin"]
+    subgraph Backend["Backend: AWS by Thomas, case logic by Krish, read endpoints and alerts by Kaylin"]
         APIGW[API Gateway]
         L1[Lambda: submit withdrawal]
         L2[Lambda: cases, responses, decision]

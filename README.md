@@ -20,9 +20,9 @@ why it looks like a scam, and alerts the client, their advisor, and LPL's fraud 
 
 | Folder | Owner |
 |---|---|
-| `frontend/`, `ai/` | Thomas |
-| `infra/`, read endpoints in `backend/` | Krish |
-| Write endpoints in `backend/`, `data/` | Kaylin |
+| `frontend/`, `ai/`, `infra/` | Thomas |
+| Write endpoints in `backend/`, `data/`, deck and demo | Krish |
+| Read endpoints and alerts in `backend/` | Kaylin |
 | `docs/` | Everyone |
 
 Work on a branch and open a pull request. Don't push straight to main.

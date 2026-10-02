@@ -1,4 +1,4 @@
-"""What each role sees in a Case, per the table in docs/api.md. Owner: Krish."""
+"""What each role sees in a Case, per the table in docs/api.md. Owner: Kaylin."""
 
 import copy
 

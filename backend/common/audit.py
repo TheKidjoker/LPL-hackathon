@@ -1,4 +1,4 @@
-"""Audit log. Owner: Kaylin. Every change to a Case writes one row."""
+"""Audit log. Owner: Krish. Every change to a Case writes one row."""
 
 
 def write_audit(case_id, actor, action, detail=""):

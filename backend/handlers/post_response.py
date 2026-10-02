@@ -1,4 +1,4 @@
-"""POST /cases/{caseId}/responses. Owner: Kaylin.
+"""POST /cases/{caseId}/responses. Owner: Krish.
 
 Stub: validates the request and returns the sample Case with the response added.
 Replace with db.get_case, append the Response, db.update_case, audit.write_audit.
@@ -36,7 +36,7 @@ def handler(event, context):
         "text": body["text"],
         "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
-    case = sample_case()  # TODO(Kaylin): db.get_case(case_id), 404 if None
+    case = sample_case()  # TODO(Krish): db.get_case(case_id), 404 if None
     case["caseId"] = case_id
     case["responses"].append(response)
     return respond(case_for_role(case, role))
