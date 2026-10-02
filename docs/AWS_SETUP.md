@@ -1,7 +1,6 @@
 # AWS CLI Setup
 
-Everyone uses the **same AWS account** and the **same region**. Confirm both at the Fri 12:30 PM setup session.
-The region below (`us-east-1`) is a placeholder until then.
+Everyone uses the **same event AWS account** in **us-east-1** (the only region the event allows).
 
 ## 1. Install
 
@@ -17,47 +16,34 @@ Mac: `brew install awscli aws-sam-cli`
 
 Close and reopen your terminal, then check with `aws --version`.
 
-## 2. Log in
+## 2. Get credentials from Workshop Studio
 
-Use whichever option matches what the organizers give you.
+1. Open the event dashboard: https://catalog.workshops.aws/event/dashboard/en-US
+2. In the left sidebar under **AWS account access**, click **Get AWS CLI credentials**.
+3. Click the copy icon on the credentials block.
 
-**A. SSO / access portal link** (most likely for an event account):
+The credentials are temporary. When commands fail with `ExpiredToken`, copy fresh ones and repeat step 3.
 
-```bash
-aws configure sso --profile lpl-hackathon
-# SSO start URL: from organizers
-# SSO region: from organizers
-# Default region: us-east-1 (or whatever the team agrees on)
-# Output format: json
-```
+## 3. Save them
 
-When the session expires, run `aws sso login --profile lpl-hackathon`.
-
-**B. Access key + secret (+ session token)** pasted from a portal:
-
-```bash
-aws configure --profile lpl-hackathon
-# If you were also given a session token:
-aws configure set aws_session_token <TOKEN> --profile lpl-hackathon
-```
-
-Never paste keys into code, chat, or a commit. They live only in `~/.aws/`.
-
-## 3. Use the profile
+Windows, from the repo root:
 
 ```powershell
-$env:AWS_PROFILE = "lpl-hackathon"   # PowerShell
-```
-```bash
-export AWS_PROFILE=lpl-hackathon     # bash / mac
+powershell -ExecutionPolicy Bypass -File .\scripts\aws-login.ps1
 ```
 
-## 4. Verify (do this first thing Friday)
+This saves them to the `lpl-hackathon` profile, makes it your default, clears your clipboard, and prints the account ID.
+
+Mac / bash: paste the "Linux or macOS (bash)" block straight into your terminal. It lasts for that terminal only.
+
+Never paste keys into code, chat, or a commit.
+
+## 4. Verify
 
 ```bash
-aws sts get-caller-identity                                  # you're logged in, right account
+aws sts get-caller-identity
 aws bedrock list-foundation-models --by-provider anthropic \
-  --query "modelSummaries[].modelId" --output table          # Claude models are visible
+  --query "modelSummaries[].modelId" --output table
 ```
 
 If the Bedrock call is empty or denied, raise it at the setup session. Everything depends on Claude access.
