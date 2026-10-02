@@ -52,6 +52,22 @@ If the Bedrock call is empty or denied, raise it at the setup session. Everythin
 
 Use the `us.` inference-profile ID, not the bare model ID. `anthropic.claude-sonnet-5` fails with "on-demand throughput isn't supported"; `us.anthropic.claude-sonnet-5` works.
 
+Only use these models. Each was tested with a live call on Oct 2.
+
+| Use | Model ID |
+|---|---|
+| Risk memo (default) | `us.anthropic.claude-sonnet-5` |
+| Fast scoring, scam-check chat | `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
+| Hard reasoning, if Sonnet falls short | `us.anthropic.claude-opus-5` |
+| Fallbacks | `us.anthropic.claude-opus-4-8`, `us.anthropic.claude-opus-4-7`, `us.anthropic.claude-sonnet-4-6`, `us.anthropic.claude-opus-4-6-v1` |
+
+Opus 5 reasons before answering. Give it `maxTokens` of a few hundred or more, and read the block that has `text` (the first block is the reasoning).
+
+Don't use these. They show up in `list-foundation-models` but fail:
+
+- Opus 5.5, Fable 5.1, Sonnet 5.5: `AccessDeniedException`. The event's model allowlist blocks them.
+- Fable 5: "data retention mode 'default' is not available for this model."
+
 ```python
 import boto3
 

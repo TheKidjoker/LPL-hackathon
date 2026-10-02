@@ -51,7 +51,7 @@ Judges score "right service for the right reason," so everyone should be able to
 
 | Service | What it does in our app | Why this one |
 |---|---|---|
-| Bedrock (Claude) | Reads the request and history, writes the risk memo | Managed AI, data stays in our AWS account |
+| Bedrock (Claude) | Sonnet 5 writes the risk memo; Haiku 4.5 handles fast scoring and the scam-check chat | Managed AI, data stays in our AWS account. Approved models are listed in [`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude) |
 | Bedrock Guardrails | Blocks investment advice and personal info leaks | Compliance built in |
 | Bedrock Knowledge Base | Holds FINRA rule text so memos cite real rules | Answers grounded in regulation |
 | Step Functions | Runs the case: flag, review, hold, notify, release | Every step visible and auditable |
