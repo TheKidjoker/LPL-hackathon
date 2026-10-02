@@ -6,7 +6,10 @@ from handlers import demo_reset, get_case, list_cases, post_decision, post_respo
 CASE_KEYS = {"caseId", "status", "createdAt", "transaction", "holdEndsAt", "decision"}
 
 
-def test_submit_returns_client_view(event):
+def test_submit_returns_client_view(event, seeded, monkeypatch):
+    from common.samples import SAMPLE_CASE
+
+    monkeypatch.setattr(submit_withdrawal, "score_withdrawal", lambda *a: dict(SAMPLE_CASE["risk"]))
     result = submit_withdrawal.handler(event("submit_withdrawal"), None)
     assert result["statusCode"] == 201
     case = body(result)
@@ -25,14 +28,14 @@ def test_submit_rejects_bad_body(event):
     assert result["statusCode"] == 400
 
 
-def test_list_cases_returns_summaries(event):
+def test_list_cases_returns_summaries(event, seeded):
     result = list_cases.handler(event("list_cases"), None)
     assert result["statusCode"] == 200
     summary = body(result)["cases"][0]
     assert {"caseId", "clientName", "amount", "payeeName", "status", "score", "level"} <= summary.keys()
 
 
-def test_get_case_filters_by_role(event):
+def test_get_case_filters_by_role(event, seeded):
     fraud = body(get_case.handler(event("get_case"), None))
     advisor = body(get_case.handler(event("get_case", headers={"X-Role": "advisor"}), None))
     client = body(get_case.handler(event("get_case", headers={"X-Role": "client"}), None))

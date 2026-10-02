@@ -10,7 +10,9 @@ def _iso_ms(when):
 
 
 def write_audit(case_id, actor, action, detail=""):
-    """Write {caseId, timestamp, actor, action, detail} to the Audit table and return the row.
+    """Write {caseId, timestamp, actor, action, detail} to the Audit table.
+
+    Returns the entry as it appears in a Case's audit list: {timestamp, actor, action, detail}.
 
     The timestamp has milliseconds and is the table's sort key, so two rows written in the
     same millisecond would collide. On a collision, move forward 1 ms and try again.
@@ -19,11 +21,15 @@ def write_audit(case_id, actor, action, detail=""):
     for _ in range(10):
         row = {"caseId": case_id, "timestamp": _iso_ms(when), "actor": actor, "action": action, "detail": detail}
         if db.put_audit_row(row):
-            return row
+            return _entry(row)
         when += timedelta(milliseconds=1)
     raise RuntimeError(f"Could not write audit row for {case_id}")
 
 
 def list_audit(case_id):
-    """Return the case's audit rows, oldest first."""
-    return db.list_audit_rows(case_id)
+    """Return the case's audit entries, oldest first, shaped like a Case's audit list."""
+    return [_entry(row) for row in db.list_audit_rows(case_id)]
+
+
+def _entry(row):
+    return {k: v for k, v in row.items() if k != "caseId"}
