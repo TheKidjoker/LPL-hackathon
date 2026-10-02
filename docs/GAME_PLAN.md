@@ -68,14 +68,12 @@ Judges score "right service for the right reason," so everyone should be able to
 
 ## Who does what and how we use GitHub
 
-We split work by folder so nobody edits the same files. For the 3-person split and first tasks, see [`TEAM_PLAN.md`](TEAM_PLAN.md).
+We split work by folder so nobody edits the same files. For checklists and handoffs, see [`TEAM_PLAN.md`](TEAM_PLAN.md).
 
-| Role | Folder | Owns |
+| Person | Folders | Owns |
 |---|---|---|
-| Backend and AWS | `/backend`, `/infra` | Lambda, DynamoDB, Step Functions, API. The only person who runs `sam deploy` |
-| AI | `/ai` | Scoring and memo prompts, Guardrails, Knowledge Base |
-| Frontend | `/frontend` | One app with three role views, Amplify hosting |
-| Data and pitch | `/data`, `/docs` | Fake accounts and scam scenarios, deck, demo script, video |
+| Thomas | `/backend`, `/infra`, `/ai` | Lambda, DynamoDB, Step Functions, API, Opus 5 scoring and memo, Guardrails. The only person who runs `sam deploy` |
+| Kaylin | `/frontend`, `/data`, `/docs` | One app with three role views, Amplify hosting, fake accounts and scam scenarios, deck, demo script, video |
 
 **Rules for the repo:**
 
