@@ -93,8 +93,11 @@ def put_case(case):
 
 
 def get_case(case_id):
-    """Return the Case dict, or None if it does not exist."""
-    item = _table(CASES_TABLE).get_item(Key={"caseId": case_id}).get("Item")
+    """Return the Case dict, or None if it does not exist.
+
+    Strongly consistent, so a Case read right after it is created or updated is never stale.
+    """
+    item = _table(CASES_TABLE).get_item(Key={"caseId": case_id}, ConsistentRead=True).get("Item")
     return _from_dynamo(item) if item else None
 
 
@@ -124,14 +127,42 @@ def update_case(case_id, changes):
     return _from_dynamo(resp["Attributes"])
 
 
+def append_response(case_id, response, changes=None):
+    """Append a Response to a Case's responses in one atomic write, plus any top-level field changes.
+
+    Returns the updated Case, or None if it does not exist.
+    """
+    changes = {k: v for k, v in (changes or {}).items() if k not in ("caseId", "responses")}
+    names = {"#responses": "responses", **{f"#f{i}": field for i, field in enumerate(changes)}}
+    values = {":r": [_to_dynamo(response)], ":empty": [],
+              **{f":v{i}": _to_dynamo(value) for i, value in enumerate(changes.values())}}
+    sets = ["#responses = list_append(if_not_exists(#responses, :empty), :r)"]
+    sets += [f"#f{i} = :v{i}" for i in range(len(changes))]
+    try:
+        resp = _table(CASES_TABLE).update_item(
+            Key={"caseId": case_id},
+            UpdateExpression="SET " + ", ".join(sets),
+            ConditionExpression="attribute_exists(caseId)",
+            ExpressionAttributeNames=names,
+            ExpressionAttributeValues=values,
+            ReturnValues="ALL_NEW",
+        )
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
+            return None
+        raise
+    return _from_dynamo(resp["Attributes"])
+
+
 def list_cases_by_status(status=None):
     """Return Cases, filtered by status when given. Uses the StatusIndex.
 
     With a status, newest first. Without one, every Case in no set order; the handler sorts.
+    The StatusIndex is eventually consistent, so a Case can take up to a second to appear by status.
     """
     table = _table(CASES_TABLE)
     if status is None:
-        return _scan_all(table)
+        return _scan_all(table, ConsistentRead=True)
     return _query_all(
         table,
         IndexName="StatusIndex",
