@@ -58,7 +58,7 @@ export default function Assistant({ role, c }) {
         </span>
         <div>
           <div style={{ fontWeight: 800, fontSize: 15 }}>Ask Juno about {c.clientName || "this case"}</div>
-          <div className="muted" style={{ fontSize: 12 }}>Juno, the Second Look AI co-pilot · answers only from this case's data · every question is logged to the audit trail · Juno never decides a hold</div>
+          <div className="muted" style={{ fontSize: 12 }}>Juno, the Second Look AI co-pilot · answers only from this case's data · Bedrock Guardrails refuse investment-advice questions · every question is logged · Juno never decides a hold</div>
         </div>
       </div>
       {(messages.length > 0 || busy) && (

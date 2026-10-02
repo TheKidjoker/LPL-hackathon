@@ -143,4 +143,6 @@ def score_withdrawal(account, transaction, history):
     transaction = transaction or {}
     signals = compute_signals(account, transaction, history)
     raw = bedrock_client.converse_json(build_prompt(account, transaction, history, signals), max_tokens=2000)
-    return validate(raw, account, signals)
+    risk = validate(raw, account, signals)
+    risk["memo"] = bedrock_client.guard_output(risk["memo"])
+    return risk

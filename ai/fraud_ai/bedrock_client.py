@@ -19,6 +19,11 @@ logger = logging.getLogger()
 MODEL_ID = os.environ.get("MODEL_ID", "us.anthropic.claude-opus-5")
 FALLBACK_MODEL_ID = os.environ.get("FALLBACK_MODEL_ID", "us.anthropic.claude-sonnet-5")
 REGION = os.environ.get("AWS_REGION", "us-east-1")
+# Bedrock Guardrails from infra/template.yaml. Unset locally, in which case both checks are no-ops.
+GUARDRAIL_ID = os.environ.get("GUARDRAIL_ID", "")  # masks identity and account numbers in AI output
+GUARDRAIL_VERSION = os.environ.get("GUARDRAIL_VERSION", "DRAFT")
+QUESTION_GUARDRAIL_ID = os.environ.get("QUESTION_GUARDRAIL_ID", "")  # refuses investment-advice questions
+QUESTION_GUARDRAIL_VERSION = os.environ.get("QUESTION_GUARDRAIL_VERSION", "DRAFT")
 
 _client = None
 
@@ -56,6 +61,56 @@ def converse(prompt, system=None, max_tokens=2000):
             last_error = e
         logger.warning("Bedrock call to %s failed: %s", model_id, last_error)
     raise last_error
+
+
+def guard_output(text):
+    """Mask identity and account numbers in text the AI wrote, before anyone sees it.
+
+    Only masking runs on output. Blocking by topic would also block memos that describe
+    an investment scam, which are exactly the cases we need to explain. If the guardrail
+    call itself fails, the text passes through and the failure is logged, so a guardrail
+    outage never blocks a fraud hold.
+    """
+    if not GUARDRAIL_ID or not text:
+        return text
+    try:
+        resp = _bedrock().apply_guardrail(
+            guardrailIdentifier=GUARDRAIL_ID,
+            guardrailVersion=GUARDRAIL_VERSION,
+            source="OUTPUT",
+            content=[{"text": {"text": text}}],
+        )
+    except Exception as e:
+        logger.warning("Guardrail check failed, passing text through: %s", e)
+        return text
+    if resp.get("action") != "GUARDRAIL_INTERVENED":
+        return text
+    logger.info("Guardrail intervened: %s", json.dumps(resp.get("assessments", []), default=str)[:500])
+    outputs = resp.get("outputs") or []
+    return "".join(o.get("text", "") for o in outputs).strip() or text
+
+
+def blocked_question(text):
+    """Return the refusal message if a staff question asks for investment advice, else None.
+
+    Runs before any model call, on the question only (never on case data or client answers,
+    which often describe investment pitches as evidence). Fails open if the guardrail is down.
+    """
+    if not QUESTION_GUARDRAIL_ID or not text:
+        return None
+    try:
+        resp = _bedrock().apply_guardrail(
+            guardrailIdentifier=QUESTION_GUARDRAIL_ID,
+            guardrailVersion=QUESTION_GUARDRAIL_VERSION,
+            source="INPUT",
+            content=[{"text": {"text": text}}],
+        )
+    except Exception as e:
+        logger.warning("Question guardrail check failed, allowing the question: %s", e)
+        return None
+    if resp.get("action") != "GUARDRAIL_INTERVENED":
+        return None
+    return "".join(o.get("text", "") for o in resp.get("outputs") or []).strip() or "Juno can't give investment advice."
 
 
 def converse_json(prompt, system=None, max_tokens=2000):

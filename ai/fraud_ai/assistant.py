@@ -74,12 +74,19 @@ def _suggestions(raw):
     return out
 
 
+# Offered after a refused investment-advice question.
+REFUSAL_SUGGESTIONS = ["Why was this held?", "What should I verify next?", "Summarize the evidence"]
+
+
 def ask(role, context, messages):
     """Return {"reply": str, "suggestions": [str, ...]} for the last user message."""
+    refusal = bedrock_client.blocked_question(messages[-1].get("text", "") if messages else "")
+    if refusal:
+        return {"reply": refusal, "suggestions": REFUSAL_SUGGESTIONS}
     raw = bedrock_client.converse_json(build_prompt(context, messages), system=_system(role), max_tokens=2000)
     if not isinstance(raw, dict):
         raise ValueError("Claude's answer is not a JSON object")
     reply = raw.get("reply")
     if not isinstance(reply, str) or not reply.strip():
         raise ValueError("Claude returned an empty reply")
-    return {"reply": reply.strip(), "suggestions": _suggestions(raw.get("suggestions"))}
+    return {"reply": bedrock_client.guard_output(reply.strip()), "suggestions": _suggestions(raw.get("suggestions"))}
