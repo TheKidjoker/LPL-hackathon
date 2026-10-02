@@ -1,4 +1,4 @@
-"""POST /withdrawals. Owner: Krish.
+"""POST /withdrawals. Owner: Kaylin.
 
 Stub: validates the request and returns the sample Case. Replace with:
 1. db.get_account(accountId) and db.get_history(accountId), 404 if no account
@@ -25,5 +25,5 @@ def handler(event, context):
     if not isinstance(body["amount"], (int, float)) or body["amount"] <= 0:
         raise ApiError(400, "bad_request", "amount must be a positive number.")
 
-    case = sample_case()  # TODO(Krish): replace with steps 1-7 above
+    case = sample_case()  # TODO(Kaylin): replace with steps 1-7 above
     return respond(case_for_role(case, "client"), 201)

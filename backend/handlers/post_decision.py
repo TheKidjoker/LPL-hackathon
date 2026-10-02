@@ -1,4 +1,4 @@
-"""POST /cases/{caseId}/decision. Owner: Krish.
+"""POST /cases/{caseId}/decision. Owner: Kaylin.
 
 Stub: checks the role and the move, returns the sample Case with the new status.
 Replace the sample with db.get_case and db.update_case, and write an audit row.
@@ -23,7 +23,7 @@ def handler(event, context):
     if not to_status:
         raise ApiError(400, "bad_request", "action must be release, extend, or escalate.")
 
-    case = sample_case()  # TODO(Krish): db.get_case(case_id), 404 if None
+    case = sample_case()  # TODO(Kaylin): db.get_case(case_id), 404 if None
     case["caseId"] = case_id
     if not case_state.can_move(case["status"], to_status, role):
         raise ApiError(409, "invalid_move", f"Cannot move a {case['status']} case to {to_status}.")

@@ -1,4 +1,4 @@
-"""Case statuses and the moves allowed between them. Owner: Krish.
+"""Case statuses and the moves allowed between them. Owner: Kaylin.
 
 This table is the contract from docs/TEAM_PLAN.md. Change it only by pull request.
 """

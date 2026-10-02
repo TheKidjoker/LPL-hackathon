@@ -1,4 +1,4 @@
-"""Load /data into the deployed tables. Owner: Krish.
+"""Load /data into the deployed tables. Owner: Kaylin.
 
     python scripts/seed_dynamodb.py
 
@@ -16,7 +16,7 @@ os.environ.setdefault("AWS_PROFILE", "lpl-hackathon")
 
 
 def main():
-    # TODO(Krish): read data/*.json, batch-write to the tables (floats -> Decimal)
+    # TODO(Kaylin): read data/*.json, batch-write to the tables (floats -> Decimal)
     raise NotImplementedError
 
 

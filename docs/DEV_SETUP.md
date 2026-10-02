@@ -47,9 +47,9 @@ Then log in to AWS (see [`AWS_SETUP.md`](AWS_SETUP.md)). Scripts default to the 
 | `infra/` | Thomas | SAM template and deploy config |
 | `backend/common/http.py`, `roles.py`, `views.py` | Kaylin | Request helpers, role check, what each role sees |
 | `backend/handlers/list_cases.py`, `get_case.py`, `backend/notify.py` | Kaylin | Read endpoints and alerts |
-| `backend/common/db.py`, `case_state.py`, `audit.py` | Krish | Tables, statuses, audit log |
-| `backend/handlers/submit_withdrawal.py`, `post_response.py`, `post_decision.py`, `demo_reset.py` | Krish | Write endpoints |
-| `data/`, `scripts/seed_dynamodb.py` | Krish | Seed data and loader |
+| `backend/common/db.py`, `case_state.py`, `audit.py` | Kaylin | Tables, statuses, audit log |
+| `backend/handlers/submit_withdrawal.py`, `post_response.py`, `post_decision.py`, `demo_reset.py` | Kaylin | Write endpoints |
+| `data/`, `scripts/seed_dynamodb.py` | Kaylin | Seed data and loader |
 | `events/` | Owner of the matching handler | Sample requests |
 | `tests/` | Everyone | Contract tests. Add tests for your own code |
 
@@ -94,7 +94,7 @@ sam deploy
 - Redeploy after every merge that touches `backend/`, `ai/`, or `infra/`.
 - Lint without deploying: `pip install cfn-lint`, then `cfn-lint infra/template.yaml`.
 
-## 7. Krish: data and write handlers
+## 7. Kaylin: data and write handlers
 
 - Put `accounts.json` and `transactions.json` in `data/` using the shapes in [`api.md`](api.md).
 - Once Thomas deploys, set the table names and run `python scripts/seed_dynamodb.py`.

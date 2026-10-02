@@ -1,12 +1,14 @@
 # Roles
 
-Find your name, do your first steps, then work down your checklist. Setup for everyone is in [`docs/DEV_SETUP.md`](docs/DEV_SETUP.md). The full inventory and reasoning are in [`docs/TEAM_PLAN.md`](docs/TEAM_PLAN.md).
+Find your name, do your first steps, then work down your checklist. Setup for everyone is in [`docs/DEV_SETUP.md`](docs/DEV_SETUP.md). The full inventory is in [`docs/TEAM_PLAN.md`](docs/TEAM_PLAN.md).
 
 | Person | Role | You own |
 |---|---|---|
 | [Thomas](#thomas-ai-frontend-and-aws) | AI, Frontend, and AWS | `ai/`, `frontend/`, `infra/`, deploys |
-| [Krish](#krish-case-logic-data-and-pitch) | Case Logic, Data, and Pitch | Write endpoints, `data/`, architecture diagram, deck and demo |
-| [Kaylin](#kaylin-api-and-alerts) | API and Alerts | Request helpers, read endpoints, role filtering, alerts |
+| [Kaylin](#kaylin-backend-and-data) | Backend and Data | Every API endpoint, DynamoDB code, `data/` |
+| [Krish](#krish-pitch-and-demo) | Pitch and Demo | Deck, demo script, architecture diagram, submission |
+
+**Stack:** DynamoDB for every table. One KMS key encrypts all tables and the CloudTrail logs. CloudTrail records every API call and every table read and write. All three are in `infra/template.yaml` and go live on the first deploy.
 
 **Everyone:** run `python -m pytest` before every pull request. Search the code for `TODO(<your name>)` to find your stubs. Keep function signatures and [`docs/api.md`](docs/api.md) shapes unchanged unless the team agrees.
 
@@ -20,7 +22,7 @@ You make Claude explain the scam, build the three screens people see, and keep e
 
 **First steps**
 
-1. Install the SAM CLI (`winget install -e --id Amazon.SAM-CLI`), then `cd infra`, `sam build`, `sam deploy`. If the account blocks IAM role creation, fix the template first, since everyone waits on the deploy
+1. Install the SAM CLI (`winget install -e --id Amazon.SAM-CLI`), then `cd infra`, `sam build`, `sam deploy`. If the account blocks creating IAM roles, KMS keys, or trails, fix the template first, since everyone waits on the deploy
 2. Post `ApiUrl` and the four table names from the deploy output in the team chat
 3. Build `ai/fraud_ai/signals.py`, then the memo prompt in `ai/fraud_ai/prompts/memo.txt`, then `score.py` with `converse_json` (the Bedrock client already works)
 
@@ -28,76 +30,73 @@ You make Claude explain the scam, build the three screens people see, and keep e
 
 | By | Done when |
 |---|---|
-| Fri 3 PM | Stack deployed. Signals work |
+| Fri 3 PM | Stack deployed: tables encrypted with KMS, CloudTrail logging. Signals work |
 | Fri 4 PM | API URL and table names shared. Views checked on mock data |
 | Fri 8 PM | `score_withdrawal` returns a real Opus 5 memo. Hero scores high, normal accounts score low. Views pointed at the live API. Redeploying after every merge |
 | Sat midnight | `doNotNotify` and `scam_check_chat` work. Scam-check chat screen, scam warning signs, emergency contact field, hold timer. Frontend on Amplify |
-| Sat 6 AM | AI slide for the deck. Drive the app for the backup video |
+| Sat 6 AM | AI and AWS slide for the deck. Drive the app for the backup video |
 
-**Stretch, after midnight:** Cognito logins, Bedrock Guardrails, Knowledge Base with FINRA rule text
+**Stretch, after midnight:** Cognito logins, Bedrock Guardrails, SNS and SES alerts, EventBridge hold timers
 
-**You need from others:** seed data from Krish (Fri 4 PM), merged code from everyone to deploy
+**You need from others:** seed data from Kaylin (Fri 4 PM), merged code from Kaylin to deploy
 
-**Others need from you:** live API URL and table names (Fri 4 PM), a real `score_withdrawal` for Krish (Fri 8 PM), a redeploy after each merge
+**Others need from you:** live API URL and table names (Fri 4 PM), a real `score_withdrawal` for Kaylin (Fri 8 PM), a redeploy after each merge
 
 ---
 
-## Krish: Case Logic, Data, and Pitch
+## Kaylin: Backend and Data
 
-You write the rules of a case and the fake data that tells the story, and you own the pitch and the architecture diagram.
+You build every API endpoint, everything that reads and writes DynamoDB, and the fake data that tells the story.
 
-**Your files:** `backend/common/db.py`, `case_state.py`, `audit.py`, `samples.py`, `backend/handlers/submit_withdrawal.py`, `post_response.py`, `post_decision.py`, `demo_reset.py`, `data/`, `scripts/seed_dynamodb.py`
+**Your files:** everything in `backend/`, `data/`, `scripts/seed_dynamodb.py`, `events/`, `tests/`
+
+**First steps**
+
+1. Write `data/accounts.json` and `data/transactions.json`: the hero (age 78, $180K to a new crypto payee), 3 normal accounts, 1 where the joint owner is the scammer, 1 with no advisor. Give every account 90 days of normal history
+2. Build `backend/common/db.py` (DynamoDB returns numbers as `Decimal`, convert them) and `audit.py`
+3. Once Thomas deploys, load the data with `scripts/seed_dynamodb.py`, then switch `submit_withdrawal` from sample data to real data
+
+**Checklist**
+
+| By | Done when |
+|---|---|
+| Fri 3 PM | Hero and normal accounts in `data/`. `db.py` working |
+| Fri 4 PM | Seed data loaded. `submit_withdrawal` saves a real Case using the AI stub. `list_cases` and `get_case` read real data |
+| Fri 8 PM | `submit_withdrawal` uses Thomas's real scoring. `post_response` saves client and advisor answers. Every change writes an audit row |
+| Sat midnight | `post_decision` (fraud team only) and `demo_reset` work. `notify.py` skips everyone in `doNotNotify`. Joint-owner and no-advisor accounts work end to end |
+| Sat 6 AM | Help Krish with the safety slide: role filtering, who gets alerted, audit log, encryption |
+
+**You need from others:** table names from Thomas (Fri 4 PM), real `score_withdrawal` from Thomas (Fri 8 PM)
+
+**Others need from you:** seed data (Fri 4 PM), working endpoints for Thomas's views (Fri 4 PM), merged code for Thomas to deploy
+
+---
+
+## Krish: Pitch and Demo
+
+You own everything the judges see besides the app. Nothing in the build waits on you, so work at your own pace and check in every few hours.
+
+**Your files:** the deck, `docs/DEMO_SCRIPT.md`, the architecture diagram
 
 **First steps**
 
 1. Submit the categories by Fri 3 PM: Startup We'd Buy Tomorrow and Best Technical Execution
-2. Write `data/accounts.json` and `data/transactions.json`: the hero (age 78, $180K to a new crypto payee), 3 normal accounts, 1 where the joint owner is the scammer, 1 with no advisor. Give every account 90 days of normal history
-3. Build `db.py` first, since Kaylin's read endpoints use it
+2. Read [`docs/GAME_PLAN.md`](docs/GAME_PLAN.md) and start the deck on the LPL template
+3. Turn [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) into a clean architecture diagram. Show DynamoDB, KMS, and CloudTrail
 
 **Checklist**
 
 | By | Done when |
 |---|---|
-| Fri 3 PM | Categories submitted. Hero and normal accounts in `data/` |
-| Fri 4 PM | `db.py` done. Seed data loaded into the tables. `submit_withdrawal` saves a real Case using the AI stub |
-| Fri 8 PM | `submit_withdrawal` uses Thomas's real scoring. `post_response` saves client and advisor answers. Every change writes an audit row |
-| Sat midnight | `post_decision` (fraud team only) and `demo_reset` work. Demo script written. Architecture diagram done (start from [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)) |
-| Sat 6 AM | Deck done. Backup video recorded |
+| Fri 3 PM | Categories submitted |
+| Fri 8 PM | Architecture diagram done. Deck outline: problem, why now (Rule 2166), demo, architecture, safety rules, why LPL buys it |
+| Sat midnight | Demo script in `docs/DEMO_SCRIPT.md`: the $180K hero through all three views, then the joint-owner and no-advisor cases |
+| Sat 6 AM | Deck done. Backup video recorded with Thomas driving the app |
 | Sat 12 PM | Code ZIP and submission form uploaded |
 
-**You need from others:** table names from Thomas (Fri 4 PM), real `score_withdrawal` from Thomas (Fri 8 PM), AI slide from Thomas and safety slide from Kaylin (Sat 6 AM)
+**Stretch:** write 2 more scam scenarios (romance scam, fake tech support) as JSON for Kaylin to load
 
-**Others need from you:** `db.py` for Kaylin, seed data for everyone (Fri 4 PM)
-
----
-
-## Kaylin: API and Alerts
-
-You own the shared request code, the endpoints the views read, what each role is allowed to see, and who gets alerted.
-
-**Your files:** `backend/common/http.py`, `roles.py`, `views.py`, `backend/handlers/list_cases.py`, `get_case.py`, `backend/notify.py`, tests for these in `tests/`
-
-**First steps**
-
-1. Read [`docs/api.md`](docs/api.md), especially "What each role sees in a Case". `views.py` already applies it. Make sure it matches
-2. Write tests for role filtering: the client never sees the memo or advisor notes, the advisor never sees `doNotNotify` or the audit log
-3. Switch `list_cases` and `get_case` from sample data to Krish's `db.py` as soon as it lands
-
-**Checklist**
-
-| By | Done when |
-|---|---|
-| Fri 3 PM | Role filtering tests written |
-| Fri 4 PM | `list_cases` (held first, newest first) and `get_case` (404 when missing, audit rows for the fraud role) on real data |
-| Fri 8 PM | `notify.py` alerts the client, advisor, emergency contact, and fraud team, skipping everyone in `doNotNotify`. Every endpoint checked against the live API after each redeploy |
-| Sat midnight | One stretch item: SNS and SES alerts with no links, or EventBridge Scheduler to end holds |
-| Sat 6 AM | Safety slide for the deck: role filtering, who gets alerted, audit log |
-
-**Stretch, after midnight:** SNS and SES alerts, EventBridge hold expiry, Step Functions, CloudTrail and KMS. Add AWS resources to `infra/template.yaml` by pull request so Thomas can deploy them
-
-**You need from others:** `db.py` from Krish (Fri 4 PM), live API URL from Thomas (Fri 4 PM)
-
-**Others need from you:** working read endpoints for Thomas's views (Fri 4 PM)
+**You need from others:** AI and AWS slide from Thomas, safety slide input from Kaylin (Sat 6 AM)
 
 ---
 
@@ -105,5 +104,5 @@ You own the shared request code, the endpoints the views read, what each role is
 
 - **Hour one:** confirm the product rules in [`docs/TEAM_PLAN.md`](docs/TEAM_PLAN.md#product-rules-decide-in-hour-one-all-three) (hold at score 70+, 10 business days, only the fraud team releases)
 - **Every 2 to 3 hours:** pull from main, merge your branch, tell Thomas to redeploy
-- **Sat 10 AM:** Q&A prep together: the three safety rules, false positives, cost per case, why Bedrock
+- **Sat 10 AM:** Q&A prep together: the three safety rules, false positives, cost per case, why Bedrock, how data is encrypted
 - **Sat 12:30 PM:** pitch

@@ -21,8 +21,8 @@ why it looks like a scam, and alerts the client, their advisor, and LPL's fraud 
 | Folder | Owner |
 |---|---|
 | `frontend/`, `ai/`, `infra/` | Thomas |
-| Write endpoints in `backend/`, `data/`, deck and demo | Krish |
-| Read endpoints and alerts in `backend/` | Kaylin |
+| `backend/`, `data/` | Kaylin |
+| Deck, demo script, architecture diagram, submission | Krish |
 | `docs/` | Everyone |
 
 Work on a branch and open a pull request. Don't push straight to main.

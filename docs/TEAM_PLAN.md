@@ -1,14 +1,16 @@
 # Team Plan: Who Builds What
 
-Three people, one owner for every piece. All three write backend code, split by file so nobody edits the same file. To change someone else's file, open a pull request and tag them. See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the pieces connect. The short version per person is [`ROLES.md`](../ROLES.md).
+Three people, one owner for every piece. Thomas and Kaylin write the code, split by folder so nobody edits the same file. Krish owns the pitch. To change someone else's file, open a pull request and tag them. See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the pieces connect. The short version per person is [`ROLES.md`](../ROLES.md).
 
 **Start with [`DEV_SETUP.md`](DEV_SETUP.md).** The repo already has a running skeleton: every endpoint, AI function, and view exists as a stub that returns the sample data from [`api.md`](api.md), and `python -m pytest` checks them all. Search for `TODO(<your name>)` to find your work.
 
 | Person | Lane | In one line |
 |---|---|---|
 | **Thomas** | AI, Frontend, and AWS | Everything Claude does, everything the user sees, and everything deployed. The only person who runs `sam deploy` |
-| **Krish** | Case Logic, Data, and Pitch | The rules of a case, the fake data that tells the story, the architecture diagram, and the deck and demo |
-| **Kaylin** | API and Alerts | The request helpers, the endpoints the views read, what each role can see, and who gets alerted |
+| **Kaylin** | Backend and Data | Every API endpoint, everything that reads and writes DynamoDB, and the fake data that tells the story |
+| **Krish** | Pitch and Demo | The deck, demo script, architecture diagram, and submission. Nothing on the critical path |
+
+**Stack:** DynamoDB for every table. One customer-managed KMS key encrypts all tables and the CloudTrail logs. CloudTrail records every API call and every table read and write. All of it is in `infra/template.yaml`.
 
 **Core** = needed for the demo, done by Sat midnight. **Stretch** = only after the core flow works.
 
@@ -18,9 +20,9 @@ Three people, one owner for every piece. All three write backend code, split by 
 
 | Item | Decision to make | Owner |
 |---|---|---|
-| Hold threshold | Score of 70 or higher holds the withdrawal | Krish |
-| Hold length | Up to 10 business days, per proposed FINRA Rule 2166 | Krish |
-| Who can release | Fraud team only. Advisor can never release alone | Krish |
+| Hold threshold | Score of 70 or higher holds the withdrawal | Kaylin |
+| Hold length | Up to 10 business days, per proposed FINRA Rule 2166 | Kaylin |
+| Who can release | Fraud team only. Advisor can never release alone | Kaylin |
 | Who gets alerted | Client, advisor, fraud team, minus anyone Claude flags as involved | Kaylin |
 | How clients confirm | Inside the app only. Alerts never carry a link or a reply option | Kaylin |
 | Claude fails or times out | Hold for manual review, never auto-release | Thomas |
@@ -31,7 +33,7 @@ Three people, one owner for every piece. All three write backend code, split by 
 | Item | Core or stretch |
 |---|---|
 | Done: `ai/fraud_ai/bedrock_client.py`, one Converse wrapper with the model ID from config, `maxTokens` 2000, reads only the `text` block (Opus 5 sends reasoning first), retries once, falls back to Sonnet 5. Tested live | Core |
-| Done: AI stubs with the exact signatures, so Krish is never blocked | Core |
+| Done: AI stubs with the exact signatures, so Kaylin is never blocked | Core |
 | `ai/fraud_ai/signals.py`: rule-based signals for new payee, full liquidation, age 65 or older, first-ever crypto, unusual timing, payee added within 24 hours | Core |
 | `ai/fraud_ai/score.py`: `score_withdrawal(...)` returns score, level, signals, memo, `doNotNotify` as validated JSON | Core |
 | `ai/fraud_ai/prompts/memo.txt`: about 120 words, plain English, names each signal, cites FINRA Rule 2165 and proposed Rule 2166, no investment advice | Core |
@@ -62,14 +64,18 @@ Three people, one owner for every piece. All three write backend code, split by 
 |---|---|
 | Everyone has working credentials. Re-run `scripts/aws-login.ps1` when they expire | Core |
 | Done: `infra/template.yaml` with API Gateway (CORS), one Lambda per endpoint, Python 3.11, 30 second timeout, the four tables, the `ai/` layer, IAM for the tables and Bedrock. Passes `cfn-lint` | Core |
-| First `sam deploy`. If the account blocks IAM role creation, change the template right away | Core |
+| First `sam deploy`. If the account blocks creating IAM roles, KMS keys, or trails, change the template right away | Core |
 | Post `ApiUrl` and the four table names in the team chat by Fri 4 PM | Core |
 | Redeploy after every merge that touches `backend/`, `ai/`, or `infra/` | Core |
 | CloudWatch logs on, with no full memos or personal details written to logs | Core |
 | Amplify hosting for the frontend from GitHub | Core |
+| Done: KMS key with rotation encrypting all four DynamoDB tables and the trail logs. CloudTrail trail with log file validation, logging management events and every table read and write. Lambdas allowed to use the key | Core |
 | Cognito user pool with client, advisor, and fraud groups, plus an API authorizer replacing `X-Role` | Stretch |
+| SNS and SES alerts with no links in them | Stretch |
+| EventBridge Scheduler to end holds automatically | Stretch |
+| Step Functions running the case flow | Stretch |
 
-### API and alerts (Kaylin)
+### API, roles, and alerts (Kaylin)
 
 | Item | Core or stretch |
 |---|---|
@@ -78,13 +84,8 @@ Three people, one owner for every piece. All three write backend code, split by 
 | `backend/handlers/get_case.py`: `GET /cases/{id}` from `db.get_case`, 404 when missing, audit rows added for the fraud role | Core |
 | `backend/notify.py`: in-app alerts on a held case, including the emergency contact, skipping everyone in `doNotNotify` | Core |
 | Tests in `tests/` for role filtering and `doNotNotify` | Core |
-| Help Thomas check each deploy: run every endpoint against the live API after a redeploy | Core |
-| SNS and SES alerts with no links in them (add the resources to the template by pull request) | Stretch |
-| EventBridge Scheduler to end holds automatically | Stretch |
-| Step Functions running the case flow | Stretch |
-| CloudTrail and KMS for the security story | Stretch |
 
-### Case logic (Krish)
+### Case logic (Kaylin)
 
 | Item | Core or stretch |
 |---|---|
@@ -97,7 +98,7 @@ Three people, one owner for every piece. All three write backend code, split by 
 | `backend/handlers/demo_reset.py`: `POST /demo/reset` wipes cases and reloads seed data, so the demo can be run again | Core |
 | `events/*.json`: keep a sample request per handler, used by `scripts/invoke_local.py` and the tests | Core |
 
-### Data (Krish)
+### Data (Kaylin)
 
 | Item | Core or stretch |
 |---|---|
@@ -108,18 +109,18 @@ Three people, one owner for every piece. All three write backend code, split by 
 | One account with no advisor, to show the scam-check chat | Core |
 | `scripts/seed_dynamodb.py`: loads `/data` into the tables | Core |
 | All names and numbers fake. No real people or real account numbers | Core |
-| Romance scam and fake tech support scenarios | Stretch |
+| Romance scam and fake tech support scenarios (Krish writes them, Kaylin loads them) | Stretch |
 
 ### Pitch and submission (Krish, with everyone)
 
 | Item | Owner | When |
 |---|---|---|
 | Submit categories: Startup We'd Buy Tomorrow and Best Technical Execution | Krish | Fri 3 PM |
-| Architecture diagram, from the draft in [`ARCHITECTURE.md`](ARCHITECTURE.md) | Krish | Sat midnight |
+| Architecture diagram, from the draft in [`ARCHITECTURE.md`](ARCHITECTURE.md). Show DynamoDB, KMS, and CloudTrail | Krish | Fri 8 PM |
 | Demo script: the $180K hero through all three views, then the no-advisor and joint-owner cases if time allows | Krish | Sat midnight |
 | Deck: problem, why now (Rule 2166), demo, architecture, three safety rules, why LPL buys it | Krish | Sat 6 AM |
-| AI slide: how Claude scores and explains, what it never does | Thomas | Sat 6 AM |
-| Safety slide: role filtering, who gets alerted, audit log | Kaylin | Sat 6 AM |
+| AI and AWS slide: how Claude scores and explains, what it never does, how data is encrypted and logged | Thomas | Sat 6 AM |
+| Safety slide input: role filtering, who gets alerted, audit log, encryption | Kaylin | Sat 6 AM |
 | Backup demo video | Krish records, Thomas drives the app | Sat 6 AM |
 | Q&A prep: the three safety rules, false positives, cost per case, why Bedrock | All | Sat 10 AM |
 | Code ZIP and submission form | Krish | Sat 12 PM |
@@ -136,16 +137,16 @@ Python 3.11 for every Lambda. One owner per file.
 | `backend/common/http.py`, `roles.py`, `views.py` | Kaylin |
 | `backend/handlers/list_cases.py`, `get_case.py` | Kaylin |
 | `backend/notify.py` | Kaylin |
-| `backend/common/db.py`, `case_state.py`, `audit.py`, `samples.py` | Krish |
-| `backend/handlers/submit_withdrawal.py`, `post_response.py`, `post_decision.py`, `demo_reset.py` | Krish |
-| `scripts/seed_dynamodb.py`, `/data` | Krish |
+| `backend/common/db.py`, `case_state.py`, `audit.py`, `samples.py` | Kaylin |
+| `backend/handlers/submit_withdrawal.py`, `post_response.py`, `post_decision.py`, `demo_reset.py` | Kaylin |
+| `scripts/seed_dynamodb.py`, `/data` | Kaylin |
 | `events/*.json` | Owner of the matching handler |
 
 ## Shared contracts
 
 Change these only by pull request, and tell the team.
 
-**DynamoDB tables** (Thomas defines them in the template, Krish's `db.py` reads and writes them):
+**DynamoDB tables** (Thomas defines them in the template, Kaylin's `db.py` reads and writes them):
 
 | Table | Key | Holds |
 |---|---|---|
@@ -154,7 +155,7 @@ Change these only by pull request, and tell the team.
 | Cases | `caseId`, plus an index on `status` | The withdrawal, risk result, memo, status, responses, hold end date |
 | Audit | `caseId` + `timestamp` | Every action: who, what, when |
 
-**Case statuses** (Krish's `case_state.py`):
+**Case statuses** (Kaylin's `case_state.py`):
 
 | From | Allowed moves | Who can make it |
 |---|---|---|
@@ -162,7 +163,7 @@ Change these only by pull request, and tell the team.
 | `HELD` | `RELEASED`, `EXTENDED`, `ESCALATED` | Fraud team only |
 | `EXTENDED` | `RELEASED`, `ESCALATED` | Fraud team only |
 
-**AI functions** (Thomas writes them, Krish's handlers call them):
+**AI functions** (Thomas writes them, Kaylin's handlers call them):
 
 ```python
 score_withdrawal(account: dict, transaction: dict, history: list[dict]) -> dict
@@ -178,15 +179,15 @@ scam_check_chat(case: dict, messages: list[dict]) -> dict
 
 ## Timeline by person
 
-| Checkpoint | Thomas: AI, Frontend, AWS | Krish: Case Logic, Data, Pitch | Kaylin: API and Alerts |
+| Checkpoint | Thomas: AI, Frontend, AWS | Kaylin: Backend and Data | Krish: Pitch and Demo |
 |---|---|---|---|
-| Hour one | SAM CLI installed. First `sam deploy` started | Product rules confirmed. `db.py` started | Read the contract in `api.md`. `list_cases` and `get_case` planned against `db.py` |
-| Fri 3 PM | Stack deployed. Signals working locally | Categories submitted. Hero and normal accounts in `/data` | Tests for role filtering |
-| Fri 4 PM | API URL and table names posted. Views checked on mock data | Seed data loaded. `db.py` done. Submit flow working on AI stubs | `list_cases` and `get_case` on real data |
-| Fri 8 PM | Real memo from Opus 5, eval passes. Views wired to the live API | Submit flow on real scoring. Responses endpoint. Audit rows | `notify.py` with `doNotNotify`. Every endpoint checked on the live API |
-| Sat midnight | Scam-check chat. Full flow on screen. Amplify hosting | Decision endpoint, demo reset, joint-owner and no-advisor accounts. Demo script. Architecture diagram | Stretch: SNS and SES alerts or EventBridge hold expiry |
-| Sat 6 AM | AI slide. Drive the backup video | Deck done. Backup video recorded | Safety slide |
-| Sat 12 PM | Q&A prep | Code ZIP and submission form | Q&A prep |
+| Hour one | SAM CLI installed. First `sam deploy` started | Product rules confirmed. Seed data and `db.py` started | Categories, deck template, game plan read |
+| Fri 3 PM | Stack deployed with KMS and CloudTrail. Signals working locally | Hero and normal accounts in `/data`. `db.py` working | Categories submitted |
+| Fri 4 PM | API URL and table names posted. Views checked on mock data | Seed data loaded. Submit flow on AI stubs. Read endpoints on real data | Deck outline |
+| Fri 8 PM | Real memo from Opus 5, eval passes. Views wired to the live API | Submit flow on real scoring. Responses endpoint. Audit rows | Architecture diagram |
+| Sat midnight | Scam-check chat. Full flow on screen. Amplify hosting | Decision endpoint, demo reset, alerts skip flagged contacts, joint-owner and no-advisor accounts | Demo script |
+| Sat 6 AM | AI and AWS slide. Drive the backup video | Safety slide input | Deck done. Backup video recorded |
+| Sat 12 PM | Q&A prep | Q&A prep | Code ZIP and submission form |
 
 ## Rules
 

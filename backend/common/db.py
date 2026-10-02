@@ -1,4 +1,4 @@
-"""DynamoDB helpers. Owner: Krish. Nobody else calls DynamoDB directly.
+"""DynamoDB helpers. Owner: Kaylin. Nobody else calls DynamoDB directly.
 
 Table names come from environment variables set in infra/template.yaml.
 Each function below is a stub: replace the body, keep the signature.

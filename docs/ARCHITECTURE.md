@@ -17,7 +17,7 @@ flowchart LR
         COG[Cognito: client, advisor, fraud roles]
     end
 
-    subgraph Backend["Backend: AWS by Thomas, case logic by Krish, read endpoints and alerts by Kaylin"]
+    subgraph Backend["Backend: AWS by Thomas, all handlers by Kaylin"]
         APIGW[API Gateway]
         L1[Lambda: submit withdrawal]
         L2[Lambda: cases, responses, decision]
@@ -25,6 +25,8 @@ flowchart LR
         SFN[Step Functions: case workflow]
         EBS[EventBridge Scheduler: hold expiry]
         SNS[SNS and SES: alerts]
+        KMS[KMS key: encrypts tables and logs]
+        CT[CloudTrail: every API call and table read or write]
     end
 
     subgraph AI["AI: Thomas"]
@@ -54,6 +56,8 @@ flowchart LR
     SFN -.-> SNS
     SFN -.-> EBS
     EBS -.->|release or extend| L2
+    KMS --> DDB
+    DDB --> CT
 ```
 
 ## What happens on one withdrawal

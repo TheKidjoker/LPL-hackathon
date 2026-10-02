@@ -61,7 +61,7 @@ Judges score "right service for the right reason," so everyone should be able to
 | API Gateway | Front door between the app and backend | Secure, managed API |
 | Cognito | Logins with client, advisor, and fraud roles | Each role sees only its own view |
 | SNS and SES | Sends alerts to all three parties | Reliable fan-out messaging |
-| KMS and CloudTrail | Encryption and a log of who did what | Security and audit trail |
+| KMS and CloudTrail | One customer-managed key encrypts every DynamoDB table and the trail logs. CloudTrail records every API call and every table read and write | Security and audit trail, built in from the first deploy |
 | Amplify | Hosts the frontend from GitHub | Auto-deploys on every push |
 
 **Skip:** SageMaker (too slow to train) and Amazon Fraud Detector (likely closed to new customers).
@@ -73,10 +73,10 @@ We split work by folder so nobody edits the same files. For checklists and hando
 | Person | Folders | Owns |
 |---|---|---|
 | Thomas | `/ai`, `/frontend`, `/infra` | Everything Claude does (Bedrock client, scoring, memo, scam-check chat, Guardrails), all three app views, and all AWS setup (SAM template, IAM, tables, Amplify, Cognito). The only person who runs `sam deploy` |
-| Krish | Case logic in `/backend`, `/data`, `/docs` | Submit, responses, decision, and demo reset endpoints, case statuses, audit log, seed data, architecture diagram, deck, demo script, video, submission |
-| Kaylin | Read endpoints and alerts in `/backend` | Request helpers, `GET /cases` and `GET /cases/{id}`, what each role can see, alerts that skip suspected scammers, stretch alert and hold-timer services |
+| Kaylin | `/backend`, `/data` | Every API endpoint, DynamoDB helpers, case statuses, audit log, role filtering, alerts, seed data and loader |
+| Krish | `/docs` (deck and demo) | Architecture diagram, category submission, deck, demo script, backup video, extra scam scenarios, submission form. Nothing on the critical path |
 
-All three build parts of the backend. The file-by-file split is in [`TEAM_PLAN.md`](TEAM_PLAN.md#backend-file-map).
+Thomas and Kaylin write the code. The file-by-file split is in [`TEAM_PLAN.md`](TEAM_PLAN.md#backend-file-map).
 
 **Rules for the repo:**
 

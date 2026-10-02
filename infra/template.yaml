@@ -43,10 +43,45 @@ Resources:
     Metadata:
       BuildMethod: python3.11
 
+  # One customer-managed key encrypts every table and the CloudTrail logs
+  DataKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: Fraud Speed Bump - encrypts DynamoDB tables and CloudTrail logs
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AccountAdmin
+            Effect: Allow
+            Principal: { AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root" }
+            Action: kms:*
+            Resource: "*"
+          - Sid: CloudTrailEncryptLogs
+            Effect: Allow
+            Principal: { Service: cloudtrail.amazonaws.com }
+            Action: kms:GenerateDataKey*
+            Resource: "*"
+            Condition:
+              StringLike:
+                kms:EncryptionContext:aws:cloudtrail:arn: !Sub "arn:aws:cloudtrail:*:${AWS::AccountId}:trail/*"
+          - Sid: CloudTrailDescribeKey
+            Effect: Allow
+            Principal: { Service: cloudtrail.amazonaws.com }
+            Action: kms:DescribeKey
+            Resource: "*"
+
+  DataKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-data"
+      TargetKeyId: !Ref DataKey
+
   AccountsTable:
     Type: AWS::DynamoDB::Table
     Properties:
       BillingMode: PAY_PER_REQUEST
+      SSESpecification: { SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref DataKey }
       AttributeDefinitions:
         - { AttributeName: accountId, AttributeType: S }
       KeySchema:
@@ -56,6 +91,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       BillingMode: PAY_PER_REQUEST
+      SSESpecification: { SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref DataKey }
       AttributeDefinitions:
         - { AttributeName: accountId, AttributeType: S }
         - { AttributeName: timestamp, AttributeType: S }
@@ -67,6 +103,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       BillingMode: PAY_PER_REQUEST
+      SSESpecification: { SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref DataKey }
       AttributeDefinitions:
         - { AttributeName: caseId, AttributeType: S }
         - { AttributeName: status, AttributeType: S }
@@ -85,6 +122,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       BillingMode: PAY_PER_REQUEST
+      SSESpecification: { SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref DataKey }
       AttributeDefinitions:
         - { AttributeName: caseId, AttributeType: S }
         - { AttributeName: timestamp, AttributeType: S }
@@ -129,6 +167,77 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/us.anthropic.claude-*"
                   - arn:aws:bedrock:*::foundation-model/anthropic.claude-*
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                  - kms:Encrypt
+                  - kms:GenerateDataKey*
+                  - kms:DescribeKey
+                Resource: !GetAtt DataKey.Arn
+
+  # CloudTrail: who did what, including every read and write on the tables
+  TrailBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: !GetAtt DataKey.Arn
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  TrailBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref TrailBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: CloudTrailAclCheck
+            Effect: Allow
+            Principal: { Service: cloudtrail.amazonaws.com }
+            Action: s3:GetBucketAcl
+            Resource: !GetAtt TrailBucket.Arn
+            Condition:
+              StringEquals:
+                aws:SourceArn: !Sub "arn:aws:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/${AWS::StackName}-trail"
+          - Sid: CloudTrailWrite
+            Effect: Allow
+            Principal: { Service: cloudtrail.amazonaws.com }
+            Action: s3:PutObject
+            Resource: !Sub "${TrailBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
+            Condition:
+              StringEquals:
+                s3:x-amz-acl: bucket-owner-full-control
+                aws:SourceArn: !Sub "arn:aws:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/${AWS::StackName}-trail"
+
+  Trail:
+    Type: AWS::CloudTrail::Trail
+    DependsOn: TrailBucketPolicy
+    Properties:
+      TrailName: !Sub "${AWS::StackName}-trail"
+      S3BucketName: !Ref TrailBucket
+      KMSKeyId: !GetAtt DataKey.Arn
+      IsLogging: true
+      EnableLogFileValidation: true
+      IncludeGlobalServiceEvents: true
+      IsMultiRegionTrail: false
+      EventSelectors:
+        - ReadWriteType: All
+          IncludeManagementEvents: true
+          DataResources:
+            - Type: AWS::DynamoDB::Table
+              Values:
+                - !GetAtt AccountsTable.Arn
+                - !GetAtt TransactionsTable.Arn
+                - !GetAtt CasesTable.Arn
+                - !GetAtt AuditTable.Arn
 
   SubmitWithdrawalFunction:
     Type: AWS::Serverless::Function
@@ -202,3 +311,7 @@ Outputs:
     Value: !Ref CasesTable
   AuditTableName:
     Value: !Ref AuditTable
+  DataKeyArn:
+    Value: !GetAtt DataKey.Arn
+  TrailBucketName:
+    Value: !Ref TrailBucket
