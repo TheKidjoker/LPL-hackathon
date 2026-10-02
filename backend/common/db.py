@@ -124,6 +124,33 @@ def update_case(case_id, changes):
     return _from_dynamo(resp["Attributes"])
 
 
+def append_response(case_id, response, changes=None):
+    """Append a Response to a Case's responses in one atomic write, plus any top-level field changes.
+
+    Returns the updated Case, or None if it does not exist.
+    """
+    changes = {k: v for k, v in (changes or {}).items() if k not in ("caseId", "responses")}
+    names = {"#responses": "responses", **{f"#f{i}": field for i, field in enumerate(changes)}}
+    values = {":r": [_to_dynamo(response)], ":empty": [],
+              **{f":v{i}": _to_dynamo(value) for i, value in enumerate(changes.values())}}
+    sets = ["#responses = list_append(if_not_exists(#responses, :empty), :r)"]
+    sets += [f"#f{i} = :v{i}" for i in range(len(changes))]
+    try:
+        resp = _table(CASES_TABLE).update_item(
+            Key={"caseId": case_id},
+            UpdateExpression="SET " + ", ".join(sets),
+            ConditionExpression="attribute_exists(caseId)",
+            ExpressionAttributeNames=names,
+            ExpressionAttributeValues=values,
+            ReturnValues="ALL_NEW",
+        )
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
+            return None
+        raise
+    return _from_dynamo(resp["Attributes"])
+
+
 def list_cases_by_status(status=None):
     """Return Cases, filtered by status when given. Uses the StatusIndex.
 

@@ -44,12 +44,12 @@ def test_get_case_filters_by_role(event, seeded):
     assert "risk" not in client and "clientName" not in client
 
 
-def test_client_response_is_added(event):
+def test_client_response_is_added(event, seeded):
     case = body(post_response.handler(event("post_response"), None))
     assert case["responses"][-1]["kind"] == "deny"
 
 
-def test_advisor_cannot_deny(event):
+def test_advisor_cannot_deny(event, seeded):
     result = post_response.handler(event("post_response", headers={"X-Role": "advisor"}), None)
     assert result["statusCode"] == 400
 
