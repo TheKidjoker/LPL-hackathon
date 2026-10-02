@@ -156,6 +156,7 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 | 404 | `not_found` | Unknown `caseId` or `accountId` |
 | 409 | `invalid_move` | The status change is not allowed from the current status |
 | 500 | `server_error` | Anything else. Details go to CloudWatch, not the response |
+| 502 | `ai_unavailable` | The assistant could not reach Claude. Try again |
 
 ## Endpoints
 
@@ -167,6 +168,8 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 | `POST /cases/{caseId}/responses` | client, advisor | Kaylin |
 | `POST /cases/{caseId}/decision` | fraud | Kaylin |
 | `POST /demo/reset` | any | Kaylin |
+| `GET /cases/{caseId}/context` | client, advisor, fraud | Thomas |
+| `POST /cases/{caseId}/assistant` | advisor, fraud | Thomas |
 
 ### `POST /withdrawals`
 
@@ -228,3 +231,59 @@ No body. Deletes all Cases and Audit rows, reloads the seed data. Response `200`
 ```json
 { "ok": true, "accountsLoaded": 6 }
 ```
+
+### `GET /cases/{caseId}/context`
+
+Names for the people around a case, so views show names instead of contact ids. `404` for an unknown case.
+
+Response `200` for advisor and fraud:
+
+```json
+{
+  "accountId": "acc-1001",
+  "clientName": "Margaret Ellis",
+  "clientAge": 78,
+  "accountOpened": "2004-03-15",
+  "advisor": { "contactId": "adv-01", "name": "Daniel Reyes" },
+  "contacts": [
+    { "contactId": "adv-01", "name": "Daniel Reyes", "relationship": "advisor", "kind": "advisor" },
+    { "contactId": "ec-01", "name": "Susan Ellis", "relationship": "daughter", "kind": "emergency" }
+  ]
+}
+```
+
+- `advisor` is `null` for a client with no advisor.
+- `contacts[].kind` is `advisor`, `emergency`, or `joint_owner`.
+
+Response `200` for the client: only `{ "advisor": { "contactId": "adv-01", "name": "Daniel Reyes" } }` (or `null`).
+
+### `POST /cases/{caseId}/assistant`
+
+Ask Claude questions about one case. Advisor and fraud only; the client gets `403`.
+
+Request:
+
+```json
+{
+  "messages": [
+    { "role": "user", "text": "Why was this held and what should I do first?" }
+  ]
+}
+```
+
+- 1 to 20 messages. `role` is `user` or `assistant`. Each `text` is 1 to 2,000 characters. The last message must be from the `user`. Anything else gets `400`.
+- Send the whole conversation each time. The server keeps no chat history.
+
+Response `200`:
+
+```json
+{
+  "reply": "Held at 14:05 on a risk score of 92. Four signals: ...",
+  "suggestions": ["Who has been notified and when?", "What does the audit trail show so far?"]
+}
+```
+
+- `suggestions` holds up to 3 follow-up questions, each under 80 characters. It can be empty.
+- Claude sees only what the caller's role may see: the advisor never gets `doNotNotify` or the audit trail.
+- Every assistant question writes an `ASSISTANT_QUESTION` audit row.
+- Takes about 8 to 12 seconds. If Claude is unavailable: `502` with code `ai_unavailable`.

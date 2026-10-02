@@ -4,13 +4,20 @@ Pure Python, no AWS calls. Every rule is robust to missing fields: a rule that
 cannot be evaluated simply does not fire.
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+
+try:
+    from zoneinfo import ZoneInfo
+
+    EASTERN = ZoneInfo("America/New_York")
+except Exception:  # no tz database (some Windows Pythons): October is EDT, UTC-4
+    EASTERN = timezone(timedelta(hours=-4), "ET")
 
 SENIOR_AGE = 65
 FULL_LIQUIDATION_SHARE = 0.9
 RECENT_PAYEE_HOURS = 24
 LARGE_VS_HISTORY_MULTIPLE = 5
-NORMAL_HOURS = range(7, 21)  # 7:00 to 20:59
+NORMAL_HOURS = range(7, 21)  # 7:00 to 20:59, client time (US Eastern)
 
 
 def _parse_time(value):
@@ -78,8 +85,9 @@ def compute_signals(account, transaction, history):
         if not past_crypto:
             add("first_crypto", "First transfer to a crypto exchange in the account's history")
 
-    if txn_time and txn_time.hour not in NORMAL_HOURS:
-        add("unusual_timing", f"Requested at {txn_time.strftime('%H:%M')}, outside normal hours")
+    local = txn_time.astimezone(EASTERN) if txn_time and txn_time.tzinfo else txn_time
+    if local and local.hour not in NORMAL_HOURS:
+        add("unusual_timing", f"Requested at {local.strftime('%H:%M')} ET, outside normal hours")
 
     past = [t.get("amount") or 0 for t in history if t.get("type") in ("withdrawal", "transfer")]
     if past and amount > LARGE_VS_HISTORY_MULTIPLE * max(past):

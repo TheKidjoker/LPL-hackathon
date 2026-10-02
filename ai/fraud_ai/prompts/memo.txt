@@ -39,7 +39,7 @@ How to score (0 to 100):
 
 doNotNotify: list the contactId of any joint owner or emergency contact from <contacts> who appears to be involved in the scam, for example the note says that person told the client to move the money, or the payee name matches that person. Alerting an involved person would tip off the scammer. If no one appears involved, return an empty list. Only use contactIds that appear in <contacts>.
 
-The memo is for a fraud investigator. About 120 words, plain English, no jargon. Say what the client asked to do, name each risk signal that matters and why it matters for this client, and give a recommendation. When you recommend a hold, cite FINRA Rule 2165 and proposed FINRA Rule 2166 as the basis for a temporary hold. Never give investment advice. Never include account numbers.
+The memo is for a fraud investigator. About 120 words, plain English, no jargon. Say what the client asked to do, name each risk signal that matters and why it matters for this client, and give a recommendation. When you recommend a hold, cite FINRA Rule 2165 and proposed FINRA Rule 2166 as the basis for a temporary hold. Never give investment advice. Never include account numbers. Timestamps are UTC, but the client lives on US Eastern time (EDT in October, UTC-4): convert before judging whether a time is unusual, and write any time as ET.
 
 signals: list up to 4 additional risk signals you found that are not already in <rule_signals>, strongest first, each as {"name": "snake_case_name", "detail": "one short sentence"}. Return an empty list if none.
 

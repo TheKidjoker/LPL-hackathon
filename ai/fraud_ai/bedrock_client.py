@@ -2,7 +2,8 @@
 
 - Model IDs come from MODEL_ID and FALLBACK_MODEL_ID (set in infra/template.yaml).
 - Opus 5 sends a reasoning block before its answer, so we read only blocks with "text".
-- One retry on the main model, then one try on the fallback.
+- One try on the main model, then one on the fallback, each capped at 13 seconds, so a
+  request always finishes inside API Gateway's 29-second limit.
 """
 
 import json
@@ -28,7 +29,7 @@ def _bedrock():
         _client = boto3.client(
             "bedrock-runtime",
             region_name=REGION,
-            config=Config(read_timeout=25, retries={"max_attempts": 1}),
+            config=Config(read_timeout=13, connect_timeout=3, retries={"max_attempts": 1, "mode": "standard"}),
         )
     return _client
 
@@ -43,7 +44,7 @@ def converse(prompt, system=None, max_tokens=2000):
         request["system"] = [{"text": system}]
 
     last_error = None
-    for model_id in (MODEL_ID, MODEL_ID, FALLBACK_MODEL_ID):
+    for model_id in (MODEL_ID, FALLBACK_MODEL_ID):
         try:
             resp = _bedrock().converse(modelId=model_id, **request)
             blocks = resp["output"]["message"]["content"]
