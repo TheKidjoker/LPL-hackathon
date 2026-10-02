@@ -38,9 +38,16 @@ Optional, but do them:
 
 - Each room has 2 LPL judges and 1 AWS judge. The LPL judges are mostly engineering leaders
   (VPs of software engineering, a principal engineer, an AIOps lead, developer experience).
-- Best Use of AWS is considered automatically.
-- Planned categories: **Startup We'd Buy Tomorrow** and **Best Technical Execution**.
-  Business Impact is the fallback, but it asks for measurable business value, which is hard to prove with synthetic data.
+- Best Use of AWS is considered automatically, so every project is judged in 3 categories.
+- Our categories: **Best Technical Execution** and **Biggest Business Impact**, plus Best Use of AWS.
+
+| Category | Judged on | How we answer it |
+|---|---|---|
+| Best Use of AWS | Right service for the right reason; secure, reliable, cost-aware, performant; solves a real problem; a live demo; the "why" | Serverless API (Lambda, API Gateway, DynamoDB), Bedrock for Claude, KMS and CloudTrail, Amplify for the frontend. Holds are saved before Claude runs, so a timeout never loses one. Cost per case. Only claim what is built |
+| Best Technical Execution | Functionality, technical complexity, implementation quality, scalability | Full flow live across three views. Rule signals plus Claude reasoning, `doNotNotify`, role-filtered views, fraud-only release. Tests and the API contract. Serverless, on-demand tables |
+| Biggest Business Impact | Problem significance, measurable business value, scalability, impact potential | Cited elder-fraud loss figures (FBI IC3, FTC). Measured results on our scenarios: scams held, normal withdrawals released, time to memo, dollars protected, cost per case. Rule 2166 extends holds to every client, which AI triage scales to |
+
+Measurable business value is the hardest part with synthetic data, so we measure what we can: run every scenario in `data/scenarios.json` through the live API and report the results.
 - Winners present to the CIO, the EVP of Wealth Management Technology, and the SVP of AI Product Management.
   Be ready for "how does this fit with Cyan?" Answer: Cyan handles advisor workflows; we handle the fraud and
   protection layer it doesn't cover, and we can plug into it.

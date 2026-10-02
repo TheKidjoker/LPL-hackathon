@@ -30,7 +30,7 @@ Three people, one owner for every piece. Thomas and Kaylin write the code, split
 
 **Krish**
 
-1. Submit the categories by Fri 3 PM: Startup We'd Buy Tomorrow and Best Technical Execution
+1. Submit the categories by Fri 3 PM: Best Technical Execution and Biggest Business Impact (Best Use of AWS is automatic)
 2. Read [`GAME_PLAN.md`](GAME_PLAN.md) and start the deck on the LPL template
 3. Turn [`ARCHITECTURE.md`](ARCHITECTURE.md) into a clean architecture diagram. Show DynamoDB, KMS, and CloudTrail
 
@@ -145,7 +145,7 @@ Three people, one owner for every piece. Thomas and Kaylin write the code, split
 
 | Item | Owner | When |
 |---|---|---|
-| Submit categories: Startup We'd Buy Tomorrow and Best Technical Execution | Krish | Fri 3 PM |
+| Submit categories: Best Technical Execution and Biggest Business Impact (Best Use of AWS is automatic) | Krish | Fri 3 PM |
 | Architecture diagram, from the draft in [`ARCHITECTURE.md`](ARCHITECTURE.md). Show DynamoDB, KMS, and CloudTrail | Krish | Fri 8 PM |
 | Demo script: the $180K hero through all three views, then the no-advisor and joint-owner cases if time allows | Krish | Sat midnight |
 | Deck: problem, why now (Rule 2166), demo, architecture, three safety rules, why LPL buys it | Krish | Sat 6 AM |
