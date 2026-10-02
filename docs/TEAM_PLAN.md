@@ -2,6 +2,8 @@
 
 Three people, one owner for every piece. All three write backend code, split by file so nobody edits the same file. To change someone else's file, open a pull request and tag them. See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the pieces connect.
 
+**Start with [`DEV_SETUP.md`](DEV_SETUP.md).** The repo already has a running skeleton: every endpoint, AI function, and view exists as a stub that returns the sample data from [`api.md`](api.md), and `python -m pytest` checks them all. Search for `TODO(<your name>)` to find your work.
+
 | Person | Lane | In one line |
 |---|---|---|
 | **Thomas** | AI and Frontend | Everything Claude does, and everything the user sees |
@@ -28,15 +30,15 @@ Three people, one owner for every piece. All three write backend code, split by 
 
 | Item | Core or stretch |
 |---|---|
-| `ai/bedrock_client.py`: one Converse wrapper with the model ID from config, `maxTokens` 2000, reads only the `text` block (Opus 5 sends reasoning first), retries once, falls back to Sonnet 5 | Core |
-| `ai/signals.py`: rule-based signals for new payee, full liquidation, age 65 or older, first-ever crypto, unusual timing, payee added within 24 hours | Core |
-| `ai/score.py`: `score_withdrawal(...)` returns score, level, signals, memo, `do_not_notify` as validated JSON | Core |
-| `ai/prompts/memo.txt`: about 120 words, plain English, names each signal, cites FINRA Rule 2165 and proposed Rule 2166, no investment advice | Core |
+| Done: `ai/fraud_ai/bedrock_client.py`, one Converse wrapper with the model ID from config, `maxTokens` 2000, reads only the `text` block (Opus 5 sends reasoning first), retries once, falls back to Sonnet 5. Tested live | Core |
+| `ai/fraud_ai/signals.py`: rule-based signals for new payee, full liquidation, age 65 or older, first-ever crypto, unusual timing, payee added within 24 hours | Core |
+| `ai/fraud_ai/score.py`: `score_withdrawal(...)` returns score, level, signals, memo, `doNotNotify` as validated JSON | Core |
+| `ai/fraud_ai/prompts/memo.txt`: about 120 words, plain English, names each signal, cites FINRA Rule 2165 and proposed Rule 2166, no investment advice | Core |
 | Treat client and advisor text as data, never as instructions to Claude (prompt-injection guard) | Core |
 | Eval script: run every scenario in `/data` and print score and level, so prompt changes can be checked in one command | Core |
-| `do_not_notify`: flag a joint owner or emergency contact who looks involved | Core |
-| `ai/scam_chat.py`: `scam_check_chat(...)` asks "Did someone contact you first?" and "Were you told to keep this secret?", returns a risk update | Core |
-| AI stubs with the exact signatures, committed in hour one so Kaylin is never blocked | Core |
+| `doNotNotify`: flag a joint owner or emergency contact who looks involved | Core |
+| `ai/fraud_ai/scam_chat.py`: `scam_check_chat(...)` asks "Did someone contact you first?" and "Were you told to keep this secret?", returns a risk update | Core |
+| Done: AI stubs with the exact signatures, so Kaylin is never blocked | Core |
 | Bedrock Guardrails on both calls: block investment advice and personal info | Stretch |
 | Knowledge Base with FINRA rule text so memos quote the rule | Stretch |
 
@@ -61,9 +63,9 @@ Three people, one owner for every piece. All three write backend code, split by 
 | Item | Core or stretch |
 |---|---|
 | Everyone has working credentials. Re-run `scripts/aws-login.ps1` when they expire | Core |
-| `infra/template.yaml`: API Gateway with CORS, one Lambda per endpoint, Python 3.12, 30 second timeout | Core |
+| `infra/template.yaml`: API Gateway with CORS, one Lambda per endpoint, Python 3.11, 30 second timeout | Core |
 | DynamoDB tables: Accounts, Transactions, Cases (index on `status`), Audit | Core |
-| Lambda layer that packages `/ai` so handlers can import it | Core |
+| Lambda layer that packages `ai/` so handlers can `from fraud_ai import ...` | Core |
 | Environment variables: `MODEL_ID=us.anthropic.claude-opus-5`, `FALLBACK_MODEL_ID`, table names | Core |
 | IAM: Lambdas can read and write only these tables and call `bedrock:InvokeModel` on Opus 5 and Sonnet 5 | Core |
 | CloudWatch logs on, with no full memos or personal details written to logs | Core |
@@ -72,7 +74,7 @@ Three people, one owner for every piece. All three write backend code, split by 
 | `backend/common/roles.py`: reads the caller's role from an `X-Role` header | Core |
 | `backend/handlers/list_cases.py`: `GET /cases`, held first | Core |
 | `backend/handlers/get_case.py`: `GET /cases/{id}`, each role sees only its fields (the client never sees the memo or advisor notes) | Core |
-| `backend/notify.py`: in-app alerts on a held case, skipping everyone in `do_not_notify` | Core |
+| `backend/notify.py`: in-app alerts on a held case, skipping everyone in `doNotNotify` | Core |
 | Architecture diagram for the deck and submission, from the draft in `ARCHITECTURE.md` | Core |
 | Cognito user pool with client, advisor, and fraud groups, plus an API authorizer replacing `X-Role` | Stretch |
 | SNS and SES alerts with no links in them | Stretch |
@@ -92,7 +94,7 @@ Three people, one owner for every piece. All three write backend code, split by 
 | `backend/handlers/post_decision.py`: `POST /cases/{id}/decision`. Release, extend, or escalate, fraud team only | Core |
 | `backend/handlers/demo_reset.py`: `POST /demo/reset` wipes cases and reloads seed data, so the demo can be run again | Core |
 | Input checks on every handler, with clear error messages | Core |
-| `events/*.json`: a sample request per handler for `sam local invoke` | Core |
+| `events/*.json`: a sample request per handler, used by `scripts/invoke_local.py` and the tests | Core |
 
 ### Data (Kaylin)
 
@@ -101,7 +103,7 @@ Three people, one owner for every piece. All three write backend code, split by 
 | Hero scenario: age 78, 22-year account, $180K full liquidation to a crypto exchange payee added 2 hours ago, client says a "bank security officer" called | Core |
 | 90 days of normal-looking transaction history behind each account, so "unusual" means something | Core |
 | 3 normal accounts that should not be flagged (house down payment, regular monthly transfer, small withdrawal) | Core |
-| One account where the joint owner is the scammer, to show `do_not_notify` | Core |
+| One account where the joint owner is the scammer, to show `doNotNotify` | Core |
 | One account with no advisor, to show the scam-check chat | Core |
 | `scripts/seed_dynamodb.py`: loads `/data` into the tables | Core |
 | Romance scam and fake tech support scenarios | Stretch |
@@ -122,7 +124,7 @@ Three people, one owner for every piece. All three write backend code, split by 
 
 ## Backend file map
 
-Python 3.12 for every Lambda. One owner per file.
+Python 3.11 for every Lambda. One owner per file.
 
 | File | Owner |
 |---|---|
@@ -164,10 +166,10 @@ Agree on these in hour one. After that, change them only by pull request, and te
 score_withdrawal(account: dict, transaction: dict, history: list[dict]) -> dict
 # returns {"score": 0-100, "level": "low"|"medium"|"high",
 #          "signals": [{"name": str, "detail": str}],
-#          "memo": str, "do_not_notify": [contact_id, ...]}
+#          "memo": str, "doNotNotify": [contact_id, ...]}
 
 scam_check_chat(case: dict, messages: list[dict]) -> dict
-# returns {"reply": str, "risk_update": int | None, "done": bool}
+# returns {"reply": str, "riskUpdate": int | None, "done": bool}
 ```
 
 **API** in [`api.md`](api.md): data shapes for Account, Transaction, Case, and Response, plus `POST /withdrawals`, `GET /cases`, `GET /cases/{id}`, `POST /cases/{id}/responses`, `POST /cases/{id}/decision`, and `POST /demo/reset`.
@@ -180,7 +182,7 @@ scam_check_chat(case: dict, messages: list[dict]) -> dict
 | Fri 3 PM | Signals and Bedrock client working locally | Tables and stub Lambdas deployed | Categories submitted. Hero and normal accounts in `/data` |
 | Fri 4 PM | Three views on mock data | Live API URL posted | Seed data loaded. Submit flow working on AI stubs |
 | Fri 8 PM | Real memo from Opus 5, eval passes. Views wired to the live API | Read endpoints with role filtering. Redeploys after each merge | Submit flow on real scoring. Responses endpoint |
-| Sat midnight | Scam-check chat and `do_not_notify`. Full flow on screen | Alerts skip flagged contacts. Amplify hosting. Architecture diagram | Decision endpoint, demo reset, joint-owner and no-advisor accounts. Demo script |
+| Sat midnight | Scam-check chat and `doNotNotify`. Full flow on screen | Alerts skip flagged contacts. Amplify hosting. Architecture diagram | Decision endpoint, demo reset, joint-owner and no-advisor accounts. Demo script |
 | Sat 6 AM | AI slide. Drive the backup video | Architecture slide | Deck done. Backup video recorded |
 | Sat 12 PM | Q&A prep | Code ZIP and submission form | Q&A prep |
 

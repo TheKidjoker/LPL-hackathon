@@ -1,0 +1,14 @@
+version = 0.1
+
+[default.global.parameters]
+stack_name = "fraud-speed-bump"
+
+[default.build.parameters]
+template_file = "template.yaml"
+
+[default.deploy.parameters]
+region = "us-east-1"
+profile = "lpl-hackathon"
+capabilities = "CAPABILITY_IAM"
+resolve_s3 = true
+confirm_changeset = false

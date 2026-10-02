@@ -1,0 +1,12 @@
+{
+  "httpMethod": "POST",
+  "path": "/cases/case-0001/responses",
+  "headers": {
+    "X-Role": "client"
+  },
+  "pathParameters": {
+    "caseId": "case-0001"
+  },
+  "queryStringParameters": null,
+  "body": "{\"kind\":\"deny\",\"text\":\"I did not request this. Someone called me.\"}"
+}

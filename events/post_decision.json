@@ -1,0 +1,12 @@
+{
+  "httpMethod": "POST",
+  "path": "/cases/case-0001/decision",
+  "headers": {
+    "X-Role": "fraud"
+  },
+  "pathParameters": {
+    "caseId": "case-0001"
+  },
+  "queryStringParameters": null,
+  "body": "{\"action\":\"escalate\",\"note\":\"Client denied the request. Impostor scam.\"}"
+}

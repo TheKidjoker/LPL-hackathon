@@ -1,0 +1,38 @@
+/* Placeholder styles. TODO(Thomas): our own product look. Do not copy LPL branding. */
+:root {
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --text: #1c2430;
+  --muted: #687385;
+  --line: #dde1e7;
+  --accent: #2f5bd3;
+  --high: #c62828;
+  --medium: #b26a00;
+  --low: #2e7d32;
+  font-family: system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+body { margin: 0; }
+.app { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.topbar { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+.roles { display: flex; gap: 4px; flex: 1; }
+button { padding: 6px 12px; margin: 4px 4px 0 0; border: 1px solid var(--line); border-radius: 6px; background: var(--card); cursor: pointer; }
+button.active { background: var(--accent); color: white; border-color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: default; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+.card.alert { border-color: var(--high); }
+label { display: block; margin-bottom: 8px; }
+input, textarea { display: block; width: 100%; box-sizing: border-box; padding: 6px; margin-top: 4px; }
+.split { display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
+.caselist { list-style: none; padding: 0; margin: 0; }
+.caselist li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 8px; cursor: pointer; }
+.caselist li.active { border-color: var(--accent); }
+.badge { display: inline-block; padding: 0 8px; border-radius: 10px; color: white; background: var(--muted); font-size: 0.85em; }
+.badge.high { background: var(--high); }
+.badge.medium { background: var(--medium); }
+.badge.low { background: var(--low); }
+.memo { white-space: pre-wrap; line-height: 1.5; }
+.muted { color: var(--muted); }
+.error { color: var(--high); }
+@media (max-width: 700px) { .split { grid-template-columns: 1fr; } }

@@ -1,0 +1,10 @@
+{
+  "httpMethod": "POST",
+  "path": "/demo/reset",
+  "headers": {
+    "X-Role": "fraud"
+  },
+  "pathParameters": null,
+  "queryStringParameters": null,
+  "body": null
+}

@@ -1,0 +1,204 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Fraud Speed Bump - API, tables, and Lambdas. Owner Krish. Only Krish runs sam deploy.
+
+Parameters:
+  ModelId:
+    Type: String
+    Default: us.anthropic.claude-opus-5
+  FallbackModelId:
+    Type: String
+    Default: us.anthropic.claude-sonnet-5
+
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 512
+    CodeUri: ../backend/
+    Layers:
+      - !Ref AiLayer
+    Environment:
+      Variables:
+        MODEL_ID: !Ref ModelId
+        FALLBACK_MODEL_ID: !Ref FallbackModelId
+        ACCOUNTS_TABLE: !Ref AccountsTable
+        TRANSACTIONS_TABLE: !Ref TransactionsTable
+        CASES_TABLE: !Ref CasesTable
+        AUDIT_TABLE: !Ref AuditTable
+  Api:
+    Cors:
+      AllowOrigin: "'*'"
+      AllowHeaders: "'Content-Type,X-Role'"
+      AllowMethods: "'GET,POST,OPTIONS'"
+
+Resources:
+  # /ai packaged as a layer, so handlers can `from fraud_ai import score_withdrawal`
+  AiLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ../ai/
+      CompatibleRuntimes:
+        - python3.11
+    Metadata:
+      BuildMethod: python3.11
+
+  AccountsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: accountId, AttributeType: S }
+      KeySchema:
+        - { AttributeName: accountId, KeyType: HASH }
+
+  TransactionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: accountId, AttributeType: S }
+        - { AttributeName: timestamp, AttributeType: S }
+      KeySchema:
+        - { AttributeName: accountId, KeyType: HASH }
+        - { AttributeName: timestamp, KeyType: RANGE }
+
+  CasesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: caseId, AttributeType: S }
+        - { AttributeName: status, AttributeType: S }
+        - { AttributeName: createdAt, AttributeType: S }
+      KeySchema:
+        - { AttributeName: caseId, KeyType: HASH }
+      GlobalSecondaryIndexes:
+        - IndexName: StatusIndex
+          KeySchema:
+            - { AttributeName: status, KeyType: HASH }
+            - { AttributeName: createdAt, KeyType: RANGE }
+          Projection:
+            ProjectionType: ALL
+
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: caseId, AttributeType: S }
+        - { AttributeName: timestamp, AttributeType: S }
+      KeySchema:
+        - { AttributeName: caseId, KeyType: HASH }
+        - { AttributeName: timestamp, KeyType: RANGE }
+
+  # One role for every Lambda: these four tables, Claude on Bedrock, and logs
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: speed-bump-app
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:BatchWriteItem
+                Resource:
+                  - !GetAtt AccountsTable.Arn
+                  - !GetAtt TransactionsTable.Arn
+                  - !GetAtt CasesTable.Arn
+                  - !Sub "${CasesTable.Arn}/index/*"
+                  - !GetAtt AuditTable.Arn
+              - Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource:
+                  - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/us.anthropic.claude-*"
+                  - arn:aws:bedrock:*::foundation-model/anthropic.claude-*
+
+  SubmitWithdrawalFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.submit_withdrawal.handler
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: /withdrawals, Method: post }
+
+  ListCasesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.list_cases.handler
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: /cases, Method: get }
+
+  GetCaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.get_case.handler
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: "/cases/{caseId}", Method: get }
+
+  PostResponseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.post_response.handler
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: "/cases/{caseId}/responses", Method: post }
+
+  PostDecisionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.post_decision.handler
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: "/cases/{caseId}/decision", Method: post }
+
+  DemoResetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.demo_reset.handler
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: /demo/reset, Method: post }
+
+Outputs:
+  ApiUrl:
+    Description: Base URL for the frontend (VITE_API_URL)
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+  AccountsTableName:
+    Value: !Ref AccountsTable
+  TransactionsTableName:
+    Value: !Ref TransactionsTable
+  CasesTableName:
+    Value: !Ref CasesTable
+  AuditTableName:
+    Value: !Ref AuditTable

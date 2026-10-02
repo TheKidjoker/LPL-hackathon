@@ -71,8 +71,8 @@ The whole call takes about 7 seconds (Opus 5 measured at 6.7s for a 120-word mem
 
 | Call | Who calls it | Input | Output | Guardrails |
 |---|---|---|---|---|
-| `ai.score_withdrawal` | Submit withdrawal Lambda | Account, transaction, last 90 days of history, rule signals | `{ score, level, signals[], memo, do_not_notify[] }` | Stretch: block investment advice and personal info in the memo |
-| `ai.scam_check_chat` | Responses Lambda, for clients with no advisor | Case summary, chat so far, client's latest answer | `{ reply, risk_update, done }` | Stretch: same Guardrail, plus never tell the client to move money |
+| `ai.score_withdrawal` | Submit withdrawal Lambda | Account, transaction, last 90 days of history, rule signals | `{ score, level, signals[], memo, doNotNotify[] }` | Stretch: block investment advice and personal info in the memo |
+| `ai.scam_check_chat` | Responses Lambda, for clients with no advisor | Case summary, chat so far, client's latest answer | `{ reply, riskUpdate, done }` | Stretch: same Guardrail, plus never tell the client to move money |
 
 Both use `us.anthropic.claude-opus-5` from one config value. Fall back to `us.anthropic.claude-sonnet-5` if Opus is throttled. See [`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude).
 
@@ -81,5 +81,5 @@ Both use `us.anthropic.claude-opus-5` from one config value. Fall back to `us.an
 | Rule | Enforced in |
 |---|---|
 | An advisor cannot release a hold alone | Decision Lambda checks the caller's role. Only `fraud` can release |
-| Never alert a suspected scammer | `do_not_notify[]` from Claude. The alert step skips those contacts |
+| Never alert a suspected scammer | `doNotNotify[]` from Claude. The alert step skips those contacts |
 | Clients confirm only inside the app | No reply links in alerts. Alerts say "open the app" |

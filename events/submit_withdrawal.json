@@ -1,0 +1,10 @@
+{
+  "httpMethod": "POST",
+  "path": "/withdrawals",
+  "headers": {
+    "X-Role": "client"
+  },
+  "pathParameters": null,
+  "queryStringParameters": null,
+  "body": "{\"accountId\":\"acc-1001\",\"amount\":180000,\"payee\":{\"name\":\"CoinVault Exchange\",\"type\":\"crypto_exchange\",\"addedAt\":\"2026-10-02T12:01:00Z\"},\"channel\":\"web\",\"clientNote\":\"Moving funds to a safe account as instructed by bank security.\"}"
+}
