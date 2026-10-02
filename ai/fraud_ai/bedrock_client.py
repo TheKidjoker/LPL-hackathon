@@ -2,14 +2,18 @@
 
 - Model IDs come from MODEL_ID and FALLBACK_MODEL_ID (set in infra/template.yaml).
 - Opus 5 sends a reasoning block before its answer, so we read only blocks with "text".
-- One try on the main model, then one on the fallback, each capped at 13 seconds, so a
-  request always finishes inside API Gateway's 29-second limit.
+- Hard time budget: if the main model hasn't answered in HEDGE_AFTER seconds (or fails), the
+  fallback model is asked too, and whichever answers first wins. Everything gives up after
+  TOTAL_BUDGET seconds, so a request always finishes inside API Gateway's 29-second limit.
+  (Opus 5 usually answers in about 10 seconds but occasionally takes over 20.)
 """
 
 import json
 import logging
 import os
 import re
+import time
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 
 import boto3
 from botocore.config import Config
@@ -25,6 +29,11 @@ GUARDRAIL_VERSION = os.environ.get("GUARDRAIL_VERSION", "DRAFT")
 QUESTION_GUARDRAIL_ID = os.environ.get("QUESTION_GUARDRAIL_ID", "")  # refuses investment-advice questions
 QUESTION_GUARDRAIL_VERSION = os.environ.get("QUESTION_GUARDRAIL_VERSION", "DRAFT")
 
+HEDGE_AFTER = 12.0  # seconds before the fallback model is also asked
+TOTAL_BUDGET = 22.0  # seconds before giving up; callers then use their own fallbacks
+# Shared and never shut down: a slow call that lost the race finishes in the background.
+_pool = ThreadPoolExecutor(max_workers=4)
+
 _client = None
 
 
@@ -34,13 +43,22 @@ def _bedrock():
         _client = boto3.client(
             "bedrock-runtime",
             region_name=REGION,
-            config=Config(read_timeout=13, connect_timeout=3, retries={"max_attempts": 1, "mode": "standard"}),
+            config=Config(read_timeout=TOTAL_BUDGET, connect_timeout=3, retries={"max_attempts": 1, "mode": "standard"}),
         )
     return _client
 
 
+def _ask(model_id, request):
+    resp = _bedrock().converse(modelId=model_id, **request)
+    blocks = resp["output"]["message"]["content"]
+    text = "".join(b["text"] for b in blocks if "text" in b).strip()
+    if not text:
+        raise RuntimeError(f"{model_id} returned no text (stopReason={resp.get('stopReason')})")
+    return text
+
+
 def converse(prompt, system=None, max_tokens=2000):
-    """Send one user message and return Claude's text answer."""
+    """Send one user message and return Claude's text answer, within TOTAL_BUDGET seconds."""
     request = {
         "messages": [{"role": "user", "content": [{"text": prompt}]}],
         "inferenceConfig": {"maxTokens": max_tokens},
@@ -48,19 +66,30 @@ def converse(prompt, system=None, max_tokens=2000):
     if system:
         request["system"] = [{"text": system}]
 
+    start = time.monotonic()
+    pending = {_pool.submit(_ask, MODEL_ID, request): MODEL_ID}
+    hedged = False
     last_error = None
-    for model_id in (MODEL_ID, FALLBACK_MODEL_ID):
-        try:
-            resp = _bedrock().converse(modelId=model_id, **request)
-            blocks = resp["output"]["message"]["content"]
-            text = "".join(b["text"] for b in blocks if "text" in b).strip()
-            if text:
-                return text
-            last_error = RuntimeError(f"{model_id} returned no text (stopReason={resp.get('stopReason')})")
-        except Exception as e:
-            last_error = e
-        logger.warning("Bedrock call to %s failed: %s", model_id, last_error)
-    raise last_error
+    while True:
+        elapsed = time.monotonic() - start
+        if not hedged and (elapsed >= HEDGE_AFTER or not pending):
+            if pending:
+                logger.warning("%s slow after %.1fs, also asking %s", MODEL_ID, elapsed, FALLBACK_MODEL_ID)
+            pending[_pool.submit(_ask, FALLBACK_MODEL_ID, request)] = FALLBACK_MODEL_ID
+            hedged = True
+        if not pending:
+            raise last_error
+        limit = (HEDGE_AFTER if not hedged else TOTAL_BUDGET) - elapsed
+        if limit <= 0:
+            raise TimeoutError(f"No model answered within {TOTAL_BUDGET:.0f}s")
+        done, _ = wait(pending, timeout=limit, return_when=FIRST_COMPLETED)
+        for future in done:
+            model_id = pending.pop(future)
+            try:
+                return future.result()
+            except Exception as e:
+                last_error = e
+                logger.warning("Bedrock call to %s failed: %s", model_id, e)
 
 
 def guard_output(text):
