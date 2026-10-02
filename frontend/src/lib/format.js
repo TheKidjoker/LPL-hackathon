@@ -21,7 +21,7 @@ export function countdown(endMs, now) {
 }
 
 export const RISK = {
-  high: { label: "High", fg: "var(--color-accent)", bg: "var(--color-accent-100)", ink: "var(--color-accent-800)" },
+  high: { label: "High", fg: "var(--risk-high)", bg: "var(--risk-high-bg)", ink: "var(--risk-high-ink)" },
   medium: { label: "Medium", fg: "var(--risk-medium)", bg: "var(--risk-medium-bg)", ink: "var(--risk-medium-ink)" },
   low: { label: "Low", fg: "var(--risk-low)", bg: "var(--risk-low-bg)", ink: "var(--risk-low-ink)" },
   unknown: { label: "Manual review", fg: "var(--color-neutral-600)", bg: "var(--color-neutral-200)", ink: "var(--color-neutral-900)" },
@@ -31,7 +31,7 @@ export const riskOf = (level) => RISK[level] || RISK.unknown;
 export const STATUS = {
   HELD: { label: "Held", bg: "var(--color-text)", ink: "var(--color-bg)" },
   EXTENDED: { label: "Extended", bg: "var(--color-text)", ink: "var(--color-bg)" },
-  ESCALATED: { label: "Escalated", bg: "var(--color-accent)", ink: "var(--color-bg)" },
+  ESCALATED: { label: "Escalated", bg: "var(--brand-orange)", ink: "#fff" },
   RELEASED: { label: "Released", bg: "var(--risk-low-bg)", ink: "var(--risk-low-ink)" },
 };
 export const statusOf = (s) => STATUS[s] || { label: s, bg: "var(--color-neutral-300)", ink: "var(--color-neutral-900)" };

@@ -44,7 +44,7 @@ export function RiskGauge({ score, level }) {
         <svg viewBox="0 0 220 112" style={{ width: "100%", display: "block" }} role="img" aria-label={`Risk score ${score ?? "unknown"} of 100`}>
           <path d="M6 110 A104 104 0 0 1 77.9 11.1" fill="none" stroke="var(--risk-low)" strokeWidth="4" />
           <path d="M77.9 11.1 A104 104 0 0 1 171.2 25.9" fill="none" stroke="var(--risk-medium)" strokeWidth="4" />
-          <path d="M171.2 25.9 A104 104 0 0 1 214 110" fill="none" stroke="var(--color-accent)" strokeWidth="4" />
+          <path d="M171.2 25.9 A104 104 0 0 1 214 110" fill="none" stroke="var(--risk-high)" strokeWidth="4" />
           <path d="M20 110 A90 90 0 0 1 200 110" fill="none" stroke="var(--color-neutral-300)" strokeWidth="18" />
           <path d="M20 110 A90 90 0 0 1 200 110" fill="none" stroke={r.fg} strokeWidth="18" strokeDasharray={dash} />
         </svg>
@@ -62,7 +62,7 @@ export function RiskGauge({ score, level }) {
 }
 
 export const SparkIcon = ({ size = 14 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" aria-hidden="true">
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--brand-orange)" strokeWidth="2" aria-hidden="true">
     <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
   </svg>
 );

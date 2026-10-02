@@ -308,14 +308,14 @@ function ScamCheck({ c, onUpdate, goWithdraw, setError }) {
         </div>
         <div style={{ height: 2, background: "var(--color-divider)" }} />
         <div className="soft" style={{ fontSize: 13, lineHeight: 1.6 }}>
-          Your account has no assigned advisor, so Speed Bump asks a few questions before large first-time transfers. A person reviews every answer.
+          Your account has no assigned advisor, so Second Look asks a few questions before large first-time transfers. A person reviews every answer.
         </div>
       </aside>
       <div className="chat-main">
         <div className="chat-head">
           <div className="brand-mark" style={{ width: 28, height: 28, background: "var(--color-text)" }} />
           <div>
-            <div className="big" style={{ fontSize: 15 }}>Speed Bump scam check</div>
+            <div className="big" style={{ fontSize: 15 }}>Second Look scam check</div>
             <div className="muted" style={{ fontSize: 12 }}>Automated assistant · a specialist is one tap away</div>
           </div>
         </div>

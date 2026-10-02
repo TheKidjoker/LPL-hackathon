@@ -1,10 +1,45 @@
-/* Layout for Speed Bump, ported from the Claude Design prototype.
-   Tokens and base components live in modernist.css. */
+/* Layout for Second Look, ported from the Claude Design prototype.
+   Tokens and base components live in modernist.css; the palette below retunes them
+   to the LPL Financial template (navy #00205B, burnt orange #B35000, gray #F2F3F5). */
 
 :root {
-  --risk-low: oklch(0.62 0.12 155);
-  --risk-low-bg: oklch(0.95 0.03 155);
-  --risk-low-ink: oklch(0.4 0.08 155);
+  /* LPL palette. --color-accent is the primary (buttons, selected role, links). */
+  --color-bg: #f2f3f5;
+  --color-surface: #e7e9ee;
+  --color-text: #00205b;
+  --color-divider: color-mix(in srgb, #00205b 30%, transparent);
+  --color-accent: #00205b;
+  --color-accent-100: #eaeef6;
+  --color-accent-200: #d3dbea;
+  --color-accent-300: #aebbd5;
+  --color-accent-400: #7487b0;
+  --color-accent-500: #3a5288;
+  --color-accent-600: #001a4b;
+  --color-accent-700: #00143c;
+  --color-accent-800: #000f2e;
+  --color-accent-900: #000a1f;
+  --color-neutral-100: #f7f8fa;
+  --color-neutral-200: #e9ebef;
+  --color-neutral-300: #d4d8e0;
+  --color-neutral-400: #b5bbc7;
+  --color-neutral-500: #9097a6;
+  --color-neutral-600: #6f7788;
+  --color-neutral-700: #545c6e;
+  --color-neutral-800: #3a4255;
+  --color-neutral-900: #1f2738;
+  --brand-orange: #b35000;
+  --brand-orange-100: #fbf0e8;
+  --brand-orange-ink: #8a3d00;
+  --font-heading: "Source Serif 4", Georgia, serif;
+  --font-heading-weight: 600;
+
+  /* Risk colors mean risk only, so they stay distinct from the brand. */
+  --risk-high: #c0261b;
+  --risk-high-bg: #fdecea;
+  --risk-high-ink: #8c1a12;
+  --risk-low: #2e7d4f;
+  --risk-low-bg: #e6f2eb;
+  --risk-low-ink: #00491f;
   --risk-medium: oklch(0.74 0.15 70);
   --risk-medium-bg: oklch(0.95 0.04 80);
   --risk-medium-ink: oklch(0.44 0.1 60);
@@ -13,7 +48,10 @@
 }
 
 body { background: var(--color-bg); }
-a { color: var(--color-accent-700); }
+a { color: var(--color-accent); }
+/* Serif is for headings only; buttons and dialog titles stay in the sans body face. */
+.btn, .dialog-title { font-family: var(--font-body); font-weight: 600; }
+.btn-primary { color: #fff; }
 .app { min-height: 100vh; font-variant-numeric: tabular-nums; }
 
 .kicker { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700); }
@@ -21,7 +59,7 @@ a { color: var(--color-accent-700); }
 .soft { color: var(--color-neutral-800); }
 .pill { display: inline-block; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; padding: 2px 7px; }
 .level-pill { font-weight: 600; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; }
-.error { color: var(--color-accent-700); font-size: 13px; }
+.error { color: var(--risk-high-ink); font-size: 13px; }
 
 /* — top bar — */
 .topbar {
@@ -31,8 +69,8 @@ a { color: var(--color-accent-700); }
 }
 .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
 .brand-mark { width: 22px; height: 22px; background: var(--color-accent); display: flex; align-items: flex-end; padding: 4px; }
-.brand-mark::after { content: ""; width: 100%; height: 5px; background: var(--color-bg); }
-.brand-name { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+.brand-mark::after { content: ""; width: 100%; height: 5px; background: var(--brand-orange); }
+.brand-name { font-family: var(--font-heading); font-weight: 600; font-size: 20px; letter-spacing: -0.01em; }
 .brand-firm { font-size: 12px; color: var(--color-neutral-700); border-left: var(--hair); padding-left: 12px; }
 .role-switch { display: flex; align-items: center; gap: 10px; }
 .roles { display: flex; border: var(--hair); }
@@ -94,10 +132,10 @@ a { color: var(--color-accent-700); }
 .page { max-width: 1280px; padding: 32px; margin: 0 auto; }
 .banner {
   display: flex; gap: 24px; align-items: center; justify-content: space-between; flex-wrap: wrap;
-  padding: 18px 24px; background: var(--color-accent-100); border-top: 4px solid var(--color-accent);
+  padding: 18px 24px; background: var(--brand-orange-100); border-top: 4px solid var(--brand-orange);
 }
-.banner h3 { font-size: 20px; margin: 0; color: var(--color-accent-900); }
-.banner p { margin: 2px 0 0; font-size: 14px; color: var(--color-accent-800); }
+.banner h3 { font-size: 22px; margin: 0; color: var(--color-text); }
+.banner p { margin: 2px 0 0; font-size: 14px; color: var(--color-neutral-800); }
 .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); margin-top: 28px; border-top: var(--rule); }
 .split > .left { padding: 24px 32px 24px 0; border-right: var(--rule); }
 .split > .right { display: flex; flex-direction: column; }
@@ -112,7 +150,7 @@ a { color: var(--color-accent-700); }
 /* — client — */
 .tabs { display: flex; gap: 24px; border-bottom: var(--rule); margin-bottom: 32px; }
 .tabs button { all: unset; cursor: pointer; font-size: 14px; font-weight: 600; padding: 0 0 10px; margin-bottom: -2px; border-bottom: 2px solid transparent; }
-.tabs button.on { border-bottom-color: var(--color-accent); }
+.tabs button.on { border-bottom-color: var(--brand-orange); }
 .client { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 300px); }
 .client > .main { padding-right: 40px; border-right: var(--rule); min-width: 0; }
 .client > aside { padding-left: 32px; display: flex; flex-direction: column; gap: 24px; }

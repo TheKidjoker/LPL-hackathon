@@ -1,7 +1,7 @@
 # LPL Financial Hackathon: Rules and Context
 
 Pulled from the "Startup pitch category strategy" chat (Lpl Financial Hackathon project on claude.ai)
-and the "Fraud Speed Bump: Team Game Plan" doc. All times are Eastern.
+and the "Fraud Speed Bump: Team Game Plan" doc (product since renamed Second Look). All times are Eastern.
 
 ## The prompt
 
@@ -53,9 +53,9 @@ Measurable business value is the hardest part with synthetic data, so we measure
   protection layer it doesn't cover, and we can plug into it.
 - Prize includes priority consideration for LPL early-career roles.
 
-## Our idea: Fraud Speed Bump
+## Our idea: Second Look (first called Fraud Speed Bump)
 
-An AI "speed bump" that catches scams where a client is tricked into moving their own money. When a risky
+An AI pause that catches scams where a client is tricked into moving their own money. When a risky
 withdrawal comes in, the system pauses it, has Claude explain in plain English why it looks like fraud, and
 alerts three people at once: the client, their financial advisor, and LPL's fraud team. Each one weighs in,
 and the fraud team makes the final call.
