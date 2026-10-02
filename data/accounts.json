@@ -1,0 +1,191 @@
+[
+  {
+    "accountId": "acc-1001",
+    "clientName": "Margaret Ellis",
+    "clientAge": 78,
+    "accountOpened": "2004-03-15",
+    "balance": 180000,
+    "advisor": {
+      "contactId": "adv-01",
+      "name": "Daniel Reyes"
+    },
+    "emergencyContact": {
+      "contactId": "ec-01",
+      "name": "Susan Ellis",
+      "relationship": "daughter"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-100",
+        "name": "First Harbor Bank checking",
+        "type": "bank",
+        "addedAt": "2011-06-01T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-001",
+        "name": "U.S. Treasury SSA benefit",
+        "type": "bank",
+        "addedAt": "2010-01-01T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "accountId": "acc-1002",
+    "clientName": "David Okafor",
+    "clientAge": 41,
+    "accountOpened": "2015-08-20",
+    "balance": 212500,
+    "advisor": {
+      "contactId": "adv-02",
+      "name": "Priya Natarajan"
+    },
+    "emergencyContact": {
+      "contactId": "ec-02",
+      "name": "Grace Okafor",
+      "relationship": "spouse"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-200",
+        "name": "Summit National Bank checking",
+        "type": "bank",
+        "addedAt": "2015-08-20T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-201",
+        "name": "Northwind Corp payroll",
+        "type": "bank",
+        "addedAt": "2019-02-01T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-202",
+        "name": "Lakeside Title & Escrow",
+        "type": "bank",
+        "addedAt": "2026-09-02T15:30:00Z"
+      }
+    ]
+  },
+  {
+    "accountId": "acc-1003",
+    "clientName": "Linda Park",
+    "clientAge": 66,
+    "accountOpened": "2009-11-02",
+    "balance": 348000,
+    "advisor": {
+      "contactId": "adv-01",
+      "name": "Daniel Reyes"
+    },
+    "emergencyContact": {
+      "contactId": "ec-03",
+      "name": "Brian Park",
+      "relationship": "son"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-300",
+        "name": "Cedar Credit Union checking",
+        "type": "bank",
+        "addedAt": "2009-11-02T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-001",
+        "name": "U.S. Treasury SSA benefit",
+        "type": "bank",
+        "addedAt": "2010-01-01T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "accountId": "acc-1004",
+    "clientName": "Marcus Bell",
+    "clientAge": 34,
+    "accountOpened": "2020-01-14",
+    "balance": 41200,
+    "advisor": {
+      "contactId": "adv-02",
+      "name": "Priya Natarajan"
+    },
+    "emergencyContact": {
+      "contactId": "ec-04",
+      "name": "Tanya Bell",
+      "relationship": "sister"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-400",
+        "name": "Riverbend Bank checking",
+        "type": "bank",
+        "addedAt": "2020-01-14T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "accountId": "acc-1005",
+    "clientName": "Harold Brooks",
+    "clientAge": 81,
+    "accountOpened": "1998-05-11",
+    "balance": 112000,
+    "advisor": {
+      "contactId": "adv-03",
+      "name": "Monica Alvarez"
+    },
+    "emergencyContact": {
+      "contactId": "ec-05",
+      "name": "Rita Brooks",
+      "relationship": "sister"
+    },
+    "jointOwners": [
+      {
+        "contactId": "jo-05",
+        "name": "Kevin Brooks",
+        "relationship": "nephew"
+      }
+    ],
+    "knownPayees": [
+      {
+        "payeeId": "pay-500",
+        "name": "Granite State Bank checking",
+        "type": "bank",
+        "addedAt": "2002-03-01T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-001",
+        "name": "U.S. Treasury SSA benefit",
+        "type": "bank",
+        "addedAt": "2010-01-01T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "accountId": "acc-1006",
+    "clientName": "Dorothy Nguyen",
+    "clientAge": 72,
+    "accountOpened": "2012-07-09",
+    "balance": 64000,
+    "advisor": null,
+    "emergencyContact": {
+      "contactId": "ec-06",
+      "name": "Alan Nguyen",
+      "relationship": "son"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-600",
+        "name": "Harborview Bank checking",
+        "type": "bank",
+        "addedAt": "2012-07-09T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-601",
+        "name": "Midstate Teachers Pension",
+        "type": "bank",
+        "addedAt": "2014-06-30T00:00:00Z"
+      }
+    ]
+  }
+]

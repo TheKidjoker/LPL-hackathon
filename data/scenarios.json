@@ -1,0 +1,104 @@
+[
+  {
+    "scenarioId": "scn-1",
+    "accountId": "acc-1001",
+    "story": "Hero. A 'bank security officer' called and told her to move everything to a safe account.",
+    "expectedLevel": "high",
+    "request": {
+      "accountId": "acc-1001",
+      "amount": 180000,
+      "payee": {
+        "name": "CoinVault Exchange",
+        "type": "crypto_exchange",
+        "addedAt": "2026-10-02T12:01:00Z"
+      },
+      "channel": "web",
+      "clientNote": "Moving funds to a safe account as instructed by bank security."
+    }
+  },
+  {
+    "scenarioId": "scn-2",
+    "accountId": "acc-1002",
+    "story": "Closing on a house. Same title company he paid earnest money to last month.",
+    "expectedLevel": "low",
+    "request": {
+      "accountId": "acc-1002",
+      "amount": 60000,
+      "payee": {
+        "name": "Lakeside Title & Escrow",
+        "type": "bank",
+        "addedAt": "2026-09-02T15:30:00Z"
+      },
+      "channel": "web",
+      "clientNote": "Down payment for closing on 412 Alder St."
+    }
+  },
+  {
+    "scenarioId": "scn-3",
+    "accountId": "acc-1003",
+    "story": "Her usual monthly transfer to her own credit union.",
+    "expectedLevel": "low",
+    "request": {
+      "accountId": "acc-1003",
+      "amount": 3000,
+      "payee": {
+        "name": "Cedar Credit Union checking",
+        "type": "bank",
+        "addedAt": "2009-11-02T00:00:00Z"
+      },
+      "channel": "web",
+      "clientNote": ""
+    }
+  },
+  {
+    "scenarioId": "scn-4",
+    "accountId": "acc-1004",
+    "story": "Small withdrawal to his own checking account.",
+    "expectedLevel": "low",
+    "request": {
+      "accountId": "acc-1004",
+      "amount": 600,
+      "payee": {
+        "name": "Riverbend Bank checking",
+        "type": "bank",
+        "addedAt": "2020-01-14T00:00:00Z"
+      },
+      "channel": "web",
+      "clientNote": ""
+    }
+  },
+  {
+    "scenarioId": "scn-5",
+    "accountId": "acc-1005",
+    "story": "Joint owner (nephew) phones in a large transfer to a brand-new payee in his own name.",
+    "expectedLevel": "high",
+    "request": {
+      "accountId": "acc-1005",
+      "amount": 95000,
+      "payee": {
+        "name": "K. Brooks Consulting LLC",
+        "type": "individual",
+        "addedAt": "2026-10-02T09:40:00Z"
+      },
+      "channel": "phone",
+      "clientNote": "Kevin Brooks calling for my uncle. He wants to invest with my company."
+    }
+  },
+  {
+    "scenarioId": "scn-6",
+    "accountId": "acc-1006",
+    "story": "Romance scam, no advisor. An online friend overseas needs 'customs fees'.",
+    "expectedLevel": "high",
+    "request": {
+      "accountId": "acc-1006",
+      "amount": 25000,
+      "payee": {
+        "name": "James Whitfield",
+        "type": "individual",
+        "addedAt": "2026-10-01T22:15:00Z"
+      },
+      "channel": "web",
+      "clientNote": "Helping a friend pay customs fees so his shipment can be released."
+    }
+  }
+]
