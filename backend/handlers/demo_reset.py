@@ -1,7 +1,7 @@
 """POST /demo/reset. Owner: Kaylin.
 
 Deletes every Case and Audit row, then reloads Accounts and Transactions from the seed data,
-so the demo can be run again from the start. The seed files come from SEED_DATA_DIR: /opt in
+so the demo can be run again from the start. Fraud team only. The seed files come from SEED_DATA_DIR: /opt in
 Lambda (the SeedDataLayer, built from data/), the repo's data/ folder locally.
 """
 
@@ -12,7 +12,7 @@ from pathlib import Path
 
 from common import db
 from common.http import api_handler, respond
-from common.roles import get_role
+from common.roles import require_role
 
 logger = logging.getLogger()
 
@@ -23,7 +23,7 @@ def seed_dir():
 
 @api_handler
 def handler(event, context):
-    role = get_role(event)
+    role = require_role(event, "fraud")  # wiping every case is a fraud-team action
     folder = seed_dir()
     accounts = json.loads((folder / "accounts.json").read_text())
     transactions = json.loads((folder / "transactions.json").read_text())

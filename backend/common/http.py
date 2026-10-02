@@ -1,18 +1,37 @@
 """Request and response helpers shared by every handler. Owner: Kaylin."""
 
+import contextvars
 import functools
 import json
 import logging
+import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 CORS_HEADERS = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type,X-Role",
+    "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Role",
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
 }
+
+# Sites allowed to call the API from a browser (comma list). "*" allows any site.
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*")
+
+# The calling site's Origin header, set per request by api_handler.
+_origin = contextvars.ContextVar("origin", default=None)
+
+
+def cors_headers(origin=None):
+    """CORS headers that echo the caller's Origin only if it is on the allowlist."""
+    headers = dict(CORS_HEADERS)
+    allowed = [o.strip() for o in ALLOWED_ORIGINS.split(",") if o.strip()]
+    if "*" in allowed:
+        headers["Access-Control-Allow-Origin"] = "*"
+    elif origin and origin in allowed:
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Vary"] = "Origin"
+    return headers
 
 
 class ApiError(Exception):
@@ -26,7 +45,7 @@ class ApiError(Exception):
 
 
 def respond(body, status=200):
-    return {"statusCode": status, "headers": CORS_HEADERS, "body": json.dumps(body, default=str)}
+    return {"statusCode": status, "headers": cors_headers(_origin.get()), "body": json.dumps(body, default=str)}
 
 
 def parse_body(event):
@@ -58,6 +77,8 @@ def api_handler(fn):
 
     @functools.wraps(fn)
     def wrapper(event, context):
+        headers = {k.lower(): v for k, v in ((event or {}).get("headers") or {}).items()}
+        _origin.set(headers.get("origin"))
         try:
             return fn(event, context)
         except ApiError as e:

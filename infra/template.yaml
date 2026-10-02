@@ -9,6 +9,10 @@ Parameters:
   FallbackModelId:
     Type: String
     Default: us.anthropic.claude-sonnet-5
+  AllowedOrigins:
+    Type: String
+    Default: https://main.d1s6iogq4h15rg.amplifyapp.com,http://localhost:5173
+    Description: Comma-separated sites allowed to call the API from a browser
 
 Globals:
   Function:
@@ -32,13 +36,72 @@ Globals:
         GUARDRAIL_VERSION: !GetAtt CaseGuardrailVersion.Version
         QUESTION_GUARDRAIL_ID: !GetAtt QuestionGuardrail.GuardrailId
         QUESTION_GUARDRAIL_VERSION: !GetAtt QuestionGuardrailVersion.Version
+        # Roles come only from the verified Cognito group, never the X-Role header.
+        ALLOW_ROLE_HEADER: "false"
+        # Sites allowed to call the API from a browser. The handler echoes the caller's
+        # Origin only when it is on this list.
+        ALLOWED_ORIGINS: !Ref AllowedOrigins
   Api:
     Cors:
       AllowOrigin: "'*'"
-      AllowHeaders: "'Content-Type,X-Role'"
+      AllowHeaders: "'Content-Type,Authorization,X-Role'"
       AllowMethods: "'GET,POST,OPTIONS'"
+    # Every route needs a valid Cognito ID token in the Authorization header.
+    Auth:
+      DefaultAuthorizer: CognitoAuth
+      AddDefaultAuthorizerToCorsPreflight: false
+      Authorizers:
+        CognitoAuth:
+          UserPoolArn: !GetAtt UserPool.Arn
+          Identity:
+            Header: Authorization
+    # Let the browser read 401 and 403 responses from the authorizer.
+    GatewayResponses:
+      DEFAULT_4XX:
+        ResponseParameters:
+          Headers:
+            Access-Control-Allow-Origin: "'*'"
+            Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Role'"
 
 Resources:
+  # Cognito: who the caller is. The group (client, advisor, fraud) is the role.
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub "${AWS::StackName}-users"
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: second-look-web
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      PreventUserExistenceErrors: ENABLED
+
+  ClientGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: { UserPoolId: !Ref UserPool, GroupName: client, Description: Clients }
+
+  AdvisorGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: { UserPoolId: !Ref UserPool, GroupName: advisor, Description: Financial advisors }
+
+  FraudGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: { UserPoolId: !Ref UserPool, GroupName: fraud, Description: Fraud team }
+
   # /ai packaged as a layer, so handlers can `from fraud_ai import score_withdrawal`
   AiLayer:
     Type: AWS::Serverless::LayerVersion
@@ -409,6 +472,12 @@ Outputs:
   ApiUrl:
     Description: Base URL for the frontend (VITE_API_URL)
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+  UserPoolId:
+    Description: Cognito user pool (scripts/create_demo_users.py)
+    Value: !Ref UserPool
+  UserPoolClientId:
+    Description: Cognito app client for the frontend (VITE_COGNITO_CLIENT_ID)
+    Value: !Ref UserPoolClient
   AccountsTableName:
     Value: !Ref AccountsTable
   TransactionsTableName:
