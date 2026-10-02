@@ -97,6 +97,7 @@ sam deploy
 ## 7. Kaylin: data and write handlers
 
 - `data/*.json` is generated: edit `scripts/make_seed_data.py`, then run `python scripts/make_seed_data.py`. `data/scenarios.json` has each account's demo withdrawal and the level it should score.
+- `python scripts/measure_scenarios.py --runs 3 --out docs/RESULTS.md` runs every scenario through the live API and reports scams held, false positives, time to memo, and dollars held. These are the measured numbers for the Business Impact slide. It uses real Claude calls and deletes the cases it creates.
 - `python scripts/seed_dynamodb.py` replaces the Accounts and Transactions tables with `data/`. It finds the table names from the `fraud-speed-bump` stack if they are not set.
 - To run a handler against the real tables, set the same variables first:
 
