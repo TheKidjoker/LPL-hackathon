@@ -1,0 +1,121 @@
+[
+  {
+    "caseId": "case-seed-07",
+    "timestamp": "2026-09-30T14:05:01.000Z",
+    "actor": "system",
+    "action": "RECEIVED",
+    "detail": "Held while automated review runs"
+  },
+  {
+    "caseId": "case-seed-07",
+    "timestamp": "2026-09-30T14:05:12.000Z",
+    "actor": "system",
+    "action": "HELD",
+    "detail": "Risk score 97"
+  },
+  {
+    "caseId": "case-seed-07",
+    "timestamp": "2026-09-30T17:10:00.000Z",
+    "actor": "advisor",
+    "action": "NOTE",
+    "detail": "Called Martha (daughter). Grandson is home and safe."
+  },
+  {
+    "caseId": "case-seed-07",
+    "timestamp": "2026-09-30T18:40:00.000Z",
+    "actor": "client",
+    "action": "DENY",
+    "detail": "After talking to my daughter I don't want this to go through."
+  },
+  {
+    "caseId": "case-seed-07",
+    "timestamp": "2026-09-30T19:02:00.000Z",
+    "actor": "fraud",
+    "action": "ESCALATED",
+    "detail": "Grandparent scam confirmed by family. Referred to investigations and APS."
+  },
+  {
+    "caseId": "case-seed-08",
+    "timestamp": "2026-09-29T16:20:01.000Z",
+    "actor": "system",
+    "action": "RECEIVED",
+    "detail": "Held while automated review runs"
+  },
+  {
+    "caseId": "case-seed-08",
+    "timestamp": "2026-09-29T16:20:11.000Z",
+    "actor": "system",
+    "action": "HELD",
+    "detail": "Risk score 72"
+  },
+  {
+    "caseId": "case-seed-08",
+    "timestamp": "2026-09-29T16:45:00.000Z",
+    "actor": "client",
+    "action": "CONFIRM",
+    "detail": "Yes, it's for our RV."
+  },
+  {
+    "caseId": "case-seed-08",
+    "timestamp": "2026-09-29T17:30:00.000Z",
+    "actor": "advisor",
+    "action": "NOTE",
+    "detail": "Confirmed by phone on the number of record. Dealer verified."
+  },
+  {
+    "caseId": "case-seed-08",
+    "timestamp": "2026-09-29T18:05:00.000Z",
+    "actor": "fraud",
+    "action": "RELEASED",
+    "detail": "Verified by callback and with the dealer. Legitimate RV purchase."
+  },
+  {
+    "caseId": "case-seed-09",
+    "timestamp": "2026-10-01T15:10:01.000Z",
+    "actor": "system",
+    "action": "RECEIVED",
+    "detail": "Held while automated review runs"
+  },
+  {
+    "caseId": "case-seed-09",
+    "timestamp": "2026-10-01T15:10:13.000Z",
+    "actor": "system",
+    "action": "HELD",
+    "detail": "Risk score 91"
+  },
+  {
+    "caseId": "case-seed-09",
+    "timestamp": "2026-10-01T16:00:00.000Z",
+    "actor": "client",
+    "action": "CONFIRM",
+    "detail": "Yes I sent it, they are getting my money back."
+  },
+  {
+    "caseId": "case-seed-09",
+    "timestamp": "2026-10-01T18:20:00.000Z",
+    "actor": "advisor",
+    "action": "NOTE",
+    "detail": "She is convinced it's real; wants to wait for the review."
+  },
+  {
+    "caseId": "case-seed-09",
+    "timestamp": "2026-10-02T13:00:00.000Z",
+    "actor": "fraud",
+    "action": "EXTENDED",
+    "detail": "Recovery-scam pattern. Extending while investigations checks the company (hold now ends 2026-10-29)"
+  },
+  {
+    "caseId": "case-seed-10",
+    "timestamp": "2026-10-02T14:40:01.000Z",
+    "actor": "system",
+    "action": "RECEIVED",
+    "detail": "Held while automated review runs"
+  },
+  {
+    "caseId": "case-seed-10",
+    "timestamp": "2026-10-02T14:40:12.000Z",
+    "actor": "system",
+    "action": "HELD",
+    "detail": "Risk score 94"
+  }
+]

@@ -5,7 +5,7 @@ from datetime import date
 
 import pytest
 
-from common import case_state, db
+from common import audit, case_state, db
 from conftest import ROOT, body
 from handlers import demo_reset, get_case, list_cases, post_decision, post_response, submit_withdrawal
 
@@ -246,8 +246,10 @@ def test_demo_reset_clears_cases_and_reloads_seed(event, seeded, scored):
     db.load_seed_data([{"accountId": "acc-junk"}], [])
 
     result = body(demo_reset.handler(event("demo_reset"), None))
-    assert result == {"ok": True, "accountsLoaded": 6}
-    assert db.list_cases_by_status() == []
+    assert result == {"ok": True, "accountsLoaded": 10, "casesLoaded": 4}
+    # Only the pre-seeded cases remain: one in each state a reviewer meets.
+    assert sorted(c["status"] for c in db.list_cases_by_status()) == ["ESCALATED", "EXTENDED", "HELD", "RELEASED"]
+    assert [a["action"] for a in audit.list_audit("case-seed-08")][-1] == "RELEASED"
     assert db.get_account("acc-junk") is None and db.get_account("acc-1001")["clientName"] == "Margaret Ellis"
     assert len(db.get_history("acc-1001", days=3650)) == 20
     assert demo_reset.handler(event("demo_reset", headers={}), None)["statusCode"] == 403

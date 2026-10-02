@@ -28,6 +28,29 @@
         "type": "bank",
         "addedAt": "2010-01-01T00:00:00Z"
       }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-09-29T15:10:00Z",
+        "channel": "phone",
+        "party": "client",
+        "who": "Margaret Ellis",
+        "summary": "Called Investor Support asking how fast a wire can go out and whether wires can go to \"a crypto account.\" Sounded rushed and said she \"can't talk about it right now.\""
+      },
+      {
+        "at": "2026-10-01T14:02:00Z",
+        "channel": "phone",
+        "party": "client",
+        "who": "Margaret Ellis",
+        "summary": "Asked to raise her online daily transfer limit. Said \"the bank security department\" is helping her protect her money. Rep suggested calling her advisor; she declined."
+      }
+    ],
+    "advisorNotes": [
+      {
+        "at": "2026-08-14T15:00:00Z",
+        "by": "Daniel Reyes",
+        "text": "Annual review. Margaret was widowed in March; her daughter Susan helps with bills. Conservative, income-focused. Has never shown interest in crypto."
+      }
     ]
   },
   {
@@ -65,6 +88,22 @@
         "type": "bank",
         "addedAt": "2026-09-02T15:30:00Z"
       }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-09-30T16:20:00Z",
+        "channel": "phone",
+        "party": "advisor",
+        "who": "Priya Natarajan",
+        "summary": "Outbound call. David confirmed closing on 412 Alder St. is set for early October with Lakeside Title & Escrow. Advisor verified the wire instructions by calling Lakeside at the number on the purchase contract."
+      }
+    ],
+    "advisorNotes": [
+      {
+        "at": "2026-09-02T16:00:00Z",
+        "by": "Priya Natarajan",
+        "text": "Buying his first home. Earnest money to Lakeside Title & Escrow goes out Sept 10; the down payment follows at closing in early October."
+      }
     ]
   },
   {
@@ -96,6 +135,14 @@
         "type": "bank",
         "addedAt": "2010-01-01T00:00:00Z"
       }
+    ],
+    "contactLog": [],
+    "advisorNotes": [
+      {
+        "at": "2026-07-10T14:00:00Z",
+        "by": "Daniel Reyes",
+        "text": "Retired in 2021. Moves $3,000 a month to her credit union for living expenses."
+      }
     ]
   },
   {
@@ -120,6 +167,14 @@
         "name": "Riverbend Bank checking",
         "type": "bank",
         "addedAt": "2020-01-14T00:00:00Z"
+      }
+    ],
+    "contactLog": [],
+    "advisorNotes": [
+      {
+        "at": "2026-06-05T18:00:00Z",
+        "by": "Priya Natarajan",
+        "text": "Self-directed, prefers the web app. Small, frequent withdrawals are normal for him."
       }
     ]
   },
@@ -158,6 +213,29 @@
         "type": "bank",
         "addedAt": "2010-01-01T00:00:00Z"
       }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-09-18T17:40:00Z",
+        "channel": "phone",
+        "party": "third_party",
+        "who": "Kevin Brooks (joint owner, nephew)",
+        "summary": "Asked to have Harold's statements sent to his own email and to be listed as the primary contact. Told only Harold can request that."
+      },
+      {
+        "at": "2026-09-27T15:05:00Z",
+        "channel": "phone",
+        "party": "third_party",
+        "who": "Kevin Brooks (joint owner, nephew)",
+        "summary": "Asked how much can be withdrawn same-day and whether Harold \"needs to be on the call.\" Mentioned \"an investment opportunity\" for his business."
+      }
+    ],
+    "advisorNotes": [
+      {
+        "at": "2026-07-22T15:30:00Z",
+        "by": "Monica Alvarez",
+        "text": "Harold had a fall in June. His nephew Kevin moved in to help and was added as a joint owner on June 30 at Harold's request. Harold seemed less engaged than usual on our call."
+      }
     ]
   },
   {
@@ -186,6 +264,206 @@
         "type": "bank",
         "addedAt": "2014-06-30T00:00:00Z"
       }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-09-12T19:30:00Z",
+        "channel": "web_chat",
+        "party": "client",
+        "who": "Dorothy Nguyen",
+        "summary": "Asked how to buy Bitcoin and whether she can send it \"to a friend overseas who is stuck in customs.\""
+      },
+      {
+        "at": "2026-09-26T18:15:00Z",
+        "channel": "phone",
+        "party": "client",
+        "who": "Dorothy Nguyen",
+        "summary": "Asked if the firm can \"release a package from customs\" for a man she met online. Rep explained the firm doesn't handle customs and flagged a possible romance scam. No advisor on the account to escalate to."
+      }
+    ],
+    "advisorNotes": []
+  },
+  {
+    "accountId": "acc-1007",
+    "clientName": "Eleanor Whitfield",
+    "clientAge": 84,
+    "accountOpened": "1996-04-22",
+    "balance": 96000,
+    "advisor": {
+      "contactId": "adv-01",
+      "name": "Daniel Reyes"
+    },
+    "emergencyContact": {
+      "contactId": "ec-07",
+      "name": "Martha Whitfield",
+      "relationship": "daughter"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-700",
+        "name": "Old Mill Savings checking",
+        "type": "bank",
+        "addedAt": "2001-02-12T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-001",
+        "name": "U.S. Treasury SSA benefit",
+        "type": "bank",
+        "addedAt": "2010-01-01T00:00:00Z"
+      }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-09-30T13:50:00Z",
+        "channel": "phone",
+        "party": "client",
+        "who": "Eleanor Whitfield",
+        "summary": "Asked to withdraw cash and buy gift cards \"for my grandson's bail.\" Said a lawyer told her not to tell her family."
+      }
+    ],
+    "advisorNotes": [
+      {
+        "at": "2026-05-03T14:00:00Z",
+        "by": "Daniel Reyes",
+        "text": "Lives alone. Very close to her grandchildren. Asked us to always call her daughter Martha if anything seems off."
+      }
     ]
+  },
+  {
+    "accountId": "acc-1008",
+    "clientName": "Robert Castillo",
+    "clientAge": 69,
+    "accountOpened": "2008-10-06",
+    "balance": 233000,
+    "advisor": {
+      "contactId": "adv-03",
+      "name": "Monica Alvarez"
+    },
+    "emergencyContact": {
+      "contactId": "ec-08",
+      "name": "Diane Castillo",
+      "relationship": "spouse"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-800",
+        "name": "Desert Federal Credit Union checking",
+        "type": "bank",
+        "addedAt": "2008-10-06T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-001",
+        "name": "U.S. Treasury SSA benefit",
+        "type": "bank",
+        "addedAt": "2010-01-01T00:00:00Z"
+      }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-09-25T15:00:00Z",
+        "channel": "branch",
+        "party": "client",
+        "who": "Robert Castillo",
+        "summary": "Visited the branch with his wife to ask about paying for an RV. Showed a purchase agreement from Coastal RV Sales."
+      }
+    ],
+    "advisorNotes": [
+      {
+        "at": "2026-09-24T17:00:00Z",
+        "by": "Monica Alvarez",
+        "text": "Robert and Diane plan to buy an RV for retirement travel, around $50,000. Expect a large payment to the dealer this month."
+      }
+    ]
+  },
+  {
+    "accountId": "acc-1009",
+    "clientName": "Janet Moore",
+    "clientAge": 58,
+    "accountOpened": "2013-05-17",
+    "balance": 151000,
+    "advisor": {
+      "contactId": "adv-02",
+      "name": "Priya Natarajan"
+    },
+    "emergencyContact": {
+      "contactId": "ec-09",
+      "name": "Paul Moore",
+      "relationship": "brother"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-900",
+        "name": "Lakeshore Bank checking",
+        "type": "bank",
+        "addedAt": "2013-05-17T00:00:00Z"
+      }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-09-22T14:45:00Z",
+        "channel": "email",
+        "party": "client",
+        "who": "Janet Moore",
+        "summary": "Emailed asking how to wire money to \"Pacific Asset Recovery Group,\" who say they can recover $40,000 she lost in a crypto scam last year for an upfront fee."
+      },
+      {
+        "at": "2026-09-29T16:30:00Z",
+        "channel": "phone",
+        "party": "client",
+        "who": "Janet Moore",
+        "summary": "Called to say the recovery firm needs the fee \"by Friday or the funds are forfeited.\""
+      }
+    ],
+    "advisorNotes": [
+      {
+        "at": "2026-03-11T15:00:00Z",
+        "by": "Priya Natarajan",
+        "text": "Janet lost about $40,000 to a crypto investment scam in 2025. Very motivated to get it back."
+      }
+    ]
+  },
+  {
+    "accountId": "acc-1010",
+    "clientName": "Walter Price",
+    "clientAge": 91,
+    "accountOpened": "1989-09-01",
+    "balance": 74000,
+    "advisor": {
+      "contactId": "adv-03",
+      "name": "Monica Alvarez"
+    },
+    "emergencyContact": {
+      "contactId": "ec-10",
+      "name": "Carol Price",
+      "relationship": "daughter"
+    },
+    "jointOwners": [],
+    "knownPayees": [
+      {
+        "payeeId": "pay-1000",
+        "name": "Granite State Bank checking",
+        "type": "bank",
+        "addedAt": "1995-03-01T00:00:00Z"
+      },
+      {
+        "payeeId": "pay-001",
+        "name": "U.S. Treasury SSA benefit",
+        "type": "bank",
+        "addedAt": "2010-01-01T00:00:00Z"
+      }
+    ],
+    "contactLog": [
+      {
+        "at": "2026-10-02T13:20:00Z",
+        "channel": "phone",
+        "party": "third_party",
+        "who": "Caller saying he is from \"Microsoft support\"",
+        "summary": "A man claiming to be from Microsoft support called asking for Walter's account number \"to process a refund.\" Rep refused and ended the call."
+      }
+    ],
+    "advisorNotes": []
   }
 ]

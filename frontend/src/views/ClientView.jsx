@@ -277,7 +277,7 @@ function SidePanel({ advisor, known }) {
       <div style={{ height: 2, background: "var(--color-divider)" }} />
       <div style={{ fontSize: 14, lineHeight: 1.6 }}><b>We will never ask you to move money to keep it safe.</b> Not by phone, text or email. If someone does, it is a scam.</div>
       <div style={{ height: 2, background: "var(--color-divider)" }} />
-      <div className="soft" style={{ fontSize: 13, lineHeight: 1.6 }}>Holds follow FINRA Rule 2165, which lets firms pause disbursements for clients 65 and older when they suspect financial exploitation.</div>
+      <div className="soft" style={{ fontSize: 13, lineHeight: 1.6 }}>For clients 65 and older, holds follow FINRA Rule 2165, which lets firms pause disbursements when they suspect financial exploitation. For other clients, holds follow the firm's fraud policy.</div>
     </aside>
   );
 }

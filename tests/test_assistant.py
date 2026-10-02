@@ -47,7 +47,7 @@ def test_context_fraud_lists_contacts_by_name(event, seeded):
 
 def test_context_advisor_same_shape(event, seeded):
     data = body(ctx(event, "advisor"))
-    assert {"accountId", "clientName", "clientAge", "accountOpened", "advisor", "contacts"} == data.keys()
+    assert {"accountId", "clientName", "clientAge", "accountOpened", "advisor", "contacts", "contactLog", "advisorNotes"} == data.keys()
 
 
 def test_context_client_only_gets_advisor(event, seeded):

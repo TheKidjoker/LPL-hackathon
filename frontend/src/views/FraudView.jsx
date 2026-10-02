@@ -3,7 +3,7 @@ import { api } from "../api.js";
 import { advisorNotes, chatTurns, citations, clientAnswer, memoParagraphs, trustedContact } from "../lib/caseView.js";
 import { countdown, fmtAt, fmtClock, fmtDay, holdEndMs, isOpen, money, riskOf } from "../lib/format.js";
 import { LockIcon, RiskGauge, SparkIcon, StatusPill, useNow } from "../components/parts.jsx";
-import { AlertsPanel, ChatTranscript, ImpactStrip, SignalGroups } from "../components/caseParts.jsx";
+import { AlertsPanel, ChatTranscript, ClientHistory, ImpactStrip, SignalGroups } from "../components/caseParts.jsx";
 import { LiveDot, usePolling, useToast } from "../components/live.jsx";
 import Assistant from "../components/Assistant.jsx";
 
@@ -152,7 +152,7 @@ function CaseDetail({ c, context, busy, onRelease, onDecide }) {
           <div style={{ marginTop: "auto" }} />
           <div className="bar"><div style={{ width: `${open ? pct.toFixed(1) : 0}%` }} /></div>
           <div className="muted" style={{ fontSize: 11, marginTop: 6 }}>
-            {c.status === "EXTENDED" ? "FINRA Rule 2165 · hold extended" : "FINRA Rule 2165 · 10 business days"}
+            {c.status === "EXTENDED" ? "Hold extended 10 business days" : "10 business days: within Rule 2165's 15-day limit for clients 65+; proposed Rule 2166 would allow 10 for any client"}
           </div>
         </div>
         <div className="stat" style={{ gap: 12 }}>
@@ -210,6 +210,11 @@ function CaseDetail({ c, context, busy, onRelease, onDecide }) {
             <div style={{ fontSize: 14 }}>{trustedContact(c) || "None on file. Rule 2165 notice cannot be sent."}</div>
           </div>
         </div>
+      </div>
+
+      <div className="cell" style={{ borderBottom: "var(--rule)" }}>
+        <div className="kicker" style={{ marginBottom: 12 }}>What the firm already knew · contact log and advisor notes</div>
+        <ClientHistory context={context} />
       </div>
 
       <Assistant role="fraud" c={c} />

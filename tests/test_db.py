@@ -18,7 +18,7 @@ def make_case(case_id, status, created_at, score=92.5):
 def test_account_roundtrip_returns_plain_numbers(tables):
     accounts = json.loads((ROOT / "data" / "accounts.json").read_text())
     transactions = json.loads((ROOT / "data" / "transactions.json").read_text())
-    assert db.load_seed_data(accounts, transactions) == 6
+    assert db.load_seed_data(accounts, transactions) == len(accounts) == 10
 
     account = db.get_account("acc-1001")
     assert account == accounts[0]

@@ -1,7 +1,8 @@
 """GET /cases/{caseId}/context. Owner: Thomas.
 
 Names and relationships for the people around a case, so views can show names instead of
-contact ids. The client only learns who their advisor is.
+contact ids, plus the firm's contact log and the advisor's CRM notes for staff. The client only
+learns who their advisor is.
 """
 
 from common import db
@@ -51,4 +52,6 @@ def handler(event, context):
         "accountOpened": account.get("accountOpened"),
         "advisor": advisor_of(account),
         "contacts": contacts_of(account),
+        "contactLog": account.get("contactLog") or [],
+        "advisorNotes": account.get("advisorNotes") or [],
     })
