@@ -1,6 +1,6 @@
 # Team Plan: Who Builds What
 
-Three people, one owner for every piece. Thomas and Kaylin write the code, split by folder so nobody edits the same file. Krish owns the pitch. To change someone else's file, open a pull request and tag them. See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the pieces connect. The short version per person is [`ROLES.md`](../ROLES.md).
+Three people, one owner for every piece. Thomas and Kaylin write the code, split by folder so nobody edits the same file. Krish owns the pitch. To change someone else's file, open a pull request and tag them. See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the pieces connect.
 
 **Start with [`DEV_SETUP.md`](DEV_SETUP.md).** The repo already has a running skeleton: every endpoint, AI function, and view exists as a stub that returns the sample data from [`api.md`](api.md), and `python -m pytest` checks them all. Search for `TODO(<your name>)` to find your work.
 
@@ -13,6 +13,36 @@ Three people, one owner for every piece. Thomas and Kaylin write the code, split
 **Stack:** DynamoDB for every table. One customer-managed KMS key encrypts all tables and the CloudTrail logs. CloudTrail records every API call and every table read and write. All of it is in `infra/template.yaml`.
 
 **Core** = needed for the demo, done by Sat midnight. **Stretch** = only after the core flow works.
+
+## First steps by person
+
+**Thomas**
+
+1. Install the SAM CLI (`winget install -e --id Amazon.SAM-CLI`), then `cd infra`, `sam build`, `sam deploy`. If the account blocks creating IAM roles, KMS keys, or trails, fix the template first, since everyone waits on the deploy
+2. Post `ApiUrl` and the four table names from the deploy output in the team chat
+3. Build `ai/fraud_ai/signals.py`, then the memo prompt in `ai/fraud_ai/prompts/memo.txt`, then `score.py` with `converse_json` (the Bedrock client already works)
+
+**Kaylin**
+
+1. Write `data/accounts.json` and `data/transactions.json`: the hero (age 78, $180K to a new crypto payee), 3 normal accounts, 1 where the joint owner is the scammer, 1 with no advisor. Give every account 90 days of normal history
+2. Build `backend/common/db.py` (DynamoDB returns numbers as `Decimal`, convert them) and `audit.py`
+3. Once Thomas deploys, load the data with `scripts/seed_dynamodb.py`, then switch `submit_withdrawal` from sample data to real data
+
+**Krish**
+
+1. Submit the categories by Fri 3 PM: Startup We'd Buy Tomorrow and Best Technical Execution
+2. Read [`GAME_PLAN.md`](GAME_PLAN.md) and start the deck on the LPL template
+3. Turn [`ARCHITECTURE.md`](ARCHITECTURE.md) into a clean architecture diagram. Show DynamoDB, KMS, and CloudTrail
+
+## Handoffs
+
+| From | To | What | When |
+|---|---|---|---|
+| Thomas | All | Live API URL and table names | Fri 4 PM |
+| Kaylin | Thomas | Seed data loaded, endpoints on real data | Fri 4 PM |
+| Thomas | Kaylin | Real `score_withdrawal` | Fri 8 PM |
+| Kaylin | Thomas | Merged code to redeploy | Every 2 to 3 hours |
+| Thomas and Kaylin | Krish | AI and AWS slide, safety slide input, working app for the video | Sat 6 AM |
 
 ## Everything this idea needs
 
