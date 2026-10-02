@@ -89,3 +89,44 @@ export function ImpactStrip({ cases }) {
 }
 
 export const fmtResponseAt = (r) => fmtAt(r.at);
+
+const PARTY = {
+  client: { label: "Client", color: "var(--color-neutral-600)" },
+  third_party: { label: "Someone else", color: "var(--brand-orange)" },
+  advisor: { label: "Advisor", color: "var(--risk-low)" },
+};
+const CHANNEL = { phone: "Phone", email: "Email", branch: "Branch", web_chat: "Web chat", web: "Web" };
+
+// What the firm already knew before this withdrawal: the contact log and the advisor's CRM notes.
+// Contacts from someone other than the client are highlighted, since scams often run through them.
+export function ClientHistory({ context }) {
+  if (!context) return <div className="muted" style={{ fontSize: 14 }}>Loading history...</div>;
+  const contacts = [...(context.contactLog || [])].sort((a, b) => b.at.localeCompare(a.at));
+  const notes = [...(context.advisorNotes || [])].sort((a, b) => b.at.localeCompare(a.at));
+  if (!contacts.length && !notes.length) return <div className="muted" style={{ fontSize: 14 }}>No recent contacts or notes on file</div>;
+  return (
+    <div className="history">
+      {contacts.map((c, i) => {
+        const p = PARTY[c.party] || PARTY.client;
+        return (
+          <div key={`c${i}`} className={`history-row${c.party === "third_party" ? " flagged" : ""}`}>
+            <span className="history-dot" style={{ background: p.color }} />
+            <div>
+              <div className="history-meta">{fmtAt(c.at)} ET · {CHANNEL[c.channel] || c.channel} · <b>{c.who}</b>{c.party === "third_party" && <span className="history-tag">{p.label}</span>}</div>
+              <div>{c.summary}</div>
+            </div>
+          </div>
+        );
+      })}
+      {notes.map((n, i) => (
+        <div key={`n${i}`} className="history-row">
+          <span className="history-dot" style={{ background: "var(--risk-low)" }} />
+          <div>
+            <div className="history-meta">{fmtAt(n.at)} ET · Advisor CRM note · <b>{n.by}</b></div>
+            <div>{n.text}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

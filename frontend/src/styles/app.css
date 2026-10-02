@@ -251,3 +251,11 @@ a { color: var(--color-accent); }
 .scenario-pick { display: grid; gap: 8px; margin-top: 18px; max-width: 520px; }
 .scenario-pick label { font-size: 12px; color: var(--color-neutral-700); }
 .live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--risk-low); margin-right: 6px; animation: blink 2s infinite; }
+
+/* — client history (contact log + advisor CRM notes) — */
+.history { display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 1.5; }
+.history-row { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px; }
+.history-row.flagged { background: var(--brand-orange-100); padding: 8px 10px; margin: 0 -10px; }
+.history-dot { width: 8px; height: 8px; margin-top: 7px; }
+.history-meta { font-size: 12px; color: var(--color-neutral-700); margin-bottom: 2px; }
+.history-tag { margin-left: 8px; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; padding: 1px 6px; background: var(--brand-orange); color: var(--color-bg); }

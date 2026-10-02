@@ -2,39 +2,12 @@
 // Role filtering mirrors backend/common/views.py.
 import { sampleCase } from "./sampleCase.js";
 import accounts from "../../../data/accounts.json";
+import seedCases from "../../../data/cases.json";
+import seedAudit from "../../../data/audit.json";
 import { SCENARIOS } from "../lib/scenarios.js";
 
 const ACCOUNTS = Object.fromEntries(accounts.map((a) => [a.accountId, a]));
 
-const otherCases = [
-  {
-    caseId: "case-0002", accountId: "acc-1002", clientName: "Robert Okafor", createdAt: "2026-10-02T14:32:00Z", status: "HELD",
-    transaction: { transactionId: "txn-9002", accountId: "acc-1002", timestamp: "2026-10-02T14:32:00Z", type: "withdrawal", amount: 42500,
-      payee: { payeeId: "pay-778", name: "Harbor Title Escrow", type: "bank", addedAt: "2026-10-02T13:10:00Z" }, channel: "web", clientNote: "Closing on the house" },
-    risk: { score: 74, level: "high", memo: "Robert Okafor, 71, is wiring $42,500 for a home closing. The wire instructions were changed by an email this morning, and the receiving bank differs from the one used for his deposit last month. This matches a business email compromise aimed at real estate closings.\n\nRecommended: confirm the instructions by phone with the title company using a number from the closing documents, not the email. A Rule 2165 hold is in place.",
-      signals: [{ name: "new_payee", detail: "Wire instructions changed by email today" }, { name: "senior_client", detail: "Client is 71" }], doNotNotify: [] },
-    holdEndsAt: "2026-10-16", notified: ["client", "adv-02", "fraud-team"], decision: null,
-    responses: [{ responseId: "resp-r1", role: "advisor", kind: "note", text: "Robert says the title officer emailed new instructions. I asked him not to reply to that thread.", at: "2026-10-02T15:20:00Z" }],
-    audit: [{ timestamp: "2026-10-02T14:32:07Z", actor: "system", action: "HELD", detail: "Risk score 74" }, { timestamp: "2026-10-02T15:20:00Z", actor: "advisor", action: "NOTE", detail: "Advisor note added" }],
-  },
-  {
-    caseId: "case-0003", accountId: "acc-1003", clientName: "Dana Whitcombe", createdAt: "2026-10-01T19:40:00Z", status: "HELD",
-    transaction: { transactionId: "txn-9003", accountId: "acc-1003", timestamp: "2026-10-01T19:40:00Z", type: "withdrawal", amount: 65000,
-      payee: { payeeId: "pay-779", name: "Apex Bullion Co.", type: "individual", addedAt: "2026-09-10T00:00:00Z" }, channel: "web", clientNote: "" },
-    risk: { score: 61, level: "medium", memo: "Dana Whitcombe, 66, is sending $65,000 to a precious-metals dealer registered three weeks ago. No impostor indicators, but the dealer is unverified.\n\nRecommended: confirm the dealer's registration before release.",
-      signals: [{ name: "large_vs_history", detail: "38% of the balance, first metals purchase" }, { name: "senior_client", detail: "Client is 66" }], doNotNotify: [] },
-    holdEndsAt: "2026-10-15", notified: ["client", "adv-01", "fraud-team"], decision: null, responses: [],
-    audit: [{ timestamp: "2026-10-01T19:40:05Z", actor: "system", action: "HELD", detail: "Risk score 61" }],
-  },
-  {
-    caseId: "case-0004", accountId: "acc-1004", clientName: "Lena Park", createdAt: "2026-10-01T16:02:00Z", status: "RELEASED",
-    transaction: { transactionId: "txn-9004", accountId: "acc-1004", timestamp: "2026-10-01T16:02:00Z", type: "withdrawal", amount: 8400,
-      payee: { payeeId: "pay-780", name: "Northline Property Mgmt", type: "bank", addedAt: "2025-08-01T00:00:00Z" }, channel: "web", clientNote: "Rent" },
-    risk: { score: 12, level: "low", memo: "Recurring rent payment to an established payee. No action needed.", signals: [], doNotNotify: [] },
-    holdEndsAt: null, notified: [], decision: null, responses: [],
-    audit: [{ timestamp: "2026-10-01T16:02:03Z", actor: "system", action: "RELEASED", detail: "Risk score 12" }],
-  },
-];
 
 const CHAT_SCRIPT = [
   "Were you told to keep this secret, even from family or your bank?",
@@ -64,7 +37,10 @@ function scenarioCase(request) {
 
 const money = (n) => n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
-const fresh = () => [structuredClone(sampleCase), ...structuredClone(otherCases)];
+// The same pre-seeded cases the live demo reset loads (data/cases.json), with their audit rows.
+const seeded = () =>
+  seedCases.map((c) => ({ ...structuredClone(c), audit: seedAudit.filter((a) => a.caseId === c.caseId).map(({ caseId, ...row }) => row) }));
+const fresh = () => [structuredClone(sampleCase), ...seeded()];
 let cases = fresh();
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -113,7 +89,7 @@ export const mockApi = {
       ...(a?.emergencyContact ? [{ ...a.emergencyContact, kind: "emergency" }] : []),
       ...(a?.jointOwners || []).map((j) => ({ ...j, kind: "joint_owner" })),
     ];
-    return { accountId: a?.accountId, clientName: a?.clientName, clientAge: a?.clientAge, accountOpened: a?.accountOpened, advisor, contacts };
+    return { accountId: a?.accountId, clientName: a?.clientName, clientAge: a?.clientAge, accountOpened: a?.accountOpened, advisor, contacts, contactLog: a?.contactLog || [], advisorNotes: a?.advisorNotes || [] };
   },
   async askAssistant(role, caseId, messages) {
     await delay(2200);

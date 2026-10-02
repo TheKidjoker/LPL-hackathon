@@ -1,0 +1,298 @@
+[
+  {
+    "caseId": "case-seed-07",
+    "accountId": "acc-1007",
+    "clientName": "Eleanor Whitfield",
+    "createdAt": "2026-09-30T14:05:00Z",
+    "status": "ESCALATED",
+    "transaction": {
+      "transactionId": "txn-seed-07",
+      "accountId": "acc-1007",
+      "timestamp": "2026-09-30T14:05:00Z",
+      "type": "withdrawal",
+      "amount": 62000,
+      "payee": {
+        "payeeId": "pay-701",
+        "name": "QuickCard Gift Card Wholesale",
+        "type": "individual",
+        "addedAt": "2026-09-30T13:55:00Z"
+      },
+      "channel": "phone",
+      "clientNote": "Grandson needs bail money today. Lawyer said not to tell family."
+    },
+    "risk": {
+      "score": 97,
+      "level": "high",
+      "signals": [
+        {
+          "name": "new_payee",
+          "detail": "QuickCard Gift Card Wholesale has never been paid from this account"
+        },
+        {
+          "name": "payee_added_recently",
+          "detail": "Payee added 0 hours before the request"
+        },
+        {
+          "name": "senior_client",
+          "detail": "Client is 84"
+        },
+        {
+          "name": "large_vs_history",
+          "detail": "52x the largest past withdrawal ($1,200)"
+        },
+        {
+          "name": "grandparent_scam_script",
+          "detail": "Note repeats the 'grandchild in jail, don't tell family' script"
+        },
+        {
+          "name": "secrecy_instruction",
+          "detail": "Client was told to keep it from her family"
+        }
+      ],
+      "memo": "Eleanor Whitfield, 84, asked to send $62,000 to a gift-card wholesaler added minutes earlier, saying her grandson needs bail and a lawyer told her not to tell her family. This is the classic grandparent scam: urgency, secrecy, and an untraceable payment method. Her daughter Martha confirmed the grandson is home and safe. Recommend keeping the hold under FINRA Rule 2165 and referring to Adult Protective Services.",
+      "doNotNotify": []
+    },
+    "holdEndsAt": "2026-10-14",
+    "notified": [
+      "client",
+      "fraud-team",
+      "adv-01",
+      "ec-07"
+    ],
+    "responses": [
+      {
+        "responseId": "resp-s07a",
+        "role": "client",
+        "kind": "deny",
+        "text": "After talking to my daughter I don't want this to go through.",
+        "at": "2026-09-30T18:40:00Z"
+      },
+      {
+        "responseId": "resp-s07b",
+        "role": "advisor",
+        "kind": "note",
+        "text": "Called Martha (daughter). Grandson is home and safe. Eleanor is upset but relieved. Classic grandparent scam.",
+        "at": "2026-09-30T17:10:00Z"
+      }
+    ],
+    "decision": {
+      "action": "escalate",
+      "by": "fraud",
+      "at": "2026-09-30T19:02:00Z",
+      "note": "Grandparent scam confirmed by family. Referred to investigations and APS."
+    }
+  },
+  {
+    "caseId": "case-seed-08",
+    "accountId": "acc-1008",
+    "clientName": "Robert Castillo",
+    "createdAt": "2026-09-29T16:20:00Z",
+    "status": "RELEASED",
+    "transaction": {
+      "transactionId": "txn-seed-08",
+      "accountId": "acc-1008",
+      "timestamp": "2026-09-29T16:20:00Z",
+      "type": "withdrawal",
+      "amount": 48500,
+      "payee": {
+        "payeeId": "pay-801",
+        "name": "Coastal RV Sales",
+        "type": "individual",
+        "addedAt": "2026-09-29T16:00:00Z"
+      },
+      "channel": "web",
+      "clientNote": "Down payment on our RV"
+    },
+    "risk": {
+      "score": 72,
+      "level": "high",
+      "signals": [
+        {
+          "name": "new_payee",
+          "detail": "Coastal RV Sales has never been paid from this account"
+        },
+        {
+          "name": "payee_added_recently",
+          "detail": "Payee added 0 hours before the request"
+        },
+        {
+          "name": "senior_client",
+          "detail": "Client is 69"
+        },
+        {
+          "name": "large_vs_history",
+          "detail": "21x the largest past withdrawal ($2,300)"
+        }
+      ],
+      "memo": "Robert Castillo, 69, asked to send $48,500 to Coastal RV Sales, a payee added 20 minutes earlier. The amount is far above his usual withdrawals. However, his advisor's notes and a branch visit with his wife show a planned RV purchase with a signed agreement. Recommend a short hold and callback to confirm before release.",
+      "doNotNotify": []
+    },
+    "holdEndsAt": null,
+    "notified": [
+      "client",
+      "fraud-team",
+      "adv-03",
+      "ec-08"
+    ],
+    "responses": [
+      {
+        "responseId": "resp-s08a",
+        "role": "client",
+        "kind": "confirm",
+        "text": "Yes, it's for our RV.",
+        "at": "2026-09-29T16:45:00Z"
+      },
+      {
+        "responseId": "resp-s08b",
+        "role": "advisor",
+        "kind": "note",
+        "text": "Confirmed with Robert and Diane by phone on the number of record. Dealer verified independently.",
+        "at": "2026-09-29T17:30:00Z"
+      }
+    ],
+    "decision": {
+      "action": "release",
+      "by": "fraud",
+      "at": "2026-09-29T18:05:00Z",
+      "note": "Verified by callback on the number of record and with the dealer. Legitimate RV purchase."
+    }
+  },
+  {
+    "caseId": "case-seed-09",
+    "accountId": "acc-1009",
+    "clientName": "Janet Moore",
+    "createdAt": "2026-10-01T15:10:00Z",
+    "status": "EXTENDED",
+    "transaction": {
+      "transactionId": "txn-seed-09",
+      "accountId": "acc-1009",
+      "timestamp": "2026-10-01T15:10:00Z",
+      "type": "withdrawal",
+      "amount": 18000,
+      "payee": {
+        "payeeId": "pay-901",
+        "name": "Pacific Asset Recovery Group",
+        "type": "individual",
+        "addedAt": "2026-10-01T14:50:00Z"
+      },
+      "channel": "web",
+      "clientNote": "Fee to recover my lost crypto"
+    },
+    "risk": {
+      "score": 91,
+      "level": "high",
+      "signals": [
+        {
+          "name": "new_payee",
+          "detail": "Pacific Asset Recovery Group has never been paid from this account"
+        },
+        {
+          "name": "payee_added_recently",
+          "detail": "Payee added 0 hours before the request"
+        },
+        {
+          "name": "large_vs_history",
+          "detail": "12x the largest past withdrawal ($1,500)"
+        },
+        {
+          "name": "recovery_scam_pattern",
+          "detail": "Upfront fee to 'recover' money lost in an earlier scam"
+        },
+        {
+          "name": "deadline_pressure",
+          "detail": "Told the fee is due 'by Friday or the funds are forfeited'"
+        }
+      ],
+      "memo": "Janet Moore, 58, asked to send an $18,000 'fee' to Pacific Asset Recovery Group, who claim they can recover the $40,000 she lost in a crypto scam last year. Upfront-fee recovery offers aimed at past victims are a known follow-on scam, and the deadline pressure fits. She is under 65, so this delay relies on the firm's fraud policy; proposed FINRA Rule 2166 would cover it. Recommend extending while investigations verifies the company.",
+      "doNotNotify": []
+    },
+    "holdEndsAt": "2026-10-29",
+    "notified": [
+      "client",
+      "fraud-team",
+      "adv-02",
+      "ec-09"
+    ],
+    "responses": [
+      {
+        "responseId": "resp-s09a",
+        "role": "client",
+        "kind": "confirm",
+        "text": "Yes I sent it, they are getting my money back.",
+        "at": "2026-10-01T16:00:00Z"
+      },
+      {
+        "responseId": "resp-s09b",
+        "role": "advisor",
+        "kind": "note",
+        "text": "Spoke with Janet. She is convinced it's real. I explained recovery scams; she wants to wait for the firm's review.",
+        "at": "2026-10-01T18:20:00Z"
+      }
+    ],
+    "decision": {
+      "action": "extend",
+      "by": "fraud",
+      "at": "2026-10-02T13:00:00Z",
+      "note": "Recovery-scam pattern. Extending while investigations checks the company."
+    }
+  },
+  {
+    "caseId": "case-seed-10",
+    "accountId": "acc-1010",
+    "clientName": "Walter Price",
+    "createdAt": "2026-10-02T14:40:00Z",
+    "status": "HELD",
+    "transaction": {
+      "transactionId": "txn-seed-10",
+      "accountId": "acc-1010",
+      "timestamp": "2026-10-02T14:40:00Z",
+      "type": "withdrawal",
+      "amount": 30000,
+      "payee": {
+        "payeeId": "pay-1001",
+        "name": "TechFix Support Services",
+        "type": "individual",
+        "addedAt": "2026-10-02T14:25:00Z"
+      },
+      "channel": "phone",
+      "clientNote": "Refund processing for computer support"
+    },
+    "risk": {
+      "score": 94,
+      "level": "high",
+      "signals": [
+        {
+          "name": "new_payee",
+          "detail": "TechFix Support Services has never been paid from this account"
+        },
+        {
+          "name": "payee_added_recently",
+          "detail": "Payee added 0 hours before the request"
+        },
+        {
+          "name": "senior_client",
+          "detail": "Client is 91"
+        },
+        {
+          "name": "large_vs_history",
+          "detail": "25x the largest past withdrawal ($1,200)"
+        },
+        {
+          "name": "tech_support_scam_pattern",
+          "detail": "Payment to 'computer support' for a 'refund' right after a fake Microsoft call"
+        }
+      ],
+      "memo": "Walter Price, 91, asked to send $30,000 to TechFix Support Services by phone, 80 minutes after a caller claiming to be Microsoft support tried to get his account number 'to process a refund.' Refund-overpayment tech-support scams follow this pattern exactly. Walter has not answered the in-app question yet. Recommend keeping the hold under FINRA Rule 2165 and reaching his daughter Carol.",
+      "doNotNotify": []
+    },
+    "holdEndsAt": "2026-10-16",
+    "notified": [
+      "client",
+      "fraud-team",
+      "adv-03",
+      "ec-10"
+    ],
+    "responses": [],
+    "decision": null
+  }
+]

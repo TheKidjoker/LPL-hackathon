@@ -223,6 +223,17 @@ def load_seed_data(accounts, transactions):
     return len(accounts)
 
 
+def load_seed_cases(cases, audit_rows):
+    """Write pre-seeded Cases and their audit rows (data/cases.json, data/audit.json). Returns the case count."""
+    with _table(CASES_TABLE).batch_writer() as batch:
+        for case in cases:
+            batch.put_item(Item=_to_dynamo(case))
+    with _table(AUDIT_TABLE).batch_writer() as batch:
+        for row in audit_rows:
+            batch.put_item(Item=_to_dynamo(row))
+    return len(cases)
+
+
 def clear_cases_and_audit():
     """Delete every Case and Audit row. Returns (cases deleted, audit rows deleted)."""
     return _clear(CASES_TABLE, ["caseId"]), _clear(AUDIT_TABLE, ["caseId", "timestamp"])

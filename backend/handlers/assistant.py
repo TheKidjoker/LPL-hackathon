@@ -52,6 +52,8 @@ def account_summary(account):
             for p in account.get("knownPayees") or []
         ],
         "contacts": [{"name": c["name"], "relationship": c["relationship"]} for c in contacts_of(account)],
+        "firmContactLog": account.get("contactLog") or [],
+        "advisorCrmNotes": account.get("advisorNotes") or [],
     }
 
 

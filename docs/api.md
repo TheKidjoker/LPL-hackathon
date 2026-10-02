@@ -232,7 +232,7 @@ Response `200`: the updated Case.
 No body. Deletes all Cases and Audit rows, then replaces Accounts and Transactions with the seed data in `data/`. Any valid `X-Role`. Response `200`:
 
 ```json
-{ "ok": true, "accountsLoaded": 6 }
+{ "ok": true, "accountsLoaded": 10, "casesLoaded": 4 }
 ```
 
 ### `GET /cases/{caseId}/context`

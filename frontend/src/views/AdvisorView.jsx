@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api.js";
 import { advisorNotes, clientAnswer, memoParagraphs } from "../lib/caseView.js";
 import { fmtAt, fmtDay, isOpen, money, riskOf } from "../lib/format.js";
 import { LevelPill, LockIcon, PhoneIcon, ShieldIcon, SparkIcon, StatusPill } from "../components/parts.jsx";
-import { SignalGroups } from "../components/caseParts.jsx";
+import { ClientHistory, SignalGroups } from "../components/caseParts.jsx";
 import { usePolling, useToast } from "../components/live.jsx";
 import Assistant from "../components/Assistant.jsx";
 
@@ -27,6 +27,11 @@ export default function AdvisorView() {
       })
       .catch((e) => setError(e.message)), []);
   usePolling(() => selId && api.getCase(ROLE, selId).then(setCase).catch((e) => setError(e.message)), [selId]);
+  const [context, setContext] = useState(null);
+  useEffect(() => {
+    setContext(null);
+    if (selId) api.getContext(ROLE, selId).then(setContext).catch(() => setContext(null));
+  }, [selId]);
 
   async function saveNote() {
     setSaving(true);
@@ -134,6 +139,10 @@ export default function AdvisorView() {
                 {n.text}<div className="muted" style={{ fontSize: 11, marginTop: 2 }}>You · {fmtAt(n.at)}</div>
               </div>
             ))}
+          </div>
+          <div>
+            <div className="kicker" style={{ marginBottom: 10 }}>Client history</div>
+            <ClientHistory context={context} />
           </div>
           <div>
             <button className="btn btn-secondary" disabled><LockIcon />Release hold</button>

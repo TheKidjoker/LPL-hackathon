@@ -50,6 +50,10 @@ def main():
     accounts = json.loads((ROOT / "data" / "accounts.json").read_text())
     transactions = json.loads((ROOT / "data" / "transactions.json").read_text())
     loaded = db.load_seed_data(accounts, transactions)
+    cases_file, audit_file = ROOT / "data" / "cases.json", ROOT / "data" / "audit.json"
+    if cases_file.exists():
+        db.clear_cases_and_audit()
+        db.load_seed_cases(json.loads(cases_file.read_text()), json.loads(audit_file.read_text()) if audit_file.exists() else [])
     print(f"Loaded {loaded} accounts and {len(transactions)} transactions into {db.ACCOUNTS_TABLE} and {db.TRANSACTIONS_TABLE}")
 
 

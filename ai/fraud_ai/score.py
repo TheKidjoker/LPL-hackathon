@@ -99,7 +99,8 @@ def build_prompt(account, transaction, history, signals):
         history=dump(_recent_history(history, transaction)) if history else "(no transactions in the last 90 days)",
         signals=dump(signals) if signals else "(none fired)",
         client_note=transaction.get("clientNote") or "(none)",
-        advisor_note="(none yet)",
+        advisor_note=dump(account.get("advisorNotes")) if account.get("advisorNotes") else "(none on file)",
+        contact_log=dump(account.get("contactLog")) if account.get("contactLog") else "(no recent contacts)",
         contacts=dump(contacts) if contacts else "(none on file)",
     )
 
