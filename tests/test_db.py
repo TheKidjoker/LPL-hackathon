@@ -3,51 +3,8 @@
 import json
 from datetime import datetime, timedelta, timezone
 
-import boto3
-import pytest
-from moto import mock_aws
-
 from common import audit, db
 from conftest import ROOT
-
-TABLES = {
-    "ACCOUNTS_TABLE": ("Accounts", [("accountId", "HASH")]),
-    "TRANSACTIONS_TABLE": ("Transactions", [("accountId", "HASH"), ("timestamp", "RANGE")]),
-    "CASES_TABLE": ("Cases", [("caseId", "HASH")]),
-    "AUDIT_TABLE": ("Audit", [("caseId", "HASH"), ("timestamp", "RANGE")]),
-}
-
-
-@pytest.fixture
-def tables(monkeypatch):
-    monkeypatch.setenv("AWS_ACCESS_KEY_ID", "testing")
-    monkeypatch.setenv("AWS_SECRET_ACCESS_KEY", "testing")
-    monkeypatch.setenv("AWS_SESSION_TOKEN", "testing")
-    monkeypatch.delenv("AWS_PROFILE", raising=False)
-    with mock_aws():
-        client = boto3.client("dynamodb", region_name="us-east-1")
-        for var, (name, keys) in TABLES.items():
-            attrs = {k for k, _ in keys}
-            extra = {}
-            if name == "Cases":
-                attrs |= {"status", "createdAt"}
-                extra["GlobalSecondaryIndexes"] = [{
-                    "IndexName": "StatusIndex",
-                    "KeySchema": [{"AttributeName": "status", "KeyType": "HASH"},
-                                  {"AttributeName": "createdAt", "KeyType": "RANGE"}],
-                    "Projection": {"ProjectionType": "ALL"},
-                }]
-            client.create_table(
-                TableName=name,
-                KeySchema=[{"AttributeName": k, "KeyType": t} for k, t in keys],
-                AttributeDefinitions=[{"AttributeName": a, "AttributeType": "S"} for a in sorted(attrs)],
-                BillingMode="PAY_PER_REQUEST",
-                **extra,
-            )
-            monkeypatch.setattr(db, var, name)
-        monkeypatch.setattr(db, "_resource", None)
-        yield
-
 
 def iso(dt):
     return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
