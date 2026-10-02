@@ -17,7 +17,7 @@ flowchart LR
         COG[Cognito: client, advisor, fraud roles]
     end
 
-    subgraph Backend["Backend: all three, AWS setup by Thomas"]
+    subgraph Backend["Backend: AWS by Krish, case logic by Kaylin"]
         APIGW[API Gateway]
         L1[Lambda: submit withdrawal]
         L2[Lambda: cases, responses, decision]
@@ -27,7 +27,7 @@ flowchart LR
         SNS[SNS and SES: alerts]
     end
 
-    subgraph AI["AI and data: Kaylin"]
+    subgraph AI["AI: Thomas"]
         RISK[ai.score_withdrawal]
         CHAT[ai.scam_check_chat]
         BR[Bedrock: Opus 5]
