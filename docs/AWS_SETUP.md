@@ -56,10 +56,12 @@ Only use these models. Each was tested with a live call on Oct 2.
 
 | Use | Model ID |
 |---|---|
-| Risk memo (default) | `us.anthropic.claude-sonnet-5` |
-| Fast scoring, scam-check chat | `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
-| Hard reasoning, if Sonnet falls short | `us.anthropic.claude-opus-5` |
-| Fallbacks | `us.anthropic.claude-opus-4-8`, `us.anthropic.claude-opus-4-7`, `us.anthropic.claude-sonnet-4-6`, `us.anthropic.claude-opus-4-6-v1` |
+| Risk score and memo, scam-check chat (default) | `us.anthropic.claude-opus-5` |
+| Backup if Opus 5 is slow or throttled | `us.anthropic.claude-sonnet-5` |
+| Cheap model for bulk test runs | `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
+| Other fallbacks | `us.anthropic.claude-opus-4-8`, `us.anthropic.claude-opus-4-7`, `us.anthropic.claude-sonnet-4-6`, `us.anthropic.claude-opus-4-6-v1` |
+
+On a 120-word memo, Opus 5 took about 6.7s and Sonnet 5 about 7.2s, so Opus costs no speed here. Keep the model ID in one config value so switching is a one-line change.
 
 Opus 5 reasons before answering. Give it `maxTokens` of a few hundred or more, and read the block that has `text` (the first block is the reasoning).
 
