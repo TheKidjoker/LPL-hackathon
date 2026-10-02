@@ -128,11 +128,11 @@ function CaseDetail({ c, context, busy, onRelease, onDecide }) {
         </div>
         <div className="actions">
           <div className="row">
-            <button className="btn btn-secondary" disabled={!open || busy} onClick={onRelease}><LockIcon />Release</button>
+            <button className="btn btn-secondary" disabled={!(open || c.status === "ESCALATED") || busy} onClick={onRelease}><LockIcon />Release</button>
             <button className="btn btn-secondary" disabled={c.status !== "HELD" || busy} onClick={() => onDecide("extend", "Hold extended for further review")}>Extend hold</button>
             <button className="btn btn-primary" disabled={!open || busy} onClick={() => onDecide("escalate", "Escalated to Fraud Investigations")}>Escalate</button>
           </div>
-          <span className="muted" style={{ fontSize: 11 }}>Release is restricted to the Fraud team and requires a logged reason</span>
+          <span className="muted" style={{ fontSize: 11 }}>Release is restricted to the Fraud team and requires a logged reason. Escalated cases can be released once investigations clears them</span>
         </div>
       </div>
 

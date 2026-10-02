@@ -251,3 +251,10 @@ def test_demo_reset_clears_cases_and_reloads_seed(event, seeded, scored):
     assert db.get_account("acc-junk") is None and db.get_account("acc-1001")["clientName"] == "Margaret Ellis"
     assert len(db.get_history("acc-1001", days=3650)) == 20
     assert demo_reset.handler(event("demo_reset", headers={}), None)["statusCode"] == 403
+
+
+def test_escalated_case_can_be_released_with_a_reason(event, seeded):
+    assert decide(event, "escalate", "Sent to investigations")["statusCode"] == 200
+    released = body(decide(event, "release", "Investigations cleared it: client confirmed in branch"))
+    assert released["status"] == "RELEASED" and released["holdEndsAt"] is None
+    assert decide(event, "extend")["statusCode"] == 409  # released is final

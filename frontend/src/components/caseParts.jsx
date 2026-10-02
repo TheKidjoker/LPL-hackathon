@@ -83,7 +83,7 @@ export function ImpactStrip({ cases }) {
       <div><b>{money(dollars)}</b><span>Protected on hold</span></div>
       <div><b>{held.length}</b><span>Withdrawals held</span></div>
       <div><b>{released.length}</b><span>Released automatically</span></div>
-      <div className="tested">Live tests, 2 runs × 6 scenarios: every scam held · no false positives · 9.6s average to memo</div>
+      <div className="tested">Live tests, 3 runs × 6 scenarios: 9/9 scams held · 0 false positives · 10.9s average · ~3¢ per case</div>
     </div>
   );
 }

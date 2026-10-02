@@ -22,6 +22,9 @@ MOVES = {
     (HELD, ESCALATED): {"fraud"},
     (EXTENDED, RELEASED): {"fraud"},
     (EXTENDED, ESCALATED): {"fraud"},
+    # After investigations clears an escalated case, the fraud team can still release it
+    # (with a logged reason). Nothing else leaves ESCALATED.
+    (ESCALATED, RELEASED): {"fraud"},
 }
 
 ACTION_TO_STATUS = {"release": RELEASED, "extend": EXTENDED, "escalate": ESCALATED}

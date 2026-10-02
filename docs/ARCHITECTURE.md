@@ -1,89 +1,123 @@
 # Architecture
 
-Claude (Opus 5 on Bedrock) is called at two points: once to score a withdrawal and write the risk memo, and once to run the scam-check chat for clients without an advisor. Everything else is plain AWS plumbing around those two calls.
+Second Look pauses risky withdrawals, has **Juno** (our AI co-pilot, built on Claude via Amazon Bedrock) explain why in plain English, and brings the client, their advisor, and the fraud team into one case. Everything runs serverless in one AWS account in `us-east-1`, deployed as one SAM stack (`fraud-speed-bump`).
 
-Solid lines are the core build (done by Sat midnight). Dotted lines are stretch.
+Live API: `https://x9ku6sdgu3.execute-api.us-east-1.amazonaws.com/Prod`
+
+## System diagram
 
 ```mermaid
 flowchart LR
-    subgraph Users
-        C[Client view]
-        A[Advisor view]
-        F[Fraud team view]
+    subgraph Users["People"]
+        C[Client]
+        A[Advisor]
+        F[Fraud team]
     end
 
-    subgraph Frontend["Frontend: Thomas"]
-        UI[React app on Amplify]
-        COG[Cognito: client, advisor, fraud roles]
+    subgraph Web["Frontend (React + Vite)"]
+        UI["Three role views<br/>polls every 4s"]
     end
 
-    subgraph Backend["Backend: AWS by Thomas, all handlers by Kaylin"]
-        APIGW[API Gateway]
-        L1[Lambda: submit withdrawal]
-        L2[Lambda: cases, responses, decision]
-        DDB[(DynamoDB: Accounts, Transactions, Cases, Audit)]
-        SFN[Step Functions: case workflow]
-        EBS[EventBridge Scheduler: hold expiry]
-        SNS[SNS and SES: alerts]
-        KMS[KMS key: encrypts tables and logs]
-        CT[CloudTrail: every API call and table read or write]
+    subgraph API["API Gateway + Lambda (Python 3.11)"]
+        SUB[POST /withdrawals]
+        READ["GET /cases<br/>GET /cases/{id}<br/>GET /cases/{id}/context"]
+        RESP[POST /cases/{id}/responses]
+        DEC[POST /cases/{id}/decision]
+        ASK[POST /cases/{id}/assistant]
+        RESET[POST /demo/reset]
     end
 
-    subgraph AI["AI: Thomas"]
-        RISK[ai.score_withdrawal]
-        CHAT[ai.scam_check_chat]
-        BR[Bedrock: Opus 5]
-        GR[Bedrock Guardrails]
-        KB[Bedrock Knowledge Base: FINRA rules]
+    subgraph AI["Juno (ai/fraud_ai, Lambda layer)"]
+        SIG[Rule signals]
+        SCORE[score_withdrawal]
+        CHAT[scam_check_chat]
+        ASSIST[assistant.ask]
     end
 
-    C & A & F --> UI
-    UI -.-> COG
-    UI --> APIGW
-    APIGW --> L1 & L2
-    L1 --> DDB
-    L1 -->|account, transaction, history| RISK
-    RISK -->|prompt| BR
-    BR -->|score, signals, memo| RISK
-    RISK -->|risk result| L1
-    L1 -->|Case: HELD or RELEASED| DDB
-    L2 --> DDB
-    L2 -->|client chat turn| CHAT
-    CHAT --> BR
-    BR -.-> GR
-    RISK -.->|retrieve rule text| KB
-    L1 -.-> SFN
-    SFN -.-> SNS
-    SFN -.-> EBS
-    EBS -.->|release or extend| L2
-    KMS --> DDB
-    DDB --> CT
+    subgraph Bedrock["Amazon Bedrock"]
+        OPUS["Claude Opus 5<br/>hedged to Sonnet 5"]
+        GQ[Guardrail: questions]
+        GO[Guardrail: output masking]
+    end
+
+    subgraph Data["Data and security"]
+        DDB[("DynamoDB<br/>Accounts, Transactions,<br/>Cases, Audit")]
+        KMS[KMS key]
+        CT[CloudTrail]
+    end
+
+    SCHED[EventBridge Scheduler<br/>every 15 min] --> EXP[hold_expiry Lambda]
+
+    C & A & F --> UI --> API
+    SUB --> SIG --> SCORE
+    RESP --> CHAT
+    ASK --> GQ --> ASSIST
+    SCORE & CHAT & ASSIST --> OPUS --> GO
+    API --> DDB
+    EXP --> DDB
+    KMS -. encrypts .-> DDB
+    KMS -. encrypts .-> CT
+    DDB -. every read and write .-> CT
 ```
 
 ## What happens on one withdrawal
 
-1. The client submits a withdrawal in the app. `POST /withdrawals` reaches the **submit withdrawal** Lambda.
-2. The Lambda loads the account and recent transactions from DynamoDB and calls `ai.score_withdrawal(...)`.
-3. That function computes rule-based signals (new payee, full liquidation, client age, unusual timing), then sends the signals and history to **Opus 5**. Claude returns JSON: a score, the signals it weighed, a 120-word memo citing FINRA Rule 2165 and proposed Rule 2166, and anyone who should not be notified.
-4. If the score is 70 or higher, the Lambda saves a Case with status `HELD` and the memo. Otherwise it saves `RELEASED`. Each step writes an Audit row.
-5. Client, advisor, and fraud team views read the Case. The client confirms or denies, the advisor adds notes, and the fraud team releases, extends, or escalates (`POST /cases/{id}/decision`).
-6. Stretch: Step Functions runs steps 4 and 5 as a workflow, SNS and SES send the alerts, and EventBridge Scheduler ends the hold if no one acts.
+1. **Client submits** in the app. `POST /withdrawals` loads the account and 90 days of history from DynamoDB.
+2. **Saved as HELD first.** The case is written as HELD with a "manual review" placeholder *before* the AI runs, so a timeout can never lose a withdrawal.
+3. **Rule signals.** Seven deterministic checks run in Python: new payee, payee added within 24 hours, 90%+ of the balance, client 65 or older, first crypto transfer, outside 7 AM to 9 PM Eastern, and 5x the largest past withdrawal.
+4. **Juno scores it.** Claude Opus 5 reads the account summary, history, signals, and the client's note (treated as untrusted evidence). It returns a 0 to 100 score, up to 4 extra signals, a roughly 120-word memo citing FINRA Rule 2165 and proposed Rule 2166, and `doNotNotify`: contacts who appear to be part of the scam.
+5. **Guardrail on output.** The memo passes through a Bedrock Guardrail that masks SSNs, card, bank account, and routing numbers.
+6. **Decision.** A score of 70 or higher, or unknown because the AI failed, means HELD until 10 business days out (5:00 PM ET). Anything lower is RELEASED.
+7. **Alerts.** The client, advisor, emergency contact, and fraud team are alerted in the app. Anyone in `doNotNotify` is skipped. For example, the joint-owner nephew in the Harold Brooks scenario is never told.
+8. **Everyone weighs in.** The client answers "Did you request this?" and can add an emergency contact. Clients with no advisor take Juno's scam-check chat. Advisors add notes. Each view refreshes every 4 seconds.
+9. **Fraud team decides:** release (needs a written reason), extend (10 more business days, once), or escalate. Advisors can never release.
+10. **Hold expiry.** Every 15 minutes, EventBridge Scheduler runs `hold_expiry`. Holds past their end date with no decision are **escalated, never released**.
 
-The whole call takes about 7 seconds (Opus 5 measured at 6.7s for a 120-word memo), which fits inside API Gateway's 29 second limit. Show a "Reviewing..." state in the app while it runs.
+Every step writes a row to the Audit table, and CloudTrail records the underlying AWS calls.
 
-## Where Claude is used
+## AWS services
 
-| Call | Who calls it | Input | Output | Guardrails |
-|---|---|---|---|---|
-| `ai.score_withdrawal` | Submit withdrawal Lambda | Account, transaction, last 90 days of history, rule signals | `{ score, level, signals[], memo, doNotNotify[] }` | Stretch: block investment advice and personal info in the memo |
-| `ai.scam_check_chat` | Responses Lambda, for clients with no advisor | Case summary, chat so far, client's latest answer | `{ reply, riskUpdate, done }` | Stretch: same Guardrail, plus never tell the client to move money |
+| Service | What it does here | Why this one |
+|---|---|---|
+| **Amazon Bedrock: Claude Opus 5** (Sonnet 5 fallback) | Risk score and memo, scam-check chat, Juno assistant | Strong reasoning on messy human context; data stays in our AWS account |
+| **Bedrock Guardrails** (2) | Refuses investment-advice questions to Juno; masks identity and account numbers in all AI output | Compliance enforced by the platform, not only by prompts |
+| **AWS Lambda** (9 functions, 2 layers) | Every endpoint, plus scheduled hold expiry. Layers: `ai/` code, `data/` seed files | Pay per request, no servers to run |
+| **Amazon API Gateway** | REST front door with CORS | Managed, secure entry point |
+| **Amazon DynamoDB** (4 tables) | Accounts, Transactions, Cases (with a `StatusIndex`), Audit | Fast serverless storage; strongly consistent reads for cases |
+| **EventBridge Scheduler** | Runs `hold_expiry` every 15 minutes | Exact timing with no server running |
+| **AWS KMS** | One customer-managed key, rotation on, encrypts all tables and the CloudTrail logs | Encryption we control |
+| **AWS CloudTrail** | Logs every API call and every table read and write, with log file validation, to a KMS-encrypted S3 bucket | Tamper-evident record of who did what |
+| **Amazon CloudWatch** | Lambda logs, including guardrail interventions and model fallbacks | Debugging and evidence |
+| **AWS IAM** | One least-privilege role: these tables, these models, these guardrails, this key | Nothing more than the app needs |
 
-Both use `us.anthropic.claude-opus-5` from one config value. Fall back to `us.anthropic.claude-sonnet-5` if Opus is throttled. See [`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude).
+Not built (stretch): Amplify hosting, Cognito logins (the app uses an `X-Role` header), SNS/SES delivery, Step Functions, a Bedrock Knowledge Base.
 
-## Safety rules, and where each lives
+## Safety rules, and where each is enforced
 
 | Rule | Enforced in |
 |---|---|
-| An advisor cannot release a hold alone | Decision Lambda checks the caller's role. Only `fraud` can release |
-| Never alert a suspected scammer | `doNotNotify[]` from Claude. The alert step skips those contacts |
-| Clients confirm only inside the app | No reply links in alerts. Alerts say "open the app" |
+| Only the fraud team can release, extend, or escalate | `post_decision.py` checks the role; `case_state.MOVES` lists the allowed moves (409 otherwise) |
+| Never alert a suspected scammer | Juno returns `doNotNotify`; `notify.py` skips those contacts; the fraud view shows them as "not alerted: may be involved" |
+| Clients confirm only inside the app | Alerts carry no links or reply options |
+| A suspect withdrawal never leaves on its own | Saved as HELD before scoring; AI failure means a manual-review hold; expired holds escalate instead of releasing |
+| Each role sees only its own fields | `views.py`: clients never see the memo, scores, or notes; advisors never see `doNotNotify` or the audit trail |
+| Juno never gives investment advice | Question guardrail refuses before any model call; prompts forbid it |
+| Every AI consultation is on the record | Each Juno question writes an `ASSISTANT_QUESTION` audit row |
+| Two reviewers can't overwrite each other | Decisions save only if the status is unchanged (`if_status`), else 409 |
+
+## Code map
+
+| Path | What |
+|---|---|
+| `frontend/` | React app: `views/` (Client, Advisor, Fraud team), `components/` (Juno panel, signal groups, alerts, polling, toasts), `mock/` (offline data) |
+| `backend/handlers/` | One Lambda per endpoint, plus `hold_expiry.py` |
+| `backend/common/` | `db.py` (DynamoDB), `audit.py`, `case_state.py` (statuses and allowed moves), `views.py` (role filtering), `roles.py`, `http.py` |
+| `backend/notify.py` | Who gets alerted |
+| `ai/fraud_ai/` | `signals.py`, `score.py`, `scam_chat.py`, `assistant.py`, `bedrock_client.py`, `prompts/memo.txt` |
+| `ai/eval/run_eval.py` | Live eval of every demo scenario |
+| `infra/template.yaml` | The whole stack |
+| `data/` | Seed accounts, 90 days of transactions, demo scenarios |
+| `scripts/` | Login, local handler runner, seed loader, scenario measurement |
+| `tests/` | 97 tests: contract, handlers, AI, guardrails, hold expiry, time budget |
+
+More detail: [`AI.md`](AI.md) (how Juno works), [`api.md`](api.md) (every endpoint), [`OPERATIONS.md`](OPERATIONS.md) (deploy and run the demo).
