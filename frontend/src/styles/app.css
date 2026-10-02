@@ -1,11 +1,11 @@
 /* Layout for Second Look, ported from the Claude Design prototype.
    Tokens and base components live in modernist.css; the palette below retunes them
-   to the LPL Financial template (navy #00205B, burnt orange #B35000, gray #F2F3F5). */
+   to the LPL Financial template (navy #00205B, burnt orange #B35000, gray #F2F3F5; background tinted blue-gray #E3E8F1). */
 
 :root {
   /* LPL palette. --color-accent is the primary (buttons, selected role, links). */
-  --color-bg: #f2f3f5;
-  --color-surface: #e7e9ee;
+  --color-bg: #e3e8f1;
+  --color-surface: #d6deeb;
   --color-text: #00205b;
   --color-divider: color-mix(in srgb, #00205b 30%, transparent);
   --color-accent: #00205b;
