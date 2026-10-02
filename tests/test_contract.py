@@ -66,9 +66,11 @@ def test_demo_reset(event):
     assert body(demo_reset.handler(event("demo_reset"), None))["ok"] is True
 
 
-def test_ai_stub_shapes():
-    from fraud_ai import scam_check_chat, score_withdrawal
+def test_ai_shapes(monkeypatch):
+    from fraud_ai import bedrock_client, scam_check_chat, score_withdrawal
 
+    fake = {"score": 10, "level": "low", "signals": [], "memo": "ok", "doNotNotify": [], "reply": "hi", "riskUpdate": None, "done": False}
+    monkeypatch.setattr(bedrock_client, "converse_json", lambda *a, **k: fake)
     risk = score_withdrawal({}, {}, [])
     assert {"score", "level", "signals", "memo", "doNotNotify"} == risk.keys()
     chat = scam_check_chat({}, [])
