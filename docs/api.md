@@ -119,7 +119,7 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 ```
 
 - `status` is one of `HELD`, `RELEASED`, `EXTENDED`, `ESCALATED`.
-- `holdEndsAt` is 10 business days after `createdAt`. `null` when released.
+- `holdEndsAt` is 2 business days after `createdAt`. `null` when released.
 - `decision` is `null` until the fraud team acts, then `{ "action": "release", "by": "fraud", "at": "...", "note": "..." }`.
 
 ### What each role sees in a Case
@@ -229,7 +229,7 @@ Request:
 
 - `action` is `release`, `extend`, or `escalate`. The Case moves to `RELEASED`, `EXTENDED`, or `ESCALATED`.
 - Allowed moves: `HELD` to any of the three; `EXTENDED` to `RELEASED` or `ESCALATED`; `ESCALATED` to `RELEASED` only (once investigations clears it). `RELEASED` is final.
-- `release` sets `holdEndsAt` to `null`. `extend` moves it 10 more business days past the current end (once only: `EXTENDED` cannot be extended again). `escalate` keeps it.
+- `release` sets `holdEndsAt` to `null`. `extend` moves it to 15 business days after `createdAt`, FINRA Rule 2165's initial limit (once only: `EXTENDED` cannot be extended again). `escalate` keeps it.
 - `note` is optional, up to 2,000 characters.
 - Any role but `fraud` gets `403`. A move not allowed from the current status gets `409`, including when another reviewer changed the Case a moment earlier.
 

@@ -152,7 +152,7 @@ function CaseDetail({ c, context, busy, onRelease, onDecide }) {
           <div style={{ marginTop: "auto" }} />
           <div className="bar"><div style={{ width: `${open ? pct.toFixed(1) : 0}%` }} /></div>
           <div className="muted" style={{ fontSize: 11, marginTop: 6 }}>
-            {c.status === "EXTENDED" ? "Hold extended 10 business days" : "10 business days: within Rule 2165's 15-day limit for clients 65+; proposed Rule 2166 would allow 10 for any client"}
+            {c.status === "EXTENDED" ? "Extended to 15 business days, FINRA Rule 2165's limit for clients 65+" : "2-business-day review hold. Extend to 15 business days under FINRA Rule 2165 (clients 65+)"}
           </div>
         </div>
         <div className="stat" style={{ gap: 12 }}>

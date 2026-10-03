@@ -95,8 +95,9 @@ def test_submit_validation(event, seeded, scored):
 
 
 def test_hold_end_date_counts_business_days():
-    assert case_state.hold_end_date(date(2026, 10, 2)) == "2026-10-16"  # Friday
-    assert case_state.hold_end_date(date(2026, 10, 3)) == "2026-10-16"  # Saturday
+    assert case_state.hold_end_date(date(2026, 10, 2)) == "2026-10-06"  # Friday + 2
+    assert case_state.hold_end_date(date(2026, 10, 3)) == "2026-10-06"  # Saturday + 2
+    assert case_state.hold_end_date(date(2026, 10, 2), case_state.EXTENDED_HOLD_BUSINESS_DAYS) == "2026-10-23"
 
 
 def test_list_cases_puts_holds_first_newest_first(event, tables):
@@ -206,7 +207,7 @@ def test_release_saves_decision_and_clears_hold(event, seeded):
 def test_extend_then_escalate(event, seeded):
     extended = body(decide(event, "extend"))
     assert extended["status"] == "EXTENDED"
-    assert extended["holdEndsAt"] > "2026-10-16"  # 10 more business days past the old end
+    assert extended["holdEndsAt"] == "2026-10-23"  # 15 business days after the Oct 2 request (Rule 2165)
     assert "hold now ends" in extended["audit"][-1]["detail"]
     assert decide(event, "extend")["statusCode"] == 409  # only one extension
 

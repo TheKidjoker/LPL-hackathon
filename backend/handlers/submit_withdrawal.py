@@ -5,7 +5,7 @@
 3. Save the Case as HELD with the fallback risk before calling Claude. Scoring takes about
    10 seconds, so if the Lambda times out the withdrawal is still held for manual review
 4. score_withdrawal. On any exception, keep the fallback risk (docs/api.md)
-5. HELD if the score is 70 or higher or unknown, else RELEASED. holdEndsAt is 10 business days out
+5. HELD if the score is 70 or higher or unknown, else RELEASED. holdEndsAt is 2 business days out
 6. Alert everyone except doNotNotify when HELD, then save and audit the final status
 """
 

@@ -11,7 +11,10 @@ EXTENDED = "EXTENDED"
 ESCALATED = "ESCALATED"
 
 HOLD_THRESHOLD = 70
-HOLD_BUSINESS_DAYS = 10
+# A new hold gives the fraud team 2 business days to review. Extending it moves the end to
+# 15 business days after the request: FINRA Rule 2165's initial limit for clients 65 and older.
+HOLD_BUSINESS_DAYS = 2
+EXTENDED_HOLD_BUSINESS_DAYS = 15
 
 # (from_status, to_status) -> roles allowed to make the move
 MOVES = {

@@ -61,7 +61,7 @@ The top bar shows "Mock data" or "Live API".
 
 ## Show hold expiry
 
-EventBridge Scheduler runs `HoldExpiryFunction` every 15 minutes. To show it without waiting 10 business days, invoke it as if the hold had ended:
+EventBridge Scheduler runs `HoldExpiryFunction` every 15 minutes. To show it without waiting for the hold to end, invoke it as if the hold had ended:
 
 ```powershell
 $fn = aws cloudformation describe-stack-resource --stack-name fraud-speed-bump --logical-resource-id HoldExpiryFunction --profile lpl-hackathon --query "StackResourceDetail.PhysicalResourceId" --output text
