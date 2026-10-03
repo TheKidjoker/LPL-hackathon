@@ -29,7 +29,7 @@ function scenarioCase(request) {
       memo: high ? `${a.clientName} asked to send ${money(request.amount)} to ${request.payee.name}, a new payee. ${scenario?.story || ""} Recommend a temporary hold under FINRA Rule 2165 and proposed Rule 2166 while the client is reached on the number of record.` : `Consistent with ${a.clientName}'s normal activity. No action needed.`,
       signals: high ? [{ name: "new_payee", detail: `${request.payee.name} has never been paid from this account` }, { name: "senior_client", detail: `Client is ${a.clientAge}` }] : [],
     },
-    holdEndsAt: high ? "2026-10-16" : null,
+    holdEndsAt: high ? "2026-10-06" : null,
     notified: high ? ["client", "fraud-team", ...(a.advisor ? [a.advisor.contactId] : []), ...(a.emergencyContact ? [a.emergencyContact.contactId] : []), ...(a.jointOwners || []).map((j) => j.contactId).filter((id) => !insiders.includes(id))] : [],
     responses: [], decision: null, audit: [],
   };
@@ -167,7 +167,7 @@ If any answer is yes, reassure her the money is safe and add a note for the Frau
     c.status = { release: "RELEASED", extend: "EXTENDED", escalate: "ESCALATED" }[action];
     c.decision = { action, by: role, at: now(), note };
     if (action === "release") c.holdEndsAt = null;
-    if (action === "extend") c.holdEndsAt = "2026-11-06";
+    if (action === "extend") c.holdEndsAt = "2026-10-23";
     c.audit.push({ timestamp: now(), actor: role, action: c.status, detail: note });
     return forRole(c, role);
   },

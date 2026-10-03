@@ -69,7 +69,7 @@ The build is done and live. The checklists below are the original plan; this tab
 | Item | Decision to make | Owner |
 |---|---|---|
 | Hold threshold | Score of 70 or higher holds the withdrawal | Kaylin |
-| Hold length | Up to 10 business days, per proposed FINRA Rule 2166 | Kaylin |
+| Hold length | 2 business days; extend to 15 business days after the request (FINRA Rule 2165) | Kaylin |
 | Who can release | Fraud team only. Advisor can never release alone | Kaylin |
 | Who gets alerted | Client, advisor, fraud team, minus anyone Claude flags as involved | Kaylin |
 | How clients confirm | Inside the app only. Alerts never carry a link or a reply option | Kaylin |

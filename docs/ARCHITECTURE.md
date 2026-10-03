@@ -74,10 +74,10 @@ A client describes a call, text, or email in the app. `POST /scam-check` sends J
 3. **Rule signals.** Seven deterministic checks run in Python: new payee, payee added within 24 hours, 90%+ of the balance, client 65 or older, first crypto transfer, outside 7 AM to 9 PM Eastern, and 5x the largest past withdrawal.
 4. **Juno scores it.** Claude Opus 5 reads the account summary, history, signals, the client's note, the firm's contact log, and the advisor's CRM notes (all text treated as untrusted evidence). It returns a 0 to 100 score, up to 4 extra signals, a roughly 80-word memo, and `doNotNotify`: contacts who appear to be part of the scam. The memo cites FINRA Rule 2165 for clients 65 and older, the firm's fraud policy for younger clients, and proposed Rule 2166 only as "proposed".
 5. **Guardrail on output.** The memo passes through a Bedrock Guardrail that masks SSNs, card, bank account, and routing numbers.
-6. **Decision.** A score of 70 or higher, or unknown because the AI failed, means HELD until 10 business days out (5:00 PM ET). Anything lower is RELEASED.
+6. **Decision.** A score of 70 or higher, or unknown because the AI failed, means HELD for 2 business days (until 5:00 PM ET) while the fraud team reviews. Anything lower is RELEASED.
 7. **Alerts.** The client, advisor, emergency contact, and fraud team are alerted in the app. Anyone in `doNotNotify` is skipped. For example, the joint-owner nephew in the Harold Brooks scenario is never told.
 8. **Everyone weighs in.** The client answers "Did you request this?" and can add an emergency contact. Clients with no advisor take Juno's scam-check chat. Advisors add notes. Each view refreshes every 4 seconds.
-9. **Fraud team decides:** release (needs a written reason), extend (10 more business days, once), or escalate. Advisors can never release.
+9. **Fraud team decides:** release (needs a written reason), extend (to 15 business days after the request, Rule 2165's limit, once), or escalate. Advisors can never release.
 10. **Hold expiry.** Every 15 minutes, EventBridge Scheduler runs `hold_expiry`. Holds past their end date with no decision are **escalated, never released**.
 
 Every step writes a row to the Audit table, and CloudTrail records the underlying AWS calls.

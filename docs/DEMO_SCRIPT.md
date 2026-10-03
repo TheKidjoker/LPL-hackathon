@@ -46,7 +46,7 @@ Timings are for the final, edited video.
 **Click:** **View as: Fraud team** → click **Margaret Ellis** in the case queue.
 
 **On screen, point at each in order:**
-1. **Risk score** about 95, **HIGH RISK**
+1. **Risk score** about 95, **HIGH RISK**, and **Hold ends in** shows a short 2-business-day review hold (the countdown includes any weekend), not a long freeze
 2. **Signals:** rule checks (new payee, added today, entire balance, senior client, first crypto) and, separately, what **Juno found** (the "safe account" script)
 3. **Juno case memo**, citing **FINRA Rule 2165**
 4. Scroll to **What the firm already knew**: her check, **Asked Juno in the app · Juno: likely scam**, and her earlier calls asking about wires to "a crypto account"
@@ -61,10 +61,12 @@ Timings are for the final, edited video.
 
 **On screen:** Juno's answer, built only from this case, and logged.
 
-**Click:** **Escalate**.
+**Click:** **Extend hold**.
+
+**On screen:** **Hold ends in** jumps to 15 business days: "Extended to 15 business days, FINRA Rule 2165's limit for clients 65+".
 
 **Say:**
-> "Investigators can question Juno, and every question is logged. Only the fraud team can decide. They escalate it, and the $180,000 stays with Margaret."
+> "Investigators can question Juno, and every question is logged. Only the fraud team can decide. This isn't like Margaret, so they extend the hold to the 15 business days FINRA Rule 2165 allows, and the $180,000 stays with her."
 
 ### 1:35 – 1:45 · No false alarms (client)
 
@@ -94,6 +96,6 @@ Timings are for the final, edited video.
 |---|---|
 | Submit takes over 20 seconds | Keep talking. The app switches to a faster model at 12 s and finishes within 22 s |
 | Score shows "?" and "manual review" | Say: "The AI failed, so the withdrawal stays held for a person. That's the fail-safe." Then continue |
-| "Juno is unavailable" | Skip Ask Juno and go straight to **Escalate** |
+| "Juno is unavailable" | Skip Ask Juno and go straight to **Extend hold** |
 | The page or network fails | Switch to the recorded video |
 | Old cases left on screen | **Reset demo** |

@@ -37,7 +37,7 @@ Behind it, in order:
 1. The case is saved as **HELD first**, so nothing can leave if anything later fails.
 2. Seven rule checks run (new payee, payee added in the last 24 hours, 90%+ of the balance, client 65+, first crypto transfer, odd hours, 5x the largest past withdrawal).
 3. Juno reads the account, 90 days of history, the rule checks, the client's note, **the firm's contact log, and the advisor's CRM notes**, then returns a 0 to 100 score, extra signals it found, a memo, and any contacts who look involved.
-4. A score of 70+ (or a failed score) holds the withdrawal for 10 business days. Anything lower is released.
+4. A score of 70+ (or a failed score) holds the withdrawal for 2 business days while the fraud team reviews. Anything lower is released.
 5. Everyone who should know is alerted in the app, except anyone Juno flagged as possibly involved.
 
 ## Client: the held withdrawal
@@ -70,7 +70,7 @@ Advisors never see who Juno flagged as possibly involved, or the audit trail.
 - **Case queue:** held cases first, then by risk score. The demo opens with five: the hero case plus four pre-seeded ones in every state (held, extended, escalated, released).
 - **Case header:** client, account, request time, status, and the three decisions:
   - **Release:** requires a written reason, logged
-  - **Extend hold:** 10 more business days, once
+  - **Extend hold:** to 15 business days after the request (Rule 2165's initial limit), once
   - **Escalate:** to investigations and Adult Protective Services. Escalated cases can still be released once investigators clear them
 - **Risk score** gauge, **Hold ends** countdown with its FINRA basis, and the **held transaction**.
 - **Signals:** rule checks and "Juno found" signals, shown separately so you can tell the rules from the reasoning.
@@ -84,8 +84,8 @@ Advisors never see who Juno flagged as possibly involved, or the audit trail.
 
 | Client | Rule cited | Hold |
 |---|---|---|
-| 65 or older (or impaired) | **FINRA Rule 2165** (in effect). Allows an initial 15-business-day hold, with extensions | Our 10 business days is inside that limit |
-| Under 65 | **The firm's fraud policy** | 10 business days |
+| 65 or older (or impaired) | **FINRA Rule 2165** (in effect). Allows an initial 15-business-day hold, with extensions | 2-day review hold; extend goes to the 15-day limit |
+| Under 65 | **The firm's fraud policy** | 2 business days, 15 if extended |
 | Anyone | **Proposed FINRA Rule 2166** (filed with the SEC, Sept 2026, not yet approved) would allow up to 10 business days for any customer | Always called "proposed" |
 
 Rule 2166's filing also lets firms skip notifying a contact who may be involved. That is what Juno's "not alerted: may be involved" does today.

@@ -2,7 +2,7 @@
 
 The fraud team releases, extends, or escalates a hold. Only the fraud role can decide, and only
 the moves in case_state.MOVES are allowed (409 otherwise). Release clears the hold end date,
-extend adds another 10 business days to it, and escalate keeps it. Every decision is audited.
+extend moves it to 15 business days after the request (Rule 2165's limit), and escalate keeps it. Every decision is audited.
 """
 
 from datetime import date, datetime, timezone
@@ -19,9 +19,10 @@ def new_hold_end(case, to_status, today):
     if to_status == case_state.RELEASED:
         return None
     if to_status == case_state.EXTENDED:
-        current = case.get("holdEndsAt")
-        start = max(date.fromisoformat(current), today) if current else today
-        return case_state.hold_end_date(start)
+        created = (case.get("createdAt") or "")[:10]
+        start = date.fromisoformat(created) if created else today
+        extended = case_state.hold_end_date(start, case_state.EXTENDED_HOLD_BUSINESS_DAYS)
+        return max(extended, case.get("holdEndsAt") or extended)
     return case.get("holdEndsAt")
 
 
