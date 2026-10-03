@@ -118,7 +118,7 @@ Team names · Biggest Business Impact · Best Technical Execution
 **On screen (two columns):**
 
 **Catch and explain**
-- Seven rule checks plus Claude's reasoning: a 0–100 risk score in about 11 seconds
+- Seven rule checks plus Claude's reasoning: a 0–100 risk score in about 7 seconds
 - A case memo that cites the right FINRA rule for the client's age
 - "Is this a scam?": clients ask Juno about a call or text **before** any money moves, and the firm remembers it
 - Scam-check chat for clients with no advisor

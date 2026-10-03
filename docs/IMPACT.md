@@ -1,6 +1,6 @@
 # Business Impact
 
-Older Americans reported losing **$7.7 billion** to online fraud in 2025, and losses grew **59%** in one year. Second Look catches the costliest kind, where the client is tricked into sending their own money, before the money leaves. In live tests it held every scam, released every normal withdrawal, and explained each decision in about 11 seconds, for about **3 cents per withdrawal** in AI cost.
+Older Americans reported losing **$7.7 billion** to online fraud in 2025, and losses grew **59%** in one year. Second Look catches the costliest kind, where the client is tricked into sending their own money, before the money leaves. In live tests it held every scam, released every normal withdrawal, and explained each decision in about 7 seconds, for about **3 cents per withdrawal** in AI cost.
 
 ## Positioning
 

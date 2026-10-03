@@ -29,7 +29,7 @@ Juno does four jobs:
 
 - `score` 0 to 100. `level` is derived from the score in code (under 40 low, 40 to 69 medium, 70+ high), so it always matches the hold threshold.
 - `signals`: the rule signals plus up to 4 that Claude found. The UI shows these separately as "Juno found", for example "safe account script" or "third party directing".
-- `memo`: about 120 words for an investigator. For clients 65 and older it cites FINRA Rule 2165 (in effect). For younger clients it says the hold rests on the firm's fraud policy. It may mention proposed Rule 2166, always as "proposed".
+- `memo`: about 80 words for an investigator. For clients 65 and older it cites FINRA Rule 2165 (in effect). For younger clients it says the hold rests on the firm's fraud policy. It may mention proposed Rule 2166, always as "proposed".
 - `doNotNotify`: contact IDs (joint owners, emergency contact) who appear to be involved. Only IDs that really exist on the account are kept.
 
 `score.validate` checks and clamps every field. If anything is wrong, it raises, and the handler stores the manual-review fallback and **still holds** the withdrawal.
@@ -84,9 +84,11 @@ Opus 5 usually answers in about 10 seconds but occasionally takes over 20, and A
 
 Opus 5 reasons before answering, so the client reads only content blocks that contain `text`.
 
+**Scoring speed.** The client waits on the scoring call, so `score.py` asks for `effort: "low"` (`SCORE_EFFORT`, sent as `output_config.effort` in `additionalModelRequestFields`) and an 80-word memo. Measured on Margaret, Oct 3: about 10.7 s at the default effort, 7.3 s at low, 6.3 s at low with the shorter memo. Same score (96), same FINRA 2165 citation. Sonnet 5 at low effort was no faster (6.3 to 7.0 s); what's left is the time to write the memo.
+
 ## Evaluation
 
-`python ai/eval/run_eval.py` scores every demo scenario in `data/` live and checks the expected level and the `doNotNotify` contact. The latest run, with contact history: **6/6 correct**, 5 to 11 seconds each. David's score fell from 22 to 15 once Juno could see his advisor had verified the wire, and Dorothy's memo cites the romance-scam warning she was already given. Unit tests in `tests/test_ai.py`, `tests/test_guardrails_expiry.py`, and `tests/test_bedrock_budget.py`, and `tests/test_scam_check.py` cover the signals, validation, guardrails, and time budget without network calls.
+`python ai/eval/run_eval.py` scores every demo scenario in `data/` live and checks the expected level and the `doNotNotify` contact. The latest run (Oct 3, low effort, 80-word memo): **6/6 correct**, 3.9 to 7.0 seconds each, down from 5 to 11. David's score fell from 22 to 15 once Juno could see his advisor had verified the wire, and Dorothy's memo cites the romance-scam warning she was already given. Unit tests in `tests/test_ai.py`, `tests/test_guardrails_expiry.py`, and `tests/test_bedrock_budget.py`, and `tests/test_scam_check.py` cover the signals, validation, guardrails, and time budget without network calls.
 
 ## Cost
 

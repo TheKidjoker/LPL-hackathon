@@ -5,6 +5,7 @@ Raises on any Claude failure. The handler owns the manual-review fallback
 """
 
 import json
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from string import Template
@@ -17,6 +18,9 @@ HISTORY_DAYS = 90
 MAX_HISTORY_ROWS = 40
 MAX_CLAUDE_SIGNALS = 4  # keeps the fraud view readable; Claude lists its strongest first
 FALLBACK_MEMO = "Automated review unavailable. Held for manual review."
+# The client waits on this call. Low effort plus the 80-word memo cut Margaret's scoring from
+# about 10.7 s to about 6.3 s, same score (96) and FINRA 2165 citation. SCORE_EFFORT=high reverts.
+SCORE_EFFORT = os.environ.get("SCORE_EFFORT", "low")
 
 
 def level_for(score):
@@ -143,7 +147,7 @@ def score_withdrawal(account, transaction, history):
     account = account or {}
     transaction = transaction or {}
     signals = compute_signals(account, transaction, history)
-    raw = bedrock_client.converse_json(build_prompt(account, transaction, history, signals), max_tokens=2000)
+    raw = bedrock_client.converse_json(build_prompt(account, transaction, history, signals), max_tokens=2000, effort=SCORE_EFFORT)
     risk = validate(raw, account, signals)
     risk["memo"] = bedrock_client.guard_output(risk["memo"])
     return risk

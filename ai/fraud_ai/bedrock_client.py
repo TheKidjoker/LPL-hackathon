@@ -57,14 +57,20 @@ def _ask(model_id, request):
     return text
 
 
-def converse(prompt, system=None, max_tokens=2000):
-    """Send one user message and return Claude's text answer, within TOTAL_BUDGET seconds."""
+def converse(prompt, system=None, max_tokens=2000, effort=None):
+    """Send one user message and return Claude's text answer, within TOTAL_BUDGET seconds.
+
+    effort ("low" | "medium" | "high") sets how long Claude reasons first. Unset means the
+    model's default (high). Lower effort answers much faster on short, well-specified tasks.
+    """
     request = {
         "messages": [{"role": "user", "content": [{"text": prompt}]}],
         "inferenceConfig": {"maxTokens": max_tokens},
     }
     if system:
         request["system"] = [{"text": system}]
+    if effort:
+        request["additionalModelRequestFields"] = {"output_config": {"effort": effort}}
 
     start = time.monotonic()
     pending = {_pool.submit(_ask, MODEL_ID, request): MODEL_ID}
@@ -142,9 +148,9 @@ def blocked_question(text):
     return "".join(o.get("text", "") for o in resp.get("outputs") or []).strip() or "Juno can't give investment advice."
 
 
-def converse_json(prompt, system=None, max_tokens=2000):
+def converse_json(prompt, system=None, max_tokens=2000, effort=None):
     """Like converse, but parses the answer as a JSON object. Tolerates ```json fences."""
-    text = converse(prompt, system=system, max_tokens=max_tokens)
+    text = converse(prompt, system=system, max_tokens=max_tokens, effort=effort)
     match = re.search(r"\{.*\}", text, re.DOTALL)
     if not match:
         raise ValueError(f"No JSON object in Claude's answer: {text[:200]}")

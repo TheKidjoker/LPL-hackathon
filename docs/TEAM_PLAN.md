@@ -84,7 +84,7 @@ The build is done and live. The checklists below are the original plan; this tab
 | Done: AI stubs with the exact signatures, so Kaylin is never blocked | Core |
 | `ai/fraud_ai/signals.py`: rule-based signals for new payee, full liquidation, age 65 or older, first-ever crypto, unusual timing, payee added within 24 hours | Core |
 | `ai/fraud_ai/score.py`: `score_withdrawal(...)` returns score, level, signals, memo, `doNotNotify` as validated JSON | Core |
-| `ai/fraud_ai/prompts/memo.txt`: about 120 words, plain English, names each signal, cites FINRA Rule 2165 and proposed Rule 2166, no investment advice | Core |
+| `ai/fraud_ai/prompts/memo.txt`: about 80 words, plain English, names each signal, cites FINRA Rule 2165 and proposed Rule 2166, no investment advice | Core |
 | Treat client and advisor text as data, never as instructions to Claude (prompt-injection guard) | Core |
 | Eval script: run every scenario in `/data` and print score and level, so prompt changes can be checked in one command | Core |
 | `doNotNotify`: flag a joint owner or emergency contact who looks involved | Core |
