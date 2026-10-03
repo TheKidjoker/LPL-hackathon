@@ -66,6 +66,13 @@ const summary = (c) => ({
   status: c.status, score: c.risk.score, level: c.risk.level, createdAt: c.createdAt, holdEndsAt: c.holdEndsAt,
 });
 
+const CONTACT_PATTERNS = [
+  { test: /safe account|hacked|security department|bank security/, type: "Bank impersonation", why: "no real bank or broker asks you to move money to keep it safe." },
+  { test: /gift card|bail|jail|grandson|granddaughter/, type: "Family emergency", why: "scammers pose as a relative in trouble and ask for gift cards and secrecy." },
+  { test: /virus|pop-up|popup|microsoft|refund|remote|connect to my computer/, type: "Tech support refund", why: "real companies never ask to connect to your computer to refund you." },
+  { test: /crypto|bitcoin|customs|met online|guaranteed/, type: "Romance or investment", why: "requests for crypto or fees from someone you met online are a top scam." },
+];
+
 const rank = (s) => (s === "HELD" || s === "EXTENDED" || s === "ESCALATED" ? 0 : 1);
 
 export const mockApi = {
@@ -111,6 +118,23 @@ If any answer is yes, reassure her the money is safe and add a note for the Frau
       reply = `It was held because the score was ${c.risk.score} (${c.risk.level}), above the 70 hold threshold. The main reasons: ${signals}. This is mock data; the live assistant answers from the real case.`;
     }
     return { reply, suggestions: role === "fraud" ? ["What should I verify before releasing?", "Summarize the evidence for my notes", "Who was alerted?"] : ["What should I ask the client on the call?", "Explain the risk in plain English"] };
+  },
+  async checkContact(role, { accountId, checkId, channel, messages }) {
+    await delay(1800);
+    const all = messages.filter((m) => m.role === "user").map((m) => m.text).join(" ").toLowerCase();
+    const hit = CONTACT_PATTERNS.find((p) => p.test.test(all));
+    const result = hit
+      ? { verdict: "likely_scam", scamType: hit.type, reply: `This matches a common scam: ${hit.why} If they are still on the line, it is safe to hang up. (Mock answer: the live Juno reads your exact words.)`, nextSteps: ["Hang up or don't reply", "Don't send money, gift cards or crypto", "Call the number on your statement", "Tell someone you trust"], suggestions: ["What if they call back?", "I already sent money"] }
+      : /advisor|statement|annual review/.test(all)
+        ? { verdict: "looks_safe", scamType: null, reply: "This sounds routine. Calling back on the number printed on your statement is exactly the right way to check. (Mock answer.)", nextSteps: ["Call the number on your statement, not one from the message"], suggestions: ["How do I spot a fake caller?"] }
+        : { verdict: "need_more", scamType: null, reply: "Thanks for checking. Did they ask you to move money, buy anything, share a code, or keep it secret? (Mock answer.)", nextSteps: [], suggestions: ["They asked me to move money", "They asked for a code"] };
+    const a = ACCOUNTS[accountId];
+    if (a) {
+      const entry = { id: checkId, at: now(), channel: "juno", party: "client", who: a.clientName, verdict: result.verdict,
+        summary: `Asked Juno whether a ${channel} contact was a scam: "${messages[0].text.slice(0, 160)}" Juno said ${result.verdict.replace("_", " ")}.` };
+      a.contactLog = [...(a.contactLog || []).filter((e) => e.id !== checkId), entry];
+    }
+    return { ...result, fallback: false };
   },
   async listCases(role, status) {
     await delay(200);

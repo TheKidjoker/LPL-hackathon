@@ -24,6 +24,7 @@ const liveApi = {
   postResponse: (role, caseId, kind, text) => call(role, "POST", `/cases/${caseId}/responses`, { kind, text }),
   postDecision: (role, caseId, action, note) => call(role, "POST", `/cases/${caseId}/decision`, { action, note }),
   askAssistant: (role, caseId, messages) => call(role, "POST", `/cases/${caseId}/assistant`, { messages }),
+  checkContact: (role, check) => call(role, "POST", "/scam-check", check),
   resetDemo: (role) => call(role, "POST", "/demo/reset"),
 };
 

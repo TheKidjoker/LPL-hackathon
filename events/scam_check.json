@@ -1,0 +1,10 @@
+{
+  "httpMethod": "POST",
+  "path": "/scam-check",
+  "headers": {
+    "X-Role": "client"
+  },
+  "pathParameters": null,
+  "queryStringParameters": null,
+  "body": "{\"accountId\": \"acc-1001\", \"checkId\": \"chk-0001\", \"channel\": \"phone\", \"messages\": [{\"role\": \"user\", \"text\": \"A man from the bank security department called. He says my account was hacked and I need to move my money to a safe account today.\"}]}"
+}

@@ -8,6 +8,7 @@ Juno does three jobs:
 |---|---|---|---|
 | Score every withdrawal and write the case memo | `score.score_withdrawal` | Fraud team, advisor (client never) | ~11s |
 | Scam-check chat for clients with no advisor | `scam_chat.scam_check_chat` | Client | 2 to 6s per turn |
+| "Is this a scam?" check, before any withdrawal | `contact_check.check_contact` | Client | about 5s |
 | Answer staff questions about one case | `assistant.ask` | Fraud team, advisor | ~10s; refusals 0.4s |
 
 ## 1. Scoring and the memo

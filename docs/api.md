@@ -170,6 +170,7 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 | `POST /demo/reset` | any | Kaylin |
 | `GET /cases/{caseId}/context` | client, advisor, fraud | Thomas |
 | `POST /cases/{caseId}/assistant` | advisor, fraud | Thomas |
+| `POST /scam-check` | client | Thomas |
 
 ### `POST /withdrawals`
 
@@ -290,3 +291,38 @@ Response `200`:
 - Claude sees only what the caller's role may see: the advisor never gets `doNotNotify` or the audit trail.
 - Every assistant question writes an `ASSISTANT_QUESTION` audit row.
 - Takes about 8 to 12 seconds. If Claude is unavailable: `502` with code `ai_unavailable`.
+
+### `POST /scam-check`
+
+A client asks Juno whether someone who contacted them is a scammer, before any money moves. Client only.
+
+Request (`channel` is one of `phone`, `text`, `email`, `popup`, `social`, `in_person`; `checkId` is made by the app and stays the same for one conversation):
+
+```json
+{
+  "accountId": "acc-1001",
+  "checkId": "chk-m1x2y3",
+  "channel": "phone",
+  "messages": [
+    { "role": "user", "text": "A man from bank security says my account was hacked and I must move my money to a safe account today." }
+  ]
+}
+```
+
+Response `200`:
+
+```json
+{
+  "verdict": "likely_scam",
+  "scamType": "Bank impersonation",
+  "reply": "Margaret, it is safe to hang up right now...",
+  "nextSteps": ["Hang up the call now", "Call the number on your statement"],
+  "suggestions": ["What if he calls back?"],
+  "fallback": false
+}
+```
+
+`verdict` is `likely_scam`, `suspicious`, `looks_safe`, or `need_more` (Juno asks one question; `nextSteps` is empty). If Claude is unavailable the response is still `200`, with fixed safety advice and `"fallback": true`.
+
+Each check is saved to the account's `contactLog` as one entry (`channel: "juno"`, plus `verdict`), replaced as the conversation goes on. Advisors and the fraud team see it in the client history, and Juno's risk scoring reads it if the client later asks to withdraw.
+

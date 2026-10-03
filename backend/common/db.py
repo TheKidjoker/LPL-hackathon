@@ -87,6 +87,20 @@ def get_history(account_id, days=90):
     )
 
 
+def save_contact_log_entry(account_id, entry):
+    """Add an entry to an Account's contactLog, or replace the entry with the same id. Returns False if no Account."""
+    account = get_account(account_id)
+    if account is None:
+        return False
+    log = [e for e in account.get("contactLog") or [] if e.get("id") != entry["id"]] + [entry]
+    _table(ACCOUNTS_TABLE).update_item(
+        Key={"accountId": account_id},
+        UpdateExpression="SET contactLog = :log",
+        ExpressionAttributeValues={":log": _to_dynamo(log)},
+    )
+    return True
+
+
 def put_case(case):
     """Save a new Case."""
     _table(CASES_TABLE).put_item(Item=_to_dynamo(case))
