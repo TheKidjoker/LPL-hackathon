@@ -30,7 +30,7 @@ What makes it more than a chatbot:
 
 ## When a withdrawal comes in
 
-**Client view → Withdraw funds.** The demo account picker loads one of six scenarios. Submitting shows a 4-step progress view ("Verifying the payee", "Checking 90 days of account activity", "Juno is reviewing the request", "Writing the case memo") while scoring runs, about 11 seconds.
+**Client view → Withdraw funds.** The demo account picker loads one of six scenarios. Submitting shows a 4-step progress view ("Verifying the payee", "Checking 90 days of account activity", "Juno is reviewing the request", "Writing the case memo") while scoring runs, about 7 seconds.
 
 Behind it, in order:
 

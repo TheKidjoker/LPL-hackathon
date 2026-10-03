@@ -9,7 +9,7 @@ import ContactCheck from "./ContactCheck.jsx";
 
 const ROLE = "client";
 
-// Shown while scoring runs (about 10 seconds with real Claude), one step every ~2.5 seconds.
+// Shown while scoring runs (about 7 seconds with real Claude), one step every ~1.75 seconds.
 const REVIEW_STEPS = ["Verifying the payee", "Checking 90 days of account activity", "Juno is reviewing the request", "Writing the case memo"];
 
 const WARNING_SIGNS = [
@@ -70,7 +70,7 @@ function WithdrawForm({ onDone, setError }) {
   const [started, setStarted] = useState(null);
   const now = useNow(100);
   const elapsed = started ? (now - started) / 1000 : 0;
-  const stepIdx = started ? Math.min(REVIEW_STEPS.length - 1, Math.floor(elapsed / 2.5)) : -1;
+  const stepIdx = started ? Math.min(REVIEW_STEPS.length - 1, Math.floor(elapsed / 1.75)) : -1;
   const newPayee = !!freshRequest(scenario).payee?.addedAt && Date.now() - Date.parse(freshRequest(scenario).payee.addedAt) < 24 * 3600e3;
 
   function pick(id) {
@@ -95,7 +95,7 @@ function WithdrawForm({ onDone, setError }) {
     return (
       <>
         <h2>Reviewing your request…</h2>
-        <p className="soft">This usually takes about 10 seconds. Please keep this page open.</p>
+        <p className="soft">This usually takes about 7 seconds. Please keep this page open.</p>
         <div style={{ display: "flex", alignItems: "center", gap: 12, maxWidth: 520, margin: "28px 0 8px" }}>
           <div style={{ flex: 1, height: 4, background: "var(--color-neutral-300)" }}>
             <div style={{ height: 4, background: "var(--color-accent)", width: `${Math.min(95, (elapsed / 11) * 100)}%`, transition: "width 0.2s" }} />

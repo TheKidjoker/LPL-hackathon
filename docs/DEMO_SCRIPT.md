@@ -11,7 +11,7 @@ Every click below uses the real labels in the app. The "Is this a scam?" step ne
 3. Press **Reset demo**. The fraud queue should show 4 cases: Eleanor, Walter, Janet, Robert.
 4. **Warm up:** submit one withdrawal as Marcus Bell, then press **Reset demo** again. The first AI call after a quiet period is the slowest.
 5. In the demo account dropdown, each option ends in "(scam)" or "(normal)". Pick it quickly so the open list isn't on screen long, or cut it in editing.
-6. Record with Xbox Game Bar (**Win + Alt + R**) or OBS. Record the whole run, then **cut the waiting** (scoring takes about 11 seconds and Juno answers take about 10) so the final video is about 1:45.
+6. Record with Xbox Game Bar (**Win + Alt + R**) or OBS. Record the whole run, then **cut the waiting** (scoring takes about 7 seconds and Juno answers take about 10) so the final video is about 1:45.
 7. Watch the finished file on the presentation laptop, with sound, before Saturday.
 
 ## The script
@@ -34,7 +34,7 @@ Timings are for the final, edited video.
 **On screen:** "Reviewing your request…" steps, then **We paused this withdrawal to protect you**.
 
 **Say:**
-> "But scammers are persuasive, and they call back. Later she tries to wire $180,000 to a crypto exchange she added that morning. In about 11 seconds, Second Look pauses it. Nothing has left her account."
+> "But scammers are persuasive, and they call back. Later she tries to wire $180,000 to a crypto exchange she added that morning. In about 7 seconds, Second Look pauses it. Nothing has left her account."
 
 **Click:** **Yes, it was me**.
 
