@@ -6,7 +6,7 @@ Built for the 2026 LPL Financial University Hackathon. **Deadline: Saturday 12:0
 
 | | |
 |---|---|
-| **Live app** | https://main.d1s6iogq4h15rg.amplifyapp.com |
+| **Live app** | https://secondlook-lpl.vercel.app (short link) → https://main.d1s6iogq4h15rg.amplifyapp.com |
 | **Live API** | https://x9ku6sdgu3.execute-api.us-east-1.amazonaws.com/Prod |
 | **Measured** | 9/9 scams held · 0 false positives · 10.9s average to a decision and memo · about 3¢ per withdrawal |
 

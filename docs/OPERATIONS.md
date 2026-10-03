@@ -5,6 +5,7 @@ Everything runs in the event AWS account (`us-east-1`, profile `lpl-hackathon`).
 | What | Where |
 |---|---|
 | App (Amplify) | https://main.d1s6iogq4h15rg.amplifyapp.com |
+| Short link | https://secondlook-lpl.vercel.app redirects to the Amplify app. Vercel project `second-look` holds only a redirect; the app itself is served by Amplify |
 | API | https://x9ku6sdgu3.execute-api.us-east-1.amazonaws.com/Prod |
 | Stack | `fraud-speed-bump` (CloudFormation) |
 | Amplify app | `second-look` (`d1s6iogq4h15rg`), branch `main` |
