@@ -26,6 +26,12 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
   "jointOwners": [],
   "knownPayees": [
     { "payeeId": "pay-100", "name": "First Harbor Bank checking", "type": "bank", "addedAt": "2011-06-01T00:00:00Z" }
+  ],
+  "contactLog": [
+    { "at": "2026-10-01T14:02:00Z", "channel": "phone", "party": "client", "who": "Margaret Ellis", "summary": "Asked to raise her online daily transfer limit..." }
+  ],
+  "advisorNotes": [
+    { "at": "2026-08-14T15:00:00Z", "by": "Daniel Reyes", "text": "Annual review. Has never shown interest in crypto." }
   ]
 }
 ```
@@ -33,6 +39,7 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 - `advisor` is `null` for a client with no advisor. That client gets the scam-check chat instead.
 - `jointOwners` items have the same shape as `emergencyContact`.
 - `payee.type` is one of `bank`, `crypto_exchange`, `brokerage`, `individual`.
+- `contactLog` is what the firm already knew: calls, emails, and chats. `party` is `client`, `third_party`, or `advisor`. Entries from `POST /scam-check` have `channel: "juno"`, an `id`, and a `verdict`. Field details: [`DATA.md`](DATA.md#contact-log-and-advisor-notes).
 
 ### Transaction
 

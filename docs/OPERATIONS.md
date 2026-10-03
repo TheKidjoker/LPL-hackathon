@@ -49,13 +49,14 @@ The top bar shows "Mock data" or "Live API".
 
 ## Before the demo
 
-1. **Reset:** press **Reset demo** in the app (or `POST /demo/reset`). It deletes every case and audit row and reloads the 6 seed accounts.
+1. **Reset:** press **Reset demo** in the app (or `POST /demo/reset`). It deletes every case and audit row, reloads the 10 seed accounts (with their contact logs and advisor notes), and puts the 4 pre-seeded cases back in the queue: Eleanor (escalated), Walter (held), Janet (extended), Robert (released). See [`DATA.md`](DATA.md).
 2. **Warm up:** submit one withdrawal, then reset again. The first Bedrock call after a quiet period is the slowest.
 3. **Pick the story** with the client view's demo account picker:
    - **Margaret Ellis**, $180,000 to CoinVault Exchange: the hero impostor scam. Held, score about 95
    - **Harold Brooks**, $95,000 by phone: the nephew and joint owner is the scammer. Held, and the fraud view shows him "not alerted: may be involved"
    - **Dorothy Nguyen**, no advisor: a romance and customs-fee scam. Take the scam-check chat
    - **Marcus Bell**, $600 to his own account: released in seconds, to show there are no false positives
+   - **"Is this a scam?"** (client view tab): tap the "Bank security" call example as Margaret. Juno flags bank impersonation in about 5 seconds, and the fraud view's "What the firm already knew" shows the check, tagged "Juno: likely scam". Then submit Margaret's withdrawal: the memo can cite it
 4. Each view refreshes every 4 seconds, so a client's answer shows up on the fraud screen live.
 
 ## Show hold expiry

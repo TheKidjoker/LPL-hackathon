@@ -20,6 +20,9 @@ The build is done and live. The checklists below are the original plan; this tab
 |---|---|
 | Backend (all endpoints on DynamoDB, decisions, demo reset) | Done (Kaylin, PRs #2, #4, #6, #11) |
 | Juno: scoring, memo, scam-check chat, Ask Juno, eval | Done (Thomas, PRs #1, #9, #13) |
+| Contact log, advisor notes, 4 pre-seeded cases, FINRA wording by age | Done (Thomas, extending Kaylin's generator, PR #16) |
+| "Is this a scam?" client check | Built in PR #17 |
+| Audit fixes, sourced impact numbers, Amplify deploy script, full docs | Done (Thomas, PR #15) |
 | Frontend: three views, navy theme, live polling, demo scenarios | Done, live on Amplify (Thomas, PRs #3, #7, #8, #10) |
 | AWS: Lambda, API Gateway, DynamoDB, KMS, CloudTrail, Guardrails, EventBridge Scheduler, Amplify | Live (Thomas, PRs #5, #12) |
 | Cognito logins | Built in PR #14, not deployed |
