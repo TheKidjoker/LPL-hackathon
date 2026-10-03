@@ -95,7 +95,8 @@ const PARTY = {
   third_party: { label: "Someone else", color: "var(--brand-orange)" },
   advisor: { label: "Advisor", color: "var(--risk-low)" },
 };
-const CHANNEL = { phone: "Phone", email: "Email", branch: "Branch", web_chat: "Web chat", web: "Web" };
+const CHANNEL = { phone: "Phone", email: "Email", branch: "Branch", web_chat: "Web chat", web: "Web", juno: "Asked Juno in the app" };
+const JUNO_VERDICT = { likely_scam: ["Juno: likely scam", "var(--risk-high)"], suspicious: ["Juno: suspicious", "var(--risk-medium)"], looks_safe: ["Juno: looks safe", "var(--risk-low)"] };
 
 // What the firm already knew before this withdrawal: the contact log and the advisor's CRM notes.
 // Contacts from someone other than the client are highlighted, since scams often run through them.
@@ -112,7 +113,7 @@ export function ClientHistory({ context }) {
           <div key={`c${i}`} className={`history-row${c.party === "third_party" ? " flagged" : ""}`}>
             <span className="history-dot" style={{ background: p.color }} />
             <div>
-              <div className="history-meta">{fmtAt(c.at)} ET · {CHANNEL[c.channel] || c.channel} · <b>{c.who}</b>{c.party === "third_party" && <span className="history-tag">{p.label}</span>}</div>
+              <div className="history-meta">{fmtAt(c.at)} ET · {CHANNEL[c.channel] || c.channel} · <b>{c.who}</b>{c.party === "third_party" && <span className="history-tag">{p.label}</span>}{JUNO_VERDICT[c.verdict] && <span className="history-tag" style={{ background: JUNO_VERDICT[c.verdict][1] }}>{JUNO_VERDICT[c.verdict][0]}</span>}</div>
               <div>{c.summary}</div>
             </div>
           </div>

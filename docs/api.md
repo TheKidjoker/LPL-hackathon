@@ -26,6 +26,12 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
   "jointOwners": [],
   "knownPayees": [
     { "payeeId": "pay-100", "name": "First Harbor Bank checking", "type": "bank", "addedAt": "2011-06-01T00:00:00Z" }
+  ],
+  "contactLog": [
+    { "at": "2026-10-01T14:02:00Z", "channel": "phone", "party": "client", "who": "Margaret Ellis", "summary": "Asked to raise her online daily transfer limit..." }
+  ],
+  "advisorNotes": [
+    { "at": "2026-08-14T15:00:00Z", "by": "Daniel Reyes", "text": "Annual review. Has never shown interest in crypto." }
   ]
 }
 ```
@@ -33,6 +39,7 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 - `advisor` is `null` for a client with no advisor. That client gets the scam-check chat instead.
 - `jointOwners` items have the same shape as `emergencyContact`.
 - `payee.type` is one of `bank`, `crypto_exchange`, `brokerage`, `individual`.
+- `contactLog` is what the firm already knew: calls, emails, and chats. `party` is `client`, `third_party`, or `advisor`. Entries from `POST /scam-check` have `channel: "juno"`, an `id`, and a `verdict`. Field details: [`DATA.md`](DATA.md#contact-log-and-advisor-notes).
 
 ### Transaction
 
@@ -170,6 +177,7 @@ Every lane builds to this file. Change it only by pull request, and tell the tea
 | `POST /demo/reset` | any | Kaylin |
 | `GET /cases/{caseId}/context` | client, advisor, fraud | Thomas |
 | `POST /cases/{caseId}/assistant` | advisor, fraud | Thomas |
+| `POST /scam-check` | client | Thomas |
 
 ### `POST /withdrawals`
 
@@ -290,3 +298,38 @@ Response `200`:
 - Claude sees only what the caller's role may see: the advisor never gets `doNotNotify` or the audit trail.
 - Every assistant question writes an `ASSISTANT_QUESTION` audit row.
 - Takes about 8 to 12 seconds. If Claude is unavailable: `502` with code `ai_unavailable`.
+
+### `POST /scam-check`
+
+A client asks Juno whether someone who contacted them is a scammer, before any money moves. Client only.
+
+Request (`channel` is one of `phone`, `text`, `email`, `popup`, `social`, `in_person`; `checkId` is made by the app and stays the same for one conversation):
+
+```json
+{
+  "accountId": "acc-1001",
+  "checkId": "chk-m1x2y3",
+  "channel": "phone",
+  "messages": [
+    { "role": "user", "text": "A man from bank security says my account was hacked and I must move my money to a safe account today." }
+  ]
+}
+```
+
+Response `200`:
+
+```json
+{
+  "verdict": "likely_scam",
+  "scamType": "Bank impersonation",
+  "reply": "Margaret, it is safe to hang up right now...",
+  "nextSteps": ["Hang up the call now", "Call the number on your statement"],
+  "suggestions": ["What if he calls back?"],
+  "fallback": false
+}
+```
+
+`verdict` is `likely_scam`, `suspicious`, `looks_safe`, or `need_more` (Juno asks one question; `nextSteps` is empty). If Claude is unavailable the response is still `200`, with fixed safety advice and `"fallback": true`.
+
+Each check is saved to the account's `contactLog` as one entry (`channel: "juno"`, plus `verdict`), replaced as the conversation goes on. Advisors and the fraud team see it in the client history, and Juno's risk scoring reads it if the client later asks to withdraw.
+

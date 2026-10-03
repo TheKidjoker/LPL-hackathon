@@ -360,6 +360,17 @@ Resources:
           Type: Api
           Properties: { Path: "/cases/{caseId}/assistant", Method: post }
 
+  ScamCheckFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers.scam_check.handler
+      Role: !GetAtt LambdaRole.Arn
+      Timeout: 30
+      Events:
+        Api:
+          Type: Api
+          Properties: { Path: /scam-check, Method: post }
+
   PostResponseFunction:
     Type: AWS::Serverless::Function
     Properties:

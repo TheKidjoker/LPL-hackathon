@@ -5,6 +5,7 @@ import { fmtDay, isOpen, money } from "../lib/format.js";
 import { SCENARIOS, freshRequest } from "../lib/scenarios.js";
 import { PhoneIcon, ShieldIcon, useNow } from "../components/parts.jsx";
 import { usePolling } from "../components/live.jsx";
+import ContactCheck from "./ContactCheck.jsx";
 
 const ROLE = "client";
 
@@ -42,6 +43,7 @@ export default function ClientView({ caseId, onCase }) {
       <div className="tabs">
         <button className={tab === "withdraw" ? "on" : ""} onClick={() => setTab("withdraw")}>Withdraw funds</button>
         <button className={tab === "chat" ? "on" : ""} onClick={() => setTab("chat")}>Scam check · client with no advisor</button>
+        <button className={tab === "contact" ? "on" : ""} onClick={() => setTab("contact")}>Is this a scam? Ask Juno</button>
       </div>
       {error && <p className="error">{error}</p>}
       {tab === "withdraw" ? (
@@ -51,6 +53,8 @@ export default function ClientView({ caseId, onCase }) {
           </div>
           <SidePanel advisor={context?.advisor} known={!!context} />
         </div>
+      ) : tab === "contact" ? (
+        <ContactCheck />
       ) : (
         <ScamCheck c={c} onUpdate={update} goWithdraw={() => setTab("withdraw")} setError={setError} />
       )}

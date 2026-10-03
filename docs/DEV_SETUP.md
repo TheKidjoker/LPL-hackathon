@@ -43,7 +43,7 @@ Then log in to AWS (see [`AWS_SETUP.md`](AWS_SETUP.md)). Scripts default to the 
 | Path | Owner | What |
 |---|---|---|
 | `frontend/` | Thomas | React app (Vite, JavaScript). `src/api.js` is every API call |
-| `ai/fraud_ai/` | Thomas | `score_withdrawal`, `scam_check_chat`, Bedrock client, prompts. Deployed as a Lambda layer |
+| `ai/fraud_ai/` | Thomas | `score_withdrawal`, `scam_check_chat`, `check_contact`, `assistant.ask`, Bedrock client, prompts. Deployed as a Lambda layer |
 | `infra/` | Thomas | SAM template and deploy config |
 | `backend/common/http.py`, `roles.py`, `views.py` | Kaylin | Request helpers, role check, what each role sees |
 | `backend/handlers/list_cases.py`, `get_case.py`, `backend/notify.py` | Kaylin | Read endpoints and alerts |

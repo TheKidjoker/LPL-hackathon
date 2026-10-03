@@ -51,10 +51,10 @@ Judges score "right service for the right reason," so everyone should be able to
 
 | Service | Status | What it does in our app | Why this one |
 |---|---|---|---|
-| Bedrock (Claude) | Live | Juno: Opus 5 scores the risk, writes the memo, runs the scam-check chat, and answers staff questions. Hedges to Sonnet 5 if Opus is slow | Managed AI, data stays in our AWS account. Approved models are listed in [`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude) |
+| Bedrock (Claude) | Live | Juno: Opus 5 scores the risk, writes the memo, runs the scam-check chat, answers clients' "Is this a scam?" questions, and answers staff questions. Hedges to Sonnet 5 if Opus is slow | Managed AI, data stays in our AWS account. Approved models are listed in [`AWS_SETUP.md`](AWS_SETUP.md#5-calling-claude) |
 | Bedrock Guardrails | Live | Two guardrails: one refuses investment-advice questions to Juno, one masks identity and account numbers in everything the AI writes | Compliance enforced by the platform, not only by prompts |
 | EventBridge Scheduler | Live | Every 15 minutes, escalates holds that passed their end date with no decision (never releases) | Exact timing with no server running |
-| Lambda | Live | 9 functions: every endpoint plus hold expiry. Layers carry the AI code and seed data | Pay only when a request comes in |
+| Lambda | Live | 10 functions: every endpoint plus hold expiry. Layers carry the AI code and seed data | Pay only when a request comes in |
 | DynamoDB | Live | Accounts, transactions, cases, audit log | Fast, serverless storage |
 | API Gateway | Live | Front door between the app and backend | Secure, managed API |
 | KMS and CloudTrail | Live | One customer-managed key encrypts every table and the trail logs. CloudTrail records every API call and every table read and write | Security and audit trail, built in from the first deploy |
