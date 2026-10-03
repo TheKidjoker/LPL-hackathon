@@ -36,6 +36,8 @@ Built for the 2026 LPL Financial University Hackathon. **Deadline: Saturday 12:0
 | [docs/OPERATIONS.md](docs/OPERATIONS.md) | Deploy, run locally, reset and run the demo, troubleshooting |
 | [docs/DEV_SETUP.md](docs/DEV_SETUP.md) | Install, tests, and the repo layout |
 | [docs/AWS_SETUP.md](docs/AWS_SETUP.md) | AWS login and which Claude models work |
+| [docs/PITCH_DECK.md](docs/PITCH_DECK.md) | Slide-by-slide deck content and speaker notes, mapped to the judging rubric |
+| [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) | The 1:45 recorded demo, click by click, with narration and backups |
 | [docs/TEAM_PLAN.md](docs/TEAM_PLAN.md) | Who built what |
 | [docs/GAME_PLAN.md](docs/GAME_PLAN.md) | The idea, timeline, and pitch |
 | [docs/HACKATHON_CONTEXT.md](docs/HACKATHON_CONTEXT.md) | Rules, deliverables, judging |
